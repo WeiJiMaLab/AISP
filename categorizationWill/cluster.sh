@@ -21,12 +21,9 @@ job_id = str2num(strjoin(regexp('$job','\d','match'), ''))
 rng(job_id)
 addpath(genpath('$HOME/AISP'))
 
-newdir = '$SCRATCH/cluster';
+newdir = '$SCRATCH/cluster$job';
 
 mkdir(newdir);
-cluster{$index} = parcluster('local');
-cluster{$index}.JobStorageLocation = newdir;
-parpool(cluster{$index}, $ppn);
 cluster_fcn(job_id);
 
 rmdir(newdir,'s')
