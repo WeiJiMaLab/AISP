@@ -9,9 +9,9 @@
 #SBATCH --mail-user=hhs4@nyu.edu
 #SBATCH --output=slurm_%j.out
 
-index=${PBS_ARRAYID}
-job=${PBS_JOBID}
-ppn=${PBS_NUM_PPN}
+index=$SLURM_ARRAY_TASK_ID
+job=$SLURM_JOB_ID
+ppn=$SLURM_JOB_CPUS_PER_NODE
 module purge
 module load matlab/2018b
 export MATLABPATH=$HOME/matlab-output
@@ -21,7 +21,7 @@ job_id = str2num(strjoin(regexp('$job','\d','match'), ''))
 rng(job_id)
 addpath(genpath('$HOME/AISP'))
 
-newdir = '$PBS_JOBTMP/cluster';
+newdir = '$SCRATCH/cluster';
 
 mkdir(newdir);
 cluster{$index} = parcluster('local');
@@ -30,3 +30,6 @@ parpool(cluster{$index}, $ppn);
 cluster_fcn(job_id);
 
 rmdir(newdir,'s')
+
+
+EOF
