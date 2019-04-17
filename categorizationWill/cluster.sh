@@ -7,7 +7,7 @@
 #SBATCH --job-name=myTest
 #SBATCH --mail-type=END
 #SBATCH --mail-user=hhs4@nyu.edu
-#SBATCH --output=$HOME/slurm-output/slurm_%j.out
+#SBATCH --output=slurm-output/slurm_%j.out
 
 index=$SLURM_ARRAY_TASK_ID
 job=$SLURM_JOB_ID
