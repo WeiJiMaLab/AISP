@@ -24,7 +24,7 @@ addpath(genpath('$HOME/AISP'))
 newdir = '$SCRATCH/cluster$job';
 
 mkdir(newdir);
-cluster_fcn(job_id);
+cluster_fcn(job_id,index);
 
 rmdir(newdir,'s')
 
