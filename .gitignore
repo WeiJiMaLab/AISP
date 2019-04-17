@@ -1,2 +1,5 @@
+pars
 data
 *.m~
+.DS_Store
+
