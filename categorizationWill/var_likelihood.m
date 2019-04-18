@@ -33,7 +33,9 @@ for iTrial = 1:size(data,1)
     x = s + sigmaNoise*randn(Nsamples,1);
     q1 = zeros(size(x));
     q1new = 0.5 * ones(size(x));
-    while any(abs(q1new-q1)>tol)
+    k = 0;
+    while any(abs(q1new-q1)>tol) && ~(k>50)
+        k = k+1;
         q1 = q1new;
         sigmanew = (sigma12.*sigma22)./(q1*sigma12.*sigmaNoise.^2 + ...
             (1-q1).*sigma2.^2.*sigmaNoise.^2+sigma1.^2*sigma2.^2);

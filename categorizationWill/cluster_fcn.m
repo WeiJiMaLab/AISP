@@ -32,5 +32,5 @@ elseif index <= 5*Nsubjects*Nreps
     iSubj = mod(index-1,Nsubjects)+1;
     iRep = floor((index-1)/Nsubjects)+1;
     fprintf('Fitting Variational: Subject #%d, repetition #%d\n',iSubj,iRep)
-    fit_cluster(iRep,iSubj,'freq3')
+    fit_cluster(iRep,iSubj,'var')
 end
