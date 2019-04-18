@@ -22,5 +22,5 @@ switch type
         save(sprintf('~/AISP/categorizationWill/pars/parsFreq3_%d_%d.mat',iSubj,iRep),'pars','likelihood')
     case 'var'
         [pars,likelihood] = bads(fun_handle,[2,1,0,-1,-1,-1,-2,0,0.01],[-5,-5,-5,-5,-5,-5,-10,-2,eps],[5,5,5,5,5,5,10,5,0.75],[-3,-3,-3,-3,-3,-3,-4,-2,0.01],[5,4,3,3,3,2,10,5,0.1]);
-        save(sprintf('~/AISP/categorizationWill/pars/parsFreq3_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        save(sprintf('~/AISP/categorizationWill/pars/parsVar_%d_%d.mat',iSubj,iRep),'pars','likelihood')
 end
