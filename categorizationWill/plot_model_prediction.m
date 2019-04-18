@@ -5,7 +5,7 @@ switch type
     case 'Bayes'
         p = load('pars/parsBayes.mat');
         l = p.likelihoods;
-        [~,maxID] = max(l,[],2);
+        [~,maxID] = min(l,[],2);
         pars = zeros(size(p.pars,1),size(p.pars,2));
         for iSubj = 1:size(p.pars,1)
             pars(iSubj,:) = p.pars(iSubj,:,maxID(iSubj));
@@ -17,7 +17,7 @@ switch type
     case 'Freq'
         p = load('pars/parsFreq.mat');
         l = p.likelihoods;
-        [~,maxID] = max(l,[],2);
+        [~,maxID] = min(l,[],2);
         pars = zeros(size(p.pars,1),size(p.pars,2));
         for iSubj = 1:size(p.pars,1)
             pars(iSubj,:) = p.pars(iSubj,:,maxID(iSubj));
@@ -25,6 +25,30 @@ switch type
             beta = [pars(iSubj,7),exp(pars(iSubj,8))];
             lambda = pars(iSubj,9);
             data(data(:,1)==iSubj,6) = 2*freq_simulate(data(data(:,1)==iSubj,2:3),sigmas,beta,lambda)-1;
+        end
+    case 'Freq2'
+        p = load('pars/parsFreq2.mat');
+        l = p.likelihoods;
+        [~,maxID] = min(l,[],2);
+        pars = zeros(size(p.pars,1),size(p.pars,2));
+        for iSubj = 1:size(p.pars,1)
+            pars(iSubj,:) = p.pars(iSubj,:,maxID(iSubj));
+            sigmas = exp(pars(iSubj,1:6));
+            beta = [pars(iSubj,7),exp(pars(iSubj,8))];
+            lambda = pars(iSubj,9);
+            data(data(:,1)==iSubj,6) = 2*freq2_simulate(data(data(:,1)==iSubj,2:3),sigmas,beta,lambda)-1;
+        end
+    case 'Freq3'
+        p = load('pars/parsFreq3.mat');
+        l = p.likelihoods;
+        [~,maxID] = min(l,[],2);
+        pars = zeros(size(p.pars,1),size(p.pars,2));
+        for iSubj = 1:size(p.pars,1)
+            pars(iSubj,:) = p.pars(iSubj,:,maxID(iSubj));
+            sigmas = exp(pars(iSubj,1:6));
+            beta = [pars(iSubj,7),exp(pars(iSubj,8))];
+            lambda = pars(iSubj,9);
+            data(data(:,1)==iSubj,6) = 2*freq3_simulate(data(data(:,1)==iSubj,2:3),sigmas,beta,lambda)-1;
         end
 end
 

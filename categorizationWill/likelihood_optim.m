@@ -20,5 +20,7 @@ switch type
         likelihood = freq2_likelihood(data(:,2:4),sigmas,beta,lambda);
     case 'freq3'
         likelihood = freq3_likelihood(data(:,2:4),sigmas,beta,lambda);
+    case 'var'
+        likelihood = var_likelihood(data(:,2:4),sigmas,beta,lambda);
 end
 lik = -sum(log2(likelihood));
