@@ -4,7 +4,7 @@ Nsubjs = 11;
 Nreps = 10;
 Npars = 9;
 
-for itype = 1:5
+for itype = 1:10
     switch itype
         case 1
             fname = 'pars/parsBayes';
@@ -16,6 +16,16 @@ for itype = 1:5
             fname = 'pars/parsFreq3';
         case 5
             fname = 'pars/parsVar';
+        case 6
+            fname = 'pars/pars_ibs_Bayes';
+        case 7
+            fname = 'pars/pars_ibs_Freq';
+        case 8
+            fname = 'pars/pars_ibs_Freq2';
+        case 9
+            fname = 'pars/pars_ibs_Freq3';
+        case 10
+            fname = 'pars/pars_ibs_Var';
     end
     files = dir([fname,'_*']);
     pars = zeros(Nsubjs,Npars,Nreps);
