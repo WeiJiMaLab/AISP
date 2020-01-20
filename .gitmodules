@@ -1,3 +1,6 @@
 [submodule "ibs"]
 	path = ibs
 	url = https://github.com/lacerbi/ibs.git
+[submodule "bads"]
+	path = bads
+	url = https://github.com/lacerbi/bads.git
