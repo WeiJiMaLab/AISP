@@ -1,10 +1,9 @@
-function likelihood = var_likelihood(data,sigmas,beta,lambda,Nsamples)
-% function likelihood = var_likelihood(data,sigmas,beta,lambda)
-% computes the likelihood for the bayesian observer.
-% data should be a matrix of size trials x 3 with columns:
+function responses = var_simulate(data,sigmas,beta,lambda)
+% function responses = bayes_simulate(data,sigmas,beta,lambda)
+% simulates respones of the bayesian observer.
+% data should be a matrix of size trials x 2 with columns:
 %     reliability [1-6] 
 %     stimulus s 
-%     reponse [1,-1]
 % sigmas should be a 6 element vector of noise standard deviations
 % beta should be the constant and slope for the logistic link
 % lambda is the lapserate
@@ -13,24 +12,17 @@ if ~exist('lambda','var') || isempty(lambda)
     lambda = 0;
 end
    
-if ~exist('Nsamples','var') || isempty(Nsamples)
-    Nsamples = 1000;
-end
 sigma1 = 3;
 sigma2 = 12;
-tol = 0.00001;
-likelihood = zeros(size(data,1),1);
-
-%ds = zeros(size(data,1),1);
-%ps = zeros(size(data,1),1);
-sigm = sigmas(data(:,1));
 sigma12 = sigma1.^2;
 sigma22 = sigma2.^2;
-
+sigm = sigmas(data(:,1));
+tol = 10^-5;
+responses = zeros(size(data,1),1);
 for iTrial = 1:size(data,1)
-    sigmaNoise = sigm(iTrial);
+    sigmaNoise = sigmas(floor(data(iTrial,1)));
     s = data(iTrial,2);
-    x = s + sigmaNoise*randn(Nsamples,1);
+    x = s + sigmaNoise*randn;
     q1 = zeros(size(x));
     q1new = 0.5 * ones(size(x));
     k = 0;
@@ -48,8 +40,6 @@ for iTrial = 1:size(data,1)
     end
     q1 = q1new;
     d = log(q1)-log(1-q1);
-    p = mean(lambda/2 + (1-lambda)./(1+exp(-beta(1)-beta(2).*d)));
-    %ds(iTrial) = mean(d);
-    %ps(iTrial) = p;
-    likelihood(iTrial) = (data(iTrial,3)==-1)*p + (data(iTrial,3)==1)*(1-p);
+    p = lambda/2 + (1-lambda)/(1+exp(beta(1)+beta(2)*d));
+    responses(iTrial) = (rand<p);
 end

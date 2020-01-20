@@ -1,0 +1,7 @@
+real_data_results/*
+fake_data_results/*
+*.eps
+*.mat
+*.xls
+*.csv
+*.pdf

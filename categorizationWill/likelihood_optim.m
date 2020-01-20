@@ -23,4 +23,4 @@ switch type
     case 'var'
         likelihood = var_likelihood(data(:,2:4),sigmas,beta,lambda);
 end
-lik = -sum(log2(likelihood));
+lik = -sum(log(likelihood));

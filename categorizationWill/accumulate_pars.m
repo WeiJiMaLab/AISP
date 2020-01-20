@@ -4,7 +4,7 @@ Nsubjs = 11;
 Nreps = 10;
 Npars = 9;
 
-for itype = 1:4
+for itype = 1:5
     switch itype
         case 1
             fname = 'pars/parsBayes';
@@ -14,6 +14,8 @@ for itype = 1:4
             fname = 'pars/parsFreq2';
         case 4
             fname = 'pars/parsFreq3';
+        case 5
+            fname = 'pars/parsVar';
     end
     files = dir([fname,'_*']);
     pars = zeros(Nsubjs,Npars,Nreps);
@@ -21,8 +23,8 @@ for itype = 1:4
     for iFile = 1:length(files)
         f = load(fullfile(files(iFile).folder,files(iFile).name));
         fparts = split(files(iFile).name,{'_','.'});
-        iSubj = str2num(fparts{2});
-        iRep = str2num(fparts{3});
+        iSubj = str2double(fparts{2});
+        iRep = str2double(fparts{3});
         likelihoods(iSubj,iRep) = f.likelihood;
         pars(iSubj,:,iRep) = f.pars;
     end

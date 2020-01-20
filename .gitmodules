@@ -1,0 +1,3 @@
+[submodule "ibs"]
+	path = ibs
+	url = https://github.com/lacerbi/ibs.git

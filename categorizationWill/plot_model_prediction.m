@@ -50,6 +50,18 @@ switch type
             lambda = pars(iSubj,9);
             data(data(:,1)==iSubj,6) = 2*freq3_simulate(data(data(:,1)==iSubj,2:3),sigmas,beta,lambda)-1;
         end
+    case 'Var'
+        p = load('pars/parsVar.mat');
+        l = p.likelihoods;
+        [~,maxID] = min(l,[],2);
+        pars = zeros(size(p.pars,1),size(p.pars,2));
+        for iSubj = 1:size(p.pars,1)
+            pars(iSubj,:) = p.pars(iSubj,:,maxID(iSubj));
+            sigmas = exp(pars(iSubj,1:6));
+            beta = [pars(iSubj,7),exp(pars(iSubj,8))];
+            lambda = pars(iSubj,9);
+            data(data(:,1)==iSubj,6) = 2*var_simulate(data(data(:,1)==iSubj,2:3),sigmas,beta,lambda)-1;
+        end
 end
 
 
