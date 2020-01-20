@@ -3,6 +3,7 @@ function fit_cluster_ibs(iRep,iSubj,type)
 data = getData();
 
 addpath(genpath('../bads/'))
+addpath(genpath('../ibs/'))
 
 options = bads;
 datSubj = data(data(:,1)==iSubj,:);
