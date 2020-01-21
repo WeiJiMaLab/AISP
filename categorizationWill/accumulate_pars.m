@@ -28,13 +28,13 @@ for itype = 1:10
             fname = 'pars/pars_ibs_Var';
     end
     files = dir([fname,'_*']);
-    pars = zeros(Nsubjs,Npars,Nreps);
-    likelihoods = zeros(Nsubjs,Nreps);
+    pars = nan(Nsubjs,Npars,Nreps);
+    likelihoods = nan(Nsubjs,Nreps);
     for iFile = 1:length(files)
         f = load(fullfile(files(iFile).folder,files(iFile).name));
         fparts = split(files(iFile).name,{'_','.'});
-        iSubj = str2double(fparts{2});
-        iRep = str2double(fparts{3});
+        iSubj = str2double(fparts{end-2});
+        iRep = str2double(fparts{end-1});
         likelihoods(iSubj,iRep) = f.likelihood;
         pars(iSubj,:,iRep) = f.pars;
     end

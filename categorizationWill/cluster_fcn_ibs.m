@@ -3,7 +3,7 @@ fprintf('Job %d:\n',job_id)
 fprintf('Started Job #%d\n',index)
 
 Nsubjects = 11;
-Nreps = 10;
+Nreps = 50;
 if index <= Nsubjects*Nreps
     iSubj = mod(index-1,Nsubjects)+1;
     iRep = floor((index-1)/Nsubjects)+1;
