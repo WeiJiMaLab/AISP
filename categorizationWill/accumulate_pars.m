@@ -1,7 +1,7 @@
 function accumulate_pars
 
 Nsubjs = 11;
-Nreps = 10;
+Nreps = 50;
 Npars = 9;
 
 for itype = 1:10

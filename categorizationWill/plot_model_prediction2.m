@@ -77,6 +77,7 @@ for iSubj = 1:11
     xlim([0,7])
     box off
     set(gca,'TickDir','out')
+    title(['Subject ', num2str(iSubj)])
 end
 
 
