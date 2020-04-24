@@ -1,10 +1,10 @@
 function response = ibs_fun(data,pars,type)
 % function response = ibs_fun(data,pars,type)
 % simulates data for ibs-sampling
-% data should be a matrix of size trials x 3 with columns:
+% data should be a matrix of size trials x (2 or 3) with columns:
 %     stimulus s target
 %     stimulus s distractor
-%     reponse [1,-1]
+%     reponse [1,-1] [optional]
 % pars should be a 4 element vector [sigmaNoise, beta, bias, lapse]
 
 switch type
