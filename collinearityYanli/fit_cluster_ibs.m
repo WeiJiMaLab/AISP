@@ -22,10 +22,10 @@ switch type
     case 'bayes'
         [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/collinearityYanli/pars/pars_Bayes_%d_%d.mat',iSubj,iRep),'pars','likelihood')
-    case 'freq'
+    case 'PE'
         [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/collinearityYanli/pars/pars_Freq_%d_%d.mat',iSubj,iRep),'pars','likelihood')
-    case 'freq2'
+    case 'PE2'
         [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/collinearityYanli/pars/pars_Freq2_%d_%d.mat',iSubj,iRep),'pars','likelihood')
 end
