@@ -16,23 +16,20 @@ beta = pars(6);
 lambda = pars(7);
 sigma0 = 24;
 
-responses = zeros(size(stim, 1), 1);
-for iTrial = 1:size(stim,1)
-    if stim(iTrial,1) == 0
-        sigmaNoise = sigmas(1);
-    elseif stim(iTrial,1) == 240
-        sigmaNoise = sigmas(2);
-    elseif stim(iTrial,1) == 480
-        sigmaNoise = sigmas(3);
-    elseif stim(iTrial,1) == 840
-        sigmaNoise = sigmas(4);
-    end
-    s = stim(iTrial, [2,3]) - stim(iTrial, 1);
-    x = s + sigmaNoise * randn(1,2);
-    shatSeparate = (sigma0.^2 / (sigma0.^2 + sigmaNoise.^2)) .* x;
-    shatSame = (sigma0.^2 / (2*sigma0.^2 + sigmaNoise.^2)) .* sum(x);
-    d = - 1 / 2 * ((sum(shatSeparate.^2) - shatSame.^2) ./ sigma0.^2 ...
-        + (sum((x - shatSeparate).^2) - sum((x - shatSame).^2))./ sigmaNoise);
-    p = lambda/2 + (1-lambda)/(1+exp(beta0 + beta*d));
-    responses(iTrial) = (rand < p);
-end
+s = stim(:, [2,3]) - stim(:, 1);
+
+sigmaNoise = zeros(size(stim, 1), 1);
+sigmaNoise(stim(:,1)==0) = sigmas(1);
+sigmaNoise(stim(:,1)==240) = sigmas(2);
+sigmaNoise(stim(:,1)==480) = sigmas(3);
+sigmaNoise(stim(:,1)==840) = sigmas(4);
+
+x = s + repmat(sigmaNoise, [1,2]) .* randn(size(stim, 1), 2);
+
+shatSeparate = (sigma0.^2 ./ (sigma0.^2 + sigmaNoise.^2)) .* x;
+shatSame = (sigma0.^2 ./ (2*sigma0.^2 + sigmaNoise.^2)) .* sum(x, 2);
+
+d = - 1 / 2 .* ((sum(shatSeparate.^2, 2) - shatSame.^2) ./ sigma0.^2 ...
+    + (sum((x - shatSeparate).^2, 2) - sum((x - repmat(shatSame,[1,2])).^2, 2))./ sigmaNoise);
+p = lambda./2 + (1-lambda)./(1+exp(beta0 + beta*d));
+responses = (rand(size(stim, 1), 1) < p);
