@@ -1,6 +1,6 @@
 function plot_likelihoods(Naverage)
 
-Nsubs = 11;
+Nsubs = 8;
 
 likelihoods = zeros(Nsubs,10);
 stds = zeros(Nsubs,10);
@@ -12,20 +12,6 @@ for itype = 1:10
             fname = 'pars/parsFreq.mat';
         case 3
             fname = 'pars/parsFreq2.mat';
-        case 4
-            fname = 'pars/parsFreq3.mat';
-        case 5
-            fname = 'pars/parsVar.mat';
-        case 6
-            fname = 'pars/pars_ibs_Bayes.mat';
-        case 7
-            fname = 'pars/pars_ibs_Freq.mat';
-        case 8
-            fname = 'pars/pars_ibs_Freq2.mat';
-        case 9
-            fname = 'pars/pars_ibs_Freq3.mat';
-        case 10
-            fname = 'pars/pars_ibs_Var.mat';
     end
     f = load(fname);
     if itype>5
@@ -59,7 +45,7 @@ box off
 set(gca,'TickDir','out')
 ylabel('LL - LLBayes','FontSize',18)
 set(gca,'FontSize',14)
-xticklabels({'Bayes','PE1','PE2','PE3','Vari','Bayes','PE1','PE2','PE3','Vari'})
+xticklabels({'Bayes','PE1','PE2'})
 
 
 pdata2 = stds;
@@ -72,4 +58,4 @@ box off
 set(gca,'TickDir','out')
 ylabel('std of estimates','FontSize',18)
 set(gca,'FontSize',14)
-xticklabels({'Bayes','PE1','PE2','PE3','Vari','Bayes','PE1','PE2','PE3','Vari'})
+xticklabels({'Bayes','PE1','PE2'})
