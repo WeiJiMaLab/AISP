@@ -6,8 +6,8 @@ function response = ibs_fun(data, pars, type)
 switch type
     case 'bayes'
         response = bayes_simulate(data(:,[2,5,6]), pars);
-    case 'freq'
+    case 'PE'
         response = pe_simulate(data(:,[2,5,6]), pars);
-    case 'freq2'
+    case 'PE2'
         response = pe2_simulate(data(:,[2,5,6]), pars);
 end
