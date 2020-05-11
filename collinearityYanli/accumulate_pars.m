@@ -7,11 +7,11 @@ Npars = 7;
 for itype = 1:10
     switch itype
         case 1
-            fname = 'pars/parsBayes';
+            fname = 'pars/pars_Bayes';
         case 2
-            fname = 'pars/parsFreq';
+            fname = 'pars/pars_Freq';
         case 3
-            fname = 'pars/parsFreq2';
+            fname = 'pars/pars_Freq2';
     end
     files = dir([fname,'_*']);
     pars = nan(Nsubjs,Npars,Nreps);

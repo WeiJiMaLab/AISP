@@ -2,16 +2,16 @@ function plot_likelihoods(Naverage)
 
 Nsubs = 8;
 
-likelihoods = zeros(Nsubs,10);
-stds = zeros(Nsubs,10);
-for itype = 1:10
+likelihoods = zeros(Nsubs,3);
+stds = zeros(Nsubs,3);
+for itype = 1:3
     switch itype
         case 1
-            fname = 'pars/parsBayes.mat';
+            fname = 'pars/pars_Bayes.mat';
         case 2
-            fname = 'pars/parsFreq.mat';
+            fname = 'pars/pars_Freq.mat';
         case 3
-            fname = 'pars/parsFreq2.mat';
+            fname = 'pars/pars_Freq2.mat';
     end
     f = load(fname);
     if itype>5
@@ -40,7 +40,7 @@ pdata = likelihoods(:,1)-likelihoods;
 figure 
 bar(mean(pdata),'FaceColor','k')
 hold on
-plot((1:10) +0.05*randn(size(pdata)),pdata,'.','Color',[0.4,0.4,0.4],'MarkerSize',20)
+plot((1:3) +0.05*randn(size(pdata)),pdata,'.','Color',[0.4,0.4,0.4],'MarkerSize',20)
 box off
 set(gca,'TickDir','out')
 ylabel('LL - LLBayes','FontSize',18)
@@ -53,7 +53,7 @@ pdata2 = stds;
 figure 
 bar(mean(pdata2),'FaceColor','k')
 hold on
-plot((1:10) +0.05*randn(size(pdata2)),pdata2,'.','Color',[0.4,0.4,0.4],'MarkerSize',20)
+plot((1:3) +0.05*randn(size(pdata2)),pdata2,'.','Color',[0.4,0.4,0.4],'MarkerSize',20)
 box off
 set(gca,'TickDir','out')
 ylabel('std of estimates','FontSize',18)
