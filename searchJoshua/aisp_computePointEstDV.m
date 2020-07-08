@@ -39,6 +39,7 @@ end
 
 %% Main calculations
 % TODO check maths behind this
+error('Check maths')
 
 % TODO not sure if the arguments to atan2 are in the correct order
 cosPercept = cos(percept);
@@ -52,16 +53,25 @@ varphi = exp(kappa_d .* (cos(mu_d) -1));
 % derivations). From the derivations we know that if tildeL items are included
 % they will be the items with the greatest values of varphi. 
 varphi = sort(varphi, 2, 'descend');
+varphiProd = cumprod(varphi, 2);
 tildeL = nan(1, size(varphi, 2), 1);
 tildeL(:) = 1 : size(varphi, 2);
 
 % Compute tildeL * product of varphi, for all possibel numbers of tildeL, and
 % pick the maximum value
-maxProduct = max(varphi.*tildeL, [], 2);
-
+maxProduct = max(varphiProd.*tildeL, [], 2);
 if any(isnan(maxProduct(:))); error('Bug'); end
 
-d = log( (1./(2*pi*nItems)) .* 
+% TODO especially check maths behind these next few lines
+if length(mu_s) == 1 && mu_s == 0
+    logBesseli = aisp_computeLogBesseliForDuplicatedValues(kappa_s)
+    logVmTerm = log(2*pi) - kappa_s + logBesseli;
+    % TODO check that this matches a von mises evaluated at x=0, and with mean
+    % mu=0. (Not sure if got the right bessel function so important to check.
+else
+    error('Not coded up yet')
+end
+d = log( (1./(2*pi*nItems)) .* maxProduct ) + logVmTerm;
 
 % Check assumptions made in the derivations 
 if any(mu_d(:)==0); error('Derivations assume all mu_d are non-zero'); end

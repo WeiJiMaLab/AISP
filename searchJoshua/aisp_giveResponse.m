@@ -7,33 +7,17 @@ function resp = aisp_giveResponse(Model, ParamStruct, Data, percepts)
 
 
 % What response is given in each case?
+relKappaX = ParamStruct.Kappa_x(Data.SetSizeCond);
+
 if strcmp(Model, 'bayes')
-    relKappaX = ParamStruct.Kappa_x(Data.SetSizeCond);
     d = makeBaysianDecision(percepts, Data.SetSize, relKappaX, ...
-        Data.KappaS, ParamStruct);
+        Data.KappaS, 0, ParamStruct);
+    % TODO add a check to ensure mu_s = 0 as have passed to this function
 
 elseif strcmp(Model, 'pointEst')
-    
-%     % Are we ignoring the set size when applying thresholds?
-%     if strcmp(Model.SetSizeThresh, 'variable')
-%        relSetSizes = Data.SetSizeCond; 
-%         
-%     elseif strcmp(Model.SetSizeThresh, 'fixed')
-%         relSetSizes = ones(size(Data.SetSizeCond));
-% 
-%     end
-%     
-%     % Are we ignoring the block type when applying thresholds?
-%     if strcmp(Model.BlockTypes, 'use')
-%         relBlockTypes = Data.BlockType; 
-%         
-%     elseif strcmp(Model.BlockTypes, 'ignore')
-%         relBlockTypes = ones(size(Data.SetSizeCond));
-%         
-%     end
-%     
-%     resp = makeMinRuleDecision(ParamStruct.Thresh, percepts, relSetSizes, ...
-%             relBlockTypes, 0);
+    d = aisp_computePointEstDV(percepts, Data.SetSize, relKappaX, ...
+        Data.KappaS, 0, ParamStruct);
+    % TODO add a check to ensure mu_s = 0 as have passed to this function
         
 elseif strcmp(Model, 'optimalPointEst')
     

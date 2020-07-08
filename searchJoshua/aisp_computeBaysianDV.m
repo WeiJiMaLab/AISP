@@ -51,7 +51,7 @@ end
 % We need to compute log(besseli(0, kappa_s) but there are only a few values of
 % kappa_s so we can speed the computation up by not doing the same thing over
 % and over again. Lets call it termA.
-termA = aisp_computeBesseliForDuplicatedValues(kappa_s);
+termA = aisp_computeLogBesseliForDuplicatedValues(kappa_s);
 
 
 % If mu_s aways equals zero, then the formula for the local loglikelihood 
