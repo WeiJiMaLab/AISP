@@ -61,7 +61,7 @@ fprintf('Subject #%d, repetition %d, Type %d\n', iSubj, iRep, iType)
 if iType == 1
     fit_cluster_ibs(iRep, iSubj, 'bayes')
 elseif iType == 2
-    fit_cluster_ibs(iRep, iSubj, 'Freq')
+    fit_cluster_ibs(iRep, iSubj, 'freq')
 elseif iType == 3
     fit_cluster_ibs(iRep, iSubj, 'var')
 end
