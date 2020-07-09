@@ -10,7 +10,7 @@ options.NoiseFinalSamples = 100;
 options.NoiseSize = 5;
 datSubj = data(data(:, 1)==iSubj, :);
 opt_ibs = ibslike;
-opt_ibs.Nreps = 25;
+opt_ibs.Nreps = 50;
 opt_ibs.NegLogLikeThreshold = size(datSubj, 1) * log(2) + 100;
 %fun_handle = @(pars) likelihood_optim(datSubj,pars,type);
 FUN = @(pars, data) ibs_fun(data, pars, type);

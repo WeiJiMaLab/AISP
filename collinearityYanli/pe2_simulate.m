@@ -18,7 +18,7 @@ beta = pars(6);
 lambda = pars(7);
 sigma0 = 24;
 
-Nsim = 100000;
+Nsim = 500000;
 if isempty(saved_pars) || any(saved_pars ~=pars)
     optimal_criterion = zeros(4);
     for i_sigma = 1:4

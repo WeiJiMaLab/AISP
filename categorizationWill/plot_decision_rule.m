@@ -1,7 +1,7 @@
 function plot_decision_rule(type)
 
-x = linspace(-25,25,250);
-sigmaNoise = linspace(0,10,250);
+x = linspace(-20,20,250);
+sigmaNoise = exp(linspace(log(0.1),log(20),250));
 
 [xx,sigmaNoisex] = meshgrid(x,sigmaNoise);
 
@@ -45,7 +45,12 @@ switch type
 end
 
 imagesc(x,sigmaNoise,1./(1+exp(-d)),[0,1])
-colormap(gray)
+set(gca,'YScale','log')
+colormap(parula)
 colorbar()
 xlabel('Measurement x','FontSize',14)
 ylabel('\sigma_n Noise standard deviation','FontSize',14)
+xticks([])
+set(gca, 'TickDir', 'out')
+box off
+set(gcf, 'Position', [560,750,560,190])
