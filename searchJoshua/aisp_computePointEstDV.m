@@ -1,4 +1,4 @@
-function d = aisp_computePointEstDV(percept, nItems, kappa_x, kappa_s, mu_s, ParamStruct)
+function d = aisp_computePointEstDV(percept, nItems, kappa_x, kappa_s, mu_s)
 % Compute the decision variable for the point estimate observer
 
 % INPUT

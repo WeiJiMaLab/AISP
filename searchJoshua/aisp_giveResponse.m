@@ -1,33 +1,35 @@
-function resp = aisp_giveResponse(Model, ParamStruct, Data, percepts)
+function resp = aisp_giveResponse(type, ParamStruct, Data, percepts)
 % Make a response assuming that the trial is not the result of a lapse
 
 % INPUT
-% stim   [num trials X num locations] array describing the perceived orientation 
-%        of the Gabor patches
+% type: Which model to simulate with?
 
+% TODO add a check to ensure mu_s = 0 as have passed to all the functions below
 
 % What response is given in each case?
 relKappaX = ParamStruct.Kappa_x(Data.SetSizeCond);
 
-if strcmp(Model, 'bayes')
-    d = makeBaysianDecision(percepts, Data.SetSize, relKappaX, ...
-        Data.KappaS, 0, ParamStruct);
-    % TODO add a check to ensure mu_s = 0 as have passed to this function
+if strcmp(type, 'bayes')
+    d = aisp_computeBaysianDV(percepts, Data.SetSize, relKappaX, ...
+        Data.KappaS, 0);
 
-elseif strcmp(Model, 'pointEst')
+elseif strcmp(type, 'PE')
     d = aisp_computePointEstDV(percepts, Data.SetSize, relKappaX, ...
-        Data.KappaS, 0, ParamStruct);
-    % TODO add a check to ensure mu_s = 0 as have passed to this function
+        Data.KappaS, 0);
         
-elseif strcmp(Model, 'optimalPointEst')
+elseif strcmp(type, 'PE2')
+    d = aisp_computeOptimalPointEstDV(percept, Data.SetSize, relKappaX, ...
+        Data.KappaS, 0);
     
 end
 
 
 % Compute the probability of a target present response 
 pPresent = (ParamStruct.LapseRate / 2) + ((1 - ParamStruct.LapseRate) * ...
-    (1 ./ (1 + exp(-ParamStrcut.Beta0 - (ParamStrcut.Beta1 * d)))));
+    (1 ./ (1 + exp(-ParamStruct.Beta0 - (ParamStruct.Beta1 * d)))));
 
 % Simulate a response
 if size(pPresent, 2) ~=1; error('Bug'); end
 resp = rand(size(pPresent)) < pPresent;
+
+error('Need to add lapses')

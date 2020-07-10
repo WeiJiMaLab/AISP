@@ -1,5 +1,5 @@
 function d = aisp_computeBaysianDV(percept, nItems, kappa_x, kappa_s, ...
-    mu_s, ParamStruct)
+    mu_s)
 % Compute the decision variable of a Bayesian observer
 
 % NOTE
