@@ -39,7 +39,8 @@ end
 
 %% Main calculations
 % TODO check maths behind this
-error('Check maths')
+error('Check maths -- checks in PDF. Just need to transfer here')
+error('TODO -- check that mu s at zero')
 
 % TODO not sure if the arguments to atan2 are in the correct order
 cosPercept = cos(percept);

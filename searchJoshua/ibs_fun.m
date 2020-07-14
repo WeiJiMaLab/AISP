@@ -10,7 +10,8 @@ ParamStruct = paramVec2Struct(pars, 'to struct');
 
 % For all models we need to add noise to the real orientations to generate
 % simulated percepts
-relKappaX = ParamStruct.Kappa_x(DesignStruct.SetSizeCond);
+kappaX = exp(ParamStruct.LnKappa_x);
+relKappaX = kappaX(DesignStruct.SetSizeCond);
 percepts = aisp_addNoiseToStim(relKappaX, DesignStruct.Orientation);
 
 % Simulate responses based on these percepts

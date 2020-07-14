@@ -7,7 +7,8 @@ function resp = aisp_giveResponse(type, ParamStruct, Data, percepts)
 % TODO add a check to ensure mu_s = 0 as have passed to all the functions below
 
 % What response is given in each case?
-relKappaX = ParamStruct.Kappa_x(Data.SetSizeCond);
+kappaX = exp(ParamStruct.LnKappa_x);
+relKappaX = kappaX(Data.SetSizeCond);
 
 if strcmp(type, 'bayes')
     d = aisp_computeBaysianDV(percepts, Data.SetSize, relKappaX, ...
@@ -31,5 +32,3 @@ pPresent = (ParamStruct.LapseRate / 2) + ((1 - ParamStruct.LapseRate) * ...
 % Simulate a response
 if size(pPresent, 2) ~=1; error('Bug'); end
 resp = rand(size(pPresent)) < pPresent;
-
-error('Need to add lapses')
