@@ -5,6 +5,7 @@ function resp = aisp_giveResponse(type, ParamStruct, Data, percepts)
 % type: Which model to simulate with?
 
 % TODO add a check to ensure mu_s = 0 as have passed to all the functions below
+error('The final todo') % Put this check in load data
 
 % What response is given in each case?
 kappaX = exp(ParamStruct.LnKappa_x);

@@ -61,8 +61,7 @@ if length(mu_s) == 1 && mu_s == 0
     termBShortcut = true;
     
 else
-    termB = NaN;
-    termBShortcut = false;
+    error('Case not coded up.')
     
 end
 
@@ -99,17 +98,6 @@ if termBShortcut
     
     d_loc = (kappa_x .* termB) + termA - termC;
     
-    
-else
-        
-    d_loc = (kappa_x .* cos(percept)) + ...
-        termA - ...
-        log(besseli(0, ( (kappa_x.^2) + ...
-        (kappa_s.^2) + ...
-        (2*kappa_x.*kappa_s.*...
-        cos(percept - mu_s)) ).^0.5 ) );
-
-
 end
 
 

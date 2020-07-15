@@ -12,7 +12,7 @@ function [ofset, assocNItems, assocKappa_x, assocKappa_s] ...
 % NOTE
 % nItems, kappa_x, kappa_s do not have to be unique but this would be a waste of
 % computation time
-if any(size(nItems) ~= size(kappa_x)); error('These are ment to correspond.'); end
+if any(size(nItems) ~= size(kappa_x)); error('These are meant to correspond.'); end
 if all(unique(nItems) ~= nItems); error('See note'); end
 if all(unique(kappa_x) ~= kappa_x); error('See note'); end
 if all(unique(kappa_s) ~= kappa_s); error('See note'); end
@@ -35,7 +35,7 @@ if isempty(savedNItems) || isempty(savedKappa_x) || isempty(savedKappa_s) || ...
         (savedNItems ~= nItems) || ...
         (savedKappa_x ~= kappa_x) || (savedKappa_s ~= kappa_s)
     
-    [assocNItems, assocKappa_s] = meshgrid(nItems, kappa_x);
+    [assocNItems, assocKappa_s] = meshgrid(nItems, kappa_s);
     assocKappa_x = nan(size(assocNItems)); 
     optimalCrit = nan(size(assocNItems));
     

@@ -38,13 +38,10 @@ end
 
 
 %% Main calculations
-% TODO check maths behind this
-error('Check maths -- checks in PDF. Just need to transfer here')
-error('TODO -- check that mu s at zero')
 
 % TODO not sure if the arguments to atan2 are in the correct order
 cosPercept = cos(percept);
-mu_d = percept + atan2(-sim(percept), (kappa_x./kappa_s)+cosPercept);
+mu_d = percept + atan2(-sin(percept), (kappa_x./kappa_s)+cosPercept);
 kappa_d = sqrt((kappa_x.^2) + (kappa_s.^2) + (2*kappa_x.*kappa_s.*cosPercept));
 
 varphi = exp(kappa_d .* (cos(mu_d) -1));
@@ -63,20 +60,17 @@ tildeL(:) = 1 : size(varphi, 2);
 maxProduct = max(varphiProd.*tildeL, [], 2);
 if any(isnan(maxProduct(:))); error('Bug'); end
 
-% TODO especially check maths behind these next few lines
 if length(mu_s) == 1 && mu_s == 0
-    logBesseli = aisp_computeLogBesseliForDuplicatedValues(kappa_s)
+    logBesseli = aisp_computeLogBesseliForDuplicatedValues(kappa_s);
     logVmTerm = log(2*pi) - kappa_s + logBesseli;
     % TODO check that this matches a von mises evaluated at x=0, and with mean
     % mu=0. (Not sure if got the right bessel function so important to check.
 else
     error('Not coded up yet')
 end
-d = log( (1./(2*pi*nItems)) .* maxProduct ) + logVmTerm;
+d = log( (1./nItems) .* maxProduct ) + logVmTerm;
 
 % Check assumptions made in the derivations 
 if any(mu_d(:)==0); error('Derivations assume all mu_d are non-zero'); end
-
-
 
 
