@@ -19,7 +19,6 @@ export MATLABPATH=$HOME/matlab-output
 cat<<EOF | matlab -nodisplay
 job_id = str2num(strjoin(regexp('$job','\d','match'), ''))
 rng(job_id)
-addpath(genpath('$HOME/AISP'))
 
 newdir = '$SCRATCH/cluster$job';
 

@@ -6,7 +6,7 @@ relevantFields = {'SetSize', 'Orientation', 'KappaS', 'SetSizeCond'};
 relevantCols = {1, 2:7, 8, 9};
 
 if direction  == 'to matrix'
-    out = nan(size(DatSubj.Response, 1), relevantCols{end}(end));
+    out = nan(size(in.Response, 1), relevantCols{end}(end));
     
     for iF = 1 : length(relevantFields)
         dataToAdd = in.(relevantFields{iF});
