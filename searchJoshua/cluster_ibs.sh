@@ -4,24 +4,24 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --time=2:00:00
 #SBATCH --job-name=aispVS
-#SBATCH --output=slurm/slurm_%a.out
+#SBATCH --output=slurmOut/slurm_%a.out
 
+# INPUT
+# $1 full file name (including directory) for the data file
+
+umask 077
+
+dataDir = "$1"
 index=$SLURM_ARRAY_TASK_ID
 job=$SLURM_JOB_ID
 
 module purge
 module load matlab/2018b
 
-cat<<EOF | matlab -nodisplay
+cat<<EOF | matlab -nodisplay -nosplash
 job_id = str2num(strjoin(regexp('$job','\d','match'), ''))
 rng(job_id)
 
-newdir = 'tmpData/cluster$job';
-mkdir(newdir);
-
-cluster_fcn_ibs(job_id,$index);
-
-rmdir(newdir,'s')
-
+cluster_fcn_ibs($dataDir, job_id, $index);
 
 EOF

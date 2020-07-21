@@ -1,13 +1,12 @@
-function fit_cluster_ibs(iRep, iSubj, type)
-
-DSet = getData();
-DatSubj = DSet.P(iSubj).Data;
-designMat = struct2DesignMat(DatSubj, 'to matrix');
+function fit_cluster_ibs(iRep, iSubj, type, DSet)
 
 addpath(genpath('../bads/'))
 addpath(genpath('../ibs/'))
 addpath('./Linked')
 addpath('../lautils-mat/stats')
+
+DatSubj = DSet.P(iSubj).Data;
+designMat = struct2DesignMat(DatSubj, 'to matrix');
 
 options = bads;
 options.NoiseFinalSamples = 100;

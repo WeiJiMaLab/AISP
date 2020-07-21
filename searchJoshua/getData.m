@@ -1,8 +1,9 @@
-function DSet = getData()
+function DSet = getData(dataDir)
 
-dataFile = 'D:\Research data _ BACKED UP\Visual search\Main Study\In use\StandardFormat_participantExcluded.mat';
-
-Loaded = load(dataFile);
+if strcmp(dataDir, 'local')
+    dataDir = 'D:\Research data _ BACKED UP\Visual search\Main Study\In use\StandardFormat_participantExcluded.mat';
+end
+Loaded = load(dataDir);
 DSet = Loaded.DSet;
 
 % Throughout we assume that the target is at the orientation of 0. Check this.
