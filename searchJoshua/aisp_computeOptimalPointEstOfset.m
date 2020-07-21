@@ -1,4 +1,4 @@
-function [ofset, assocNItems, assocKappa_x, assocKappa_s] ...
+function [ofset, finalAssocNItems, finalAssocKappa_x, finalAssocKappa_s] ...
     = aisp_computeOptimalPointEstOfset(nItems, kappa_x, kappa_s, mu_s)
 % Compute the offset required to optimally compensate for changes in kappa_x and
 % kappa_s
@@ -12,10 +12,9 @@ function [ofset, assocNItems, assocKappa_x, assocKappa_s] ...
 % NOTE
 % nItems, kappa_x, kappa_s do not have to be unique but this would be a waste of
 % computation time
+if ~isequal(unique(nItems), sort(nItems)); error('See note'); end
 if any(size(nItems) ~= size(kappa_x)); error('These are meant to correspond.'); end
-if all(unique(nItems) ~= nItems); error('See note'); end
-if all(unique(kappa_x) ~= kappa_x); error('See note'); end
-if all(unique(kappa_s) ~= kappa_s); error('See note'); end
+if ~isequal(unique(kappa_s), sort(kappa_s)); error('See note'); end
 
 % OUTPUT
 % ofset: array, giving the optimal offset for each combination of nItems and kappa_s
@@ -27,14 +26,31 @@ persistent optimalCrit
 persistent savedNItems
 persistent savedKappa_x
 persistent savedKappa_s
+persistent assocNItems
+persistent assocKappa_x
+persistent assocKappa_s
 
-nSim = 500000;
+nSim = 5000; %500000;
+
+
+% Work out if the requested calulations are the same as ones done previously,
+% a subset, or if they are new
+if isempty(savedNItems) || isempty(savedKappa_x) || isempty(savedKappa_s)
+    calc = 'new';
+elseif isequal(savedNItems, nItems) ...
+        && isequal(savedKappa_x, kappa_x) ...
+        && isequal(savedKappa_s, kappa_s)
+    calc = 'prev';
+elseif all(ismember(nItems(:), savedNItems(:))) ...
+        && all(ismember(kappa_x(:), savedKappa_x(:))) ...
+        && all(ismember(kappa_s(:), savedKappa_s(:)))
+    calc = 'subset';
+else
+    calc = 'new';
+end
 
 % Only recompute the optimal criteria if these have changed
-if isempty(savedNItems) || isempty(savedKappa_x) || isempty(savedKappa_s) || ...
-        (savedNItems ~= nItems) || ...
-        (savedKappa_x ~= kappa_x) || (savedKappa_s ~= kappa_s)
-    
+if strcmp(calc, 'new')
     [assocNItems, assocKappa_s] = meshgrid(nItems, kappa_s);
     assocKappa_x = nan(size(assocNItems)); 
     optimalCrit = nan(size(assocNItems));
@@ -69,6 +85,14 @@ if isempty(savedNItems) || isempty(savedKappa_x) || isempty(savedKappa_s) || ...
         crit0 = min(d1);
         crit2 = max(d0);
         crit1 = crit0 + (crit2-crit0) / ( 3 + sqrt(5) ) * 2;
+        %%
+%         % For debugging
+%         figure; hold on
+%         histogram(d0, 'Normalization', 'countdensity')
+%         histogram(d1, 'Normalization', 'countdensity')
+%         plot([crit0, crit0], get(gca,'YLim'))
+%         plot([crit2, crit2], get(gca,'YLim'))
+%         %%%
         f1 = sum(d0 < crit1) + sum(d1 > crit1);
         while (crit2-crit0) > 0.001
             if abs(crit2-crit1) > abs(crit1-crit0)
@@ -93,6 +117,10 @@ if isempty(savedNItems) || isempty(savedKappa_x) || isempty(savedKappa_s) || ...
                 end
             end
         end
+%         %%%
+%         % For debugging
+%         plot([crit1, crit1], get(gca,'YLim'))
+%         %%%
         
         % If the distributions were already completely seperated, then we
         % would never have entered the while loop, and something potentially
@@ -103,7 +131,7 @@ if isempty(savedNItems) || isempty(savedKappa_x) || isempty(savedKappa_s) || ...
             crit1 = (crit0 + crit2)/2;
         end
         
-        optimalCrit(iN, iK) = crit1;
+        optimalCrit(iCase) = crit1;
     end
     
     % Update persistant variables to reflect that have recomputed the ofset
@@ -112,6 +140,8 @@ if isempty(savedNItems) || isempty(savedKappa_x) || isempty(savedKappa_s) || ...
     savedKappa_s = kappa_s;
 end
 
-
+finalAssocNItems = assocNItems;
+finalAssocKappa_x = assocKappa_x;
+finalAssocKappa_s = assocKappa_s;
 ofset = optimalCrit;
 

@@ -4,3 +4,6 @@
 [submodule "bads"]
 	path = bads
 	url = https://github.com/lacerbi/bads.git
+[submodule "lautils-mat"]
+	path = lautils-mat
+	url = https://github.com/lacerbi/lautils-mat.git

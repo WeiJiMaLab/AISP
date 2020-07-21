@@ -7,18 +7,16 @@ designMat = struct2DesignMat(DatSubj, 'to matrix');
 addpath(genpath('../bads/'))
 addpath(genpath('../ibs/'))
 addpath('./Linked')
+addpath('../lautils-mat/stats')
 
 options = bads;
 options.NoiseFinalSamples = 100;
 options.NoiseSize = 5;
 
-% TODO change these back to the project wide defaults
 opt_ibs = ibslike;
 opt_ibs.Nreps = 25;
-% opt_ibs.NegLogLikeThreshold = size(DatSubj.Response, 1) * log(2) + 100;
-opt_ibs.MaxIter = 1000;
+opt_ibs.MaxIter = 10000;
 opt_ibs.Vectorized = 'on';
-opt_ibs.MaxTime = 0.001;
 
 FUN = @(pars, data) ibs_fun(data, pars, type);
 fun_handle = @(pars) ibslike(FUN, pars, DatSubj.Response, designMat, opt_ibs);

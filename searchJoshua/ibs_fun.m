@@ -1,8 +1,6 @@
 function response = ibs_fun(data, pars, type)
 % simulates responses for ibs-sampling
 
-try
-
 %% Change format of data
 DesignStruct = struct2DesignMat(data, 'to struct');
 ParamStruct = paramVec2Struct(pars, 'to struct');
@@ -20,6 +18,4 @@ percepts = aisp_addNoiseToStim(relKappaX, DesignStruct.Orientation);
 response = aisp_giveResponse(type, ParamStruct, DesignStruct, percepts);
 
 
-catch
-    disp('here')
-end
+if any(isnan(response(:))); error('Bug'); end

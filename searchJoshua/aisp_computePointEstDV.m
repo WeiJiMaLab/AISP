@@ -50,7 +50,7 @@ varphi = exp(kappa_d .* (cos(mu_d) -1));
 % Find the number of elements, tildeL, in Omega, that maximise J (see
 % derivations). From the derivations we know that if tildeL items are included
 % they will be the items with the greatest values of varphi. 
-varphi = sort(varphi, 2, 'descend');
+varphi = sort(varphi, 2, 'descend', 'MissingPlacement', 'last');
 varphiProd = cumprod(varphi, 2);
 tildeL = nan(1, size(varphi, 2), 1);
 tildeL(:) = 1 : size(varphi, 2);
@@ -69,8 +69,5 @@ else
     error('Not coded up yet')
 end
 d = log( (1./nItems) .* maxProduct ) + logVmTerm;
-
-% Check assumptions made in the derivations 
-if any(mu_d(:)==0); error('Derivations assume all mu_d are non-zero'); end
 
 

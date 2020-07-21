@@ -3,6 +3,7 @@ function accumulate_pars
 Nsubjs = 8;
 Nreps = 20;
 Npars = 7;
+error('Change')
 
 for itype = 1:10
     switch itype

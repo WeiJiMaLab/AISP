@@ -17,7 +17,7 @@ elseif strcmp(type, 'PE')
         Data.KappaS, 0);
         
 elseif strcmp(type, 'PE2')
-    d = aisp_computeOptimalPointEstDV(percept, Data.SetSize, relKappaX, ...
+    d = aisp_computeOptimalPointEstDV(percepts, Data.SetSize, relKappaX, ...
         Data.KappaS, 0);
     
 end
