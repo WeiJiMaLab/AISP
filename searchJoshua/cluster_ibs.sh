@@ -11,17 +11,17 @@
 
 umask 077
 
-dataDir = "$1"
+dataDir="$1"
 index=$SLURM_ARRAY_TASK_ID
 job=$SLURM_JOB_ID
 
 module purge
-module load matlab/2018b
+module load matlab/R2018b
 
 cat<<EOF | matlab -nodisplay -nosplash
 job_id = str2num(strjoin(regexp('$job','\d','match'), ''))
 rng(job_id)
 
-cluster_fcn_ibs($dataDir, job_id, $index);
+cluster_fcn_ibs("$dataDir", job_id, $index);
 
 EOF
