@@ -17,7 +17,7 @@ module load matlab/2018b
 export MATLABPATH=$HOME/matlab-output
 
 cat<<EOF | matlab -nodisplay
-cd ~/AISP/categorizationWill
+cd ~/AISP/searchShan
 job_id = str2num(strjoin(regexp('$job','\d','match'), ''))
 rng(job_id)
 cluster_fcn_fancy(job_id,$index);
