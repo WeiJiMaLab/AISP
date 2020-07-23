@@ -5,16 +5,17 @@ data = getData();
 addpath(genpath('../bads/'))
 addpath(genpath('../ibs/'))
 
+var_limit = 4;
+
 options = bads;
 options.NoiseFinalSamples = 100;
-options.NoiseSize = 5;
-datSubj = data(data(:, 1)==iSubj, :);
+options.NoiseSize = sqrt(var_limit);
+datSubj = data(data(:,1)==iSubj,:);
 opt_ibs = ibslike;
-opt_ibs.Nreps = 50;
-opt_ibs.NegLogLikeThreshold = size(datSubj, 1) * log(2) + 100;
-%fun_handle = @(pars) likelihood_optim(datSubj,pars,type);
-FUN = @(pars, data) ibs_fun(data, pars, type);
-fun_handle = @(pars) ibslike(FUN, pars, datSubj(:, 4), datSubj, opt_ibs);
+opt_ibs.Nreps = 1;
+opt_ibs.MaxIter = 100000;
+FUN = @(pars,data) ibs_fun(data,pars,type);
+fun_handle = @(pars) ibslike_var(FUN,pars,datSubj(:,4),datSubj,opt_ibs, var_limit);
 
 [X0,LB,UB,PLB,PUB] = get_bads_bounds();
 

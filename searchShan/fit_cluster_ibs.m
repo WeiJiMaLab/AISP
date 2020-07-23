@@ -7,28 +7,26 @@ data = [stimulus, response];
 addpath(genpath('../bads/'))
 addpath(genpath('../ibs/'))
 
+var_limit = 4;
+
 options = bads;
 options.NoiseFinalSamples = 100;
-options.NoiseSize = 5;
+options.NoiseSize = sqrt(var_limit);
+datSubj = data(data(:,1)==iSubj,:);
 opt_ibs = ibslike;
-opt_ibs.Nreps = 25;
-opt_ibs.NegLogLikeThreshold = size(data,1)*log(2)+200;
-%fun_handle = @(pars) likelihood_optim(datSubj,pars,type);
-FUN = @(pars, data) ibs_fun(data,pars,type);
-fun_handle = @(pars) ibslike(FUN,pars,response,stimulus,opt_ibs);
+opt_ibs.Nreps = 1;
+opt_ibs.MaxIter = 100000;
+FUN = @(pars,data) ibs_fun(data,pars,type);
+fun_handle = @(pars) ibslike_var(FUN,pars,datSubj(:,4),datSubj,opt_ibs, var_limit);
 
-lowerBound = [0,0,-5,0.0001];
-upperBound = [20,50,5,0.5];
-lowerPlausible = [2,0,-5,0.0001];
-upperPlausible = [10,20,5,0.5];
+[X0, LB, UB, PLB, PUB] = get_bads_bounds();
 
-x0 = lowerPlausible + rand(size(lowerBound)) .* (upperPlausible-lowerPlausible);
 
 switch type
     case 'bayes'
-        [pars,likelihood] = bads(fun_handle,x0,lowerBound,upperBound,lowerPlausible,upperPlausible,options);
+        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/searchShan/pars/pars_ibs_Bayes_%d_%d.mat',iSubj,iRep),'pars','likelihood')
     case 'freq'
-        [pars,likelihood] = bads(fun_handle,x0,lowerBound,upperBound,lowerPlausible,upperPlausible,options);
+        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/searchShan/pars/pars_ibs_Freq_%d_%d.mat',iSubj,iRep),'pars','likelihood')
 end
