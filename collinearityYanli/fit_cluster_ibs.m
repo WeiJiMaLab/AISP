@@ -13,7 +13,7 @@ options.NoiseSize = sqrt(var_limit);
 datSubj = data(data(:,1)==iSubj,:);
 opt_ibs = ibslike;
 opt_ibs.Nreps = 1;
-opt_ibs.MaxIter = 100000;
+opt_ibs.MaxIter = 20000;
 FUN = @(pars,data) ibs_fun(data,pars,type);
 fun_handle = @(pars) ibslike_var(FUN,pars,datSubj(:,4),datSubj,opt_ibs, var_limit);
 
