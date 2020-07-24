@@ -2,7 +2,7 @@ function cluster_fcn_fancy(job_id, idx)
 fprintf('Job %d:\n', job_id)
 fprintf('Started Job #%d\n', idx)
 
-Ntype = 3;
+Ntype = 2;
 Nsubject = 9;
 Nmin = 20;
 slack = 2;
@@ -61,7 +61,5 @@ fprintf('Subject #%d, repetition %d, Type %d\n', iSubj, iRep, iType)
 if iType == 1
     fit_cluster_ibs(iRep, iSubj, 'bayes')
 elseif iType == 2
-    fit_cluster_ibs(iRep, iSubj, 'PE')
-elseif iType == 3
-    fit_cluster_ibs(iRep, iSubj, 'PE2')
+    fit_cluster_ibs(iRep, iSubj, 'freq')
 end
