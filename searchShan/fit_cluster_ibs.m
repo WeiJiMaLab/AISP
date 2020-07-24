@@ -14,7 +14,8 @@ options.NoiseFinalSamples = 100;
 options.NoiseSize = sqrt(var_limit);
 opt_ibs = ibslike;
 opt_ibs.Nreps = 1;
-opt_ibs.MaxIter = 100000;
+opt_ibs.MaxIter = 20000;
+opt_ibs.Vectorized = false;
 FUN = @(pars, stimulus) ibs_fun(stimulus,pars,type);
 fun_handle = @(pars) ibslike_var(FUN,pars,response,stimulus,opt_ibs, var_limit);
 
