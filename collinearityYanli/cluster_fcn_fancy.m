@@ -2,8 +2,8 @@ function cluster_fcn_fancy(job_id, idx)
 fprintf('Job %d:\n', job_id)
 fprintf('Started Job #%d\n', idx)
 
-Ntype = 2;
-Nsubject = 9;
+Ntype = 3;
+Nsubject = 8;
 Nmin = 20;
 slack = 2;
 Ntarget = 5;
