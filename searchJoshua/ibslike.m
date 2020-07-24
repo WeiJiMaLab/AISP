@@ -441,12 +441,9 @@ for iRep = 1:options.Nreps
             break;
         end
 
-    end    
-end
-
-if ~isempty(T)
-    error('ibslike:ConvergenceFail', ...
-        'Maximum number of iterations reached and algorithm did not converge. Check FUN and DATA.');
+    end
+    K(T) = MaxIter;
+    T = [];
 end
     
 Nreps = sum(K > 0,2);
@@ -464,7 +461,7 @@ K_max = max(1,max(K_mat(:)));
 if K_max > numel(Psi_tab)   % Fill digamma function table
     Psi_tab = [Psi_tab; (psi(1) - psi(numel(Psi_tab)+1:K_max)')];
 end
-LL_mat = Psi_tab(max(1,K_mat));
+LL_mat = reshape(Psi_tab(K_mat), size(K_mat));
 
 end
 

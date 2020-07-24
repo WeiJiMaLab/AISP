@@ -441,12 +441,9 @@ for iRep = 1:options.Nreps
             break;
         end
 
-    end    
-end
-
-if ~isempty(T)
-    error('ibslike:ConvergenceFail', ...
-        'Maximum number of iterations reached and algorithm did not converge. Check FUN and DATA.');
+    end
+    K(T) = MaxIter;
+    T = [];
 end
     
 Nreps = sum(K > 0,2);
