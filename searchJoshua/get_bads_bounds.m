@@ -6,7 +6,7 @@ PLB= [repmat(-4, 1, 4),  -5,  0.1, 0.01];
 PUB= [repmat(4, 1, 4),   5,    5, 0.2];
 UB = [repmat(7, 1, 4),  10,   25, 1];
 
-X0 = PLB + (PUB - PLB) .* rand(size(PUB));
+X0 = PLB + ((PUB - PLB) .* rand(size(PUB)));
 
 % Check that the order the params are specified here matches the ordering used
 % for the param vector in the rest of the code
