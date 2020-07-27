@@ -1,4 +1,4 @@
-function DSet = getData(dataDir)
+function [DSet, Nptpnts] = getData(dataDir)
 
 if strcmp(dataDir, 'local')
     dataDir = 'D:\Research data _ BACKED UP\Visual search\Main Study\In use\StandardFormat_participantExcluded.mat';
@@ -18,3 +18,5 @@ for iP = 1 : length(DSet.P)
     
     if any(targetVals(:) ~= 0); error('Bug'); end
 end
+
+Nptpnts = length(DSet.P);

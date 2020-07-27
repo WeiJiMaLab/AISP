@@ -7,3 +7,6 @@
 [submodule "lautils-mat"]
 	path = lautils-mat
 	url = https://github.com/lacerbi/lautils-mat.git
+[submodule "searchJoshua/visualSearch"]
+	path = searchJoshua/visualSearch
+	url = https://github.com/jCalderTravis/visualSearch.git

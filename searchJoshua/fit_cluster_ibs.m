@@ -2,7 +2,7 @@ function fit_cluster_ibs(iRep, iSubj, type, DSet)
 
 addpath(genpath('../bads/'))
 addpath(genpath('../ibs/'))
-addpath('./Linked')
+addpath('./visualSearch')
 addpath('../lautils-mat/stats')
 
 DatSubj = DSet.P(iSubj).Data;
@@ -24,12 +24,12 @@ fun_handle = @(pars) ibslike(FUN, pars, DatSubj.Response, designMat, opt_ibs);
 
 switch type
     case 'bayes'
-        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
-        save(sprintf('./pars/pars_Bayes_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        [pars,nLogL] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+        save(sprintf('./pars/pars_Bayes_%d_%d.mat',iSubj,iRep),'pars','nLogL')
     case 'PE'
-        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
-        save(sprintf('./pars/pars_Freq_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        [pars,nLogL] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+        save(sprintf('./pars/pars_Freq_%d_%d.mat',iSubj,iRep),'pars','nLogL')
     case 'PE2'
-        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
-        save(sprintf('./pars/pars_Freq2_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        [pars,nLogL] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+        save(sprintf('./pars/pars_Freq2_%d_%d.mat',iSubj,iRep),'pars','nLogL')
 end

@@ -7,15 +7,6 @@ ParamStruct = paramVec2Struct(pars, 'to struct');
 
 
 %% Simulate responses
-
-% For all models we need to add noise to the real orientations to generate
-% simulated percepts
-kappaX = exp(ParamStruct.LnKappa_x);
-relKappaX = kappaX(DesignStruct.SetSizeCond);
-percepts = aisp_addNoiseToStim(relKappaX, DesignStruct.Orientation);
-
-% Simulate responses based on these percepts
-response = aisp_giveResponse(type, ParamStruct, DesignStruct, percepts);
+response = aisp_simResponse(type, ParamStruct, DesignStruct);
 
 
-if any(isnan(response(:))); error('Bug'); end
