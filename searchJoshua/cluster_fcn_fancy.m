@@ -1,67 +1,63 @@
-function cluster_fcn_fancy(job_id, idx)
-fprintf('Job %d:\n', job_id)
-fprintf('Started Job #%d\n', idx)
+function cluster_fcn_fancy(dataDir, job_id, idx)
 
-Ntype = 3;
-Nsubject = 11;
-Nmin = 20;
+% Settings
 slack = 2;
 N_target = 5;
 
-if ~exist('runs.csv','file')
-    subj = 1:Nsubject;
-    rep = 1:Nmin;
+
+fprintf('Job %d:\n', job_id)
+fprintf('Started Job #%d\n', idx)
+
+[DSet, Nptpnts] = getData(dataDir);
+Config = load('Config.mat');
+NMinReps = Config.Nreps;
+Ntype = length(Config.ModelList);
+
+mkdir('tmp')
+if ~exist('./tmp/runs.csv','file')
+    ptpnt = 1:Nptpnts;
+    rep = 1:NMinReps;
     type = 1:Ntype;
-    [subj, rep, type] = meshgrid(subj, rep, type);
-    runs = [subj(:), rep(:), type(:)];
-    csvwrite('runs.csv', runs);
+    [ptpnt, rep, type] = meshgrid(ptpnt, rep, type);
+    runs = [ptpnt(:), rep(:), type(:)];
+    csvwrite('./tmp/runs.csv', runs);
 end
 
-while exist('block_runs', 'file')
+while exist('./tmp/block_runs', 'file')
     pause(5)
 end
 
-runs = csvread('runs.csv');
+runs = csvread('./tmp/runs.csv');
 
 while idx > size(runs, 1)
     % adding more lines to runs
-    f = fopen('block_runs', 'w');
-    for iSubj = 1:Nsubject
+    f = fopen('./tmp/block_runs', 'w');
+    for iPtpnt = 1:Nptpnts
         for iType = 1:Ntype
-            switch iType
-                case 1
-                    files = dir(sprintf('pars/pars_ibs_Bayes_%d_*', iSubj));
-                case 2
-                    files = dir(sprintf('pars/pars_ibs_Freq_%d_*', iSubj));
-                case 3
-                    files = dir(sprintf('pars/pars_ibs_Var_%d_*', iSubj));
-            end
-            evals = zeros(length(files), 1);
+            files = dir(sprintf('pars/pars_ibs_%s_%d_*', ...
+                Config.ModelList{iType}, iPtpnt));
+            
+            evals = nan(length(files), 1);
             for iFile = 1:length(files)
                 data = load(fullfile(files(iFile).folder, files(iFile).name));
-                evals(iFile) = data.likelihood;
+                evals(iFile) = data.nLogL;
             end
             best = min(evals);
             n_good = sum(evals < best + slack);
             if n_good < N_target
-                iRep = max(runs(runs(:,1)==iSubj & runs(:,3)==iType,2)) + 1;
-                runs = [runs; [iSubj, iRep, iType]];
+                iRep = max(runs(runs(:,1)==iPtpnt & runs(:,3)==iType,2)) + 1;
+                runs = [runs; [iPtpnt, iRep, iType]];
             end
         end
     end
-    csvwrite('runs.csv', runs);
+    csvwrite('./tmp/runs.csv', runs);
     fclose(f);
-    delete('block_runs');
+    delete('./tmp/block_runs');
 end
 
-iSubj = runs(idx, 1);
+iPtpnt = runs(idx, 1);
 iRep = runs(idx, 2);
 iType = runs(idx, 3);
-fprintf('Subject #%d, repetition %d, Type %d\n', iSubj, iRep, iType)
-if iType == 1
-    fit_cluster_ibs(iRep, iSubj, 'bayes')
-elseif iType == 2
-    fit_cluster_ibs(iRep, iSubj, 'freq')
-elseif iType == 3
-    fit_cluster_ibs(iRep, iSubj, 'var')
-end
+fprintf('Participant #%d, Repetition %d, Type %d\n', iPtpnt, iRep, iType)
+fit_cluster_ibs(iRep, iPtpnt, Config.ModelList{iType}, DSet)
+

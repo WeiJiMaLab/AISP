@@ -1,11 +1,17 @@
-function fit_cluster_ibs(iRep, iSubj, type, DSet)
+function fit_cluster_ibs(iRep, iPtpnt, type, DSet)
 
 addpath(genpath('../bads/'))
 addpath(genpath('../ibs/'))
 addpath('./visualSearch')
 addpath('../lautils-mat/stats')
 
-DatSubj = DSet.P(iSubj).Data;
+saveFile = sprintf('./pars/pars_%s_%d_%d.mat',type,iPtpnt,iRep);
+if exist(saveFile, 'file')
+    warning('Skipping this fit as it has already been completed.')
+    return
+end
+
+DatSubj = DSet.P(iPtpnt).Data;
 designMat = struct2DesignMat(DatSubj, 'to matrix');
 
 opt_bads = bads;
@@ -25,14 +31,7 @@ fun_handle = @(pars) ibslike_var(FUN, pars, DatSubj.Response, designMat, ...
 
 [X0,LB,UB,PLB,PUB] = get_bads_bounds();
 
-switch type
-    case 'bayes'
-        [pars,nLogL] = bads(fun_handle,X0,LB,UB,PLB,PUB,opt_bads);
-        save(sprintf('./pars/pars_Bayes_%d_%d.mat',iSubj,iRep),'pars','nLogL')
-    case 'PE'
-        [pars,nLogL] = bads(fun_handle,X0,LB,UB,PLB,PUB,opt_bads);
-        save(sprintf('./pars/pars_Freq_%d_%d.mat',iSubj,iRep),'pars','nLogL')
-    case 'PE2'
-        [pars,nLogL] = bads(fun_handle,X0,LB,UB,PLB,PUB,opt_bads);
-        save(sprintf('./pars/pars_Freq2_%d_%d.mat',iSubj,iRep),'pars','nLogL')
-end
+[pars,nLogL] = bads(fun_handle,X0,LB,UB,PLB,PUB,opt_bads);
+save(saveFile,'pars','nLogL')
+
+

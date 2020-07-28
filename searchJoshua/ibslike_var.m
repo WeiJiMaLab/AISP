@@ -3,7 +3,8 @@ function [val_out, var_out, n] = ibslike_var(FUN, PARAMS, RESPMAT, DESIGNMAT, op
 % This wrapper function runs ibslike with all parameters just passed
 % through until the variance of the estimate is smaller than var_limit
 
-[value, var] = ibslike(FUN, PARAMS, RESPMAT, DESIGNMAT, options);
+[value, var, ~, Details] = ibslike(FUN, PARAMS, RESPMAT, DESIGNMAT, options);
+disp(['Samples per trial: ' num2str(Details.NsamplesPerTrial )])
 val_sum = value;
 var_sum = var;
 n = 1;

@@ -1,5 +1,5 @@
 function [ofset, finalAssocNItems, finalAssocKappa_x, finalAssocKappa_s] ...
-    = aisp_computeOptimalPointEstOfset(nItems, kappa_x, kappa_s, mu_s)
+    = aisp_computeOptimalPointEstOfset(nItems, kappa_x, kappa_s, mu_s, varargin)
 % Compute the offset required to optimally compensate for changes in kappa_x and
 % kappa_s
 
@@ -8,19 +8,29 @@ function [ofset, finalAssocNItems, finalAssocKappa_x, finalAssocKappa_s] ...
 % kappa_x: Vector same length as nItems. Values of kappa_x for each value of
 % nItems
 % kappa_s: Vector of unique values of kappa_s to use
+% varargin: If set to true, recompute the ofset regardless of whether the imput
+% options have changed or not. (Normally does not recompute if inputs are the
+% same.)
 
 % NOTE
 % nItems, kappa_x, kappa_s do not have to be unique but this would be a waste of
 % computation time
-if ~isequal(unique(nItems), sort(nItems)); error('See note'); end
-if any(size(nItems) ~= size(kappa_x)); error('These are meant to correspond.'); end
-if ~isequal(unique(kappa_s), sort(kappa_s)); error('See note'); end
 
 % OUTPUT
 % ofset: array, giving the optimal offset for each combination of nItems and kappa_s
 % assocNItems: Array of same size as ofset indicating the corresponding nItems
 % for each entry in ofset
 % assocKappa_s: Same as assocNItems but for kappa_s
+
+if ~isequal(unique(nItems), sort(nItems)); error('See note'); end
+if any(size(nItems) ~= size(kappa_x)); error('These are meant to correspond.'); end
+if ~isequal(unique(kappa_s), sort(kappa_s)); error('See note'); end
+
+if ~isempty(varargin)
+    forceRecompute = varargin{1};
+else
+    forceRecompute = false;
+end
 
 persistent optimalCrit
 persistent savedNItems
@@ -30,12 +40,14 @@ persistent assocNItems
 persistent assocKappa_x
 persistent assocKappa_s
 
-nSim = 5000; %500000;
+nSim = 50000; %500000;
 
 
 % Work out if the requested calulations are the same as ones done previously,
 % a subset, or if they are new
-if isempty(savedNItems) || isempty(savedKappa_x) || isempty(savedKappa_s)
+if forceRecompute
+    calc = 'new';
+elseif isempty(savedNItems) || isempty(savedKappa_x) || isempty(savedKappa_s)
     calc = 'new';
 elseif isequal(savedNItems, nItems) ...
         && isequal(savedKappa_x, kappa_x) ...

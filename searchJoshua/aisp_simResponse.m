@@ -19,15 +19,15 @@ percepts = aisp_addNoiseToStim(relKappaX, Data.Orientation);
 kappaX = exp(ParamStruct.LnKappa_x);
 relKappaX = kappaX(Data.SetSizeCond);
 
-if strcmp(type, 'bayes')
+if strcmp(type, 'Bayes')
     d = aisp_computeBaysianDV(percepts, Data.SetSize, relKappaX, ...
         Data.KappaS, 0);
 
-elseif strcmp(type, 'PE') || strcmp(type, 'Freq')
+elseif strcmp(type, 'PE')
     d = aisp_computePointEstDV(percepts, Data.SetSize, relKappaX, ...
         Data.KappaS, 0);
         
-elseif strcmp(type, 'PE2') || strcmp(type, 'Freq2')
+elseif strcmp(type, 'PE2')
     d = aisp_computeOptimalPointEstDV(percepts, Data.SetSize, relKappaX, ...
         Data.KappaS, 0);
     

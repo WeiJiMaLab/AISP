@@ -11,7 +11,7 @@ if index <= Nptpnts*Nreps
     iSubj = mod(index-1,Nptpnts)+1;
     iRep = floor((index-1)/Nptpnts)+1;
     fprintf('Fitting Bayes: Subject #%d, repetition #%d\n',iSubj,iRep)
-    fit_cluster_ibs(iRep,iSubj,'bayes',DSet)
+    fit_cluster_ibs(iRep,iSubj,'Bayes',DSet)
 elseif index <= 2*Nptpnts*Nreps
     index = index-Nptpnts*Nreps;
     iSubj = mod(index-1,Nptpnts)+1;

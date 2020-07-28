@@ -2,24 +2,26 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
-#SBATCH --time=3:00:00
-#SBATCH --mem=2GB
-#SBATCH --job-name=fitWill
-#SBATCH --mail-type=END
-#SBATCH --mail-user=hhs4@nyu.edu
-#SBATCH --output=slurm-will/slurm_%a.out
+#SBATCH --time=2:00:00
+#SBATCH --job-name=aispVS
+#SBATCH --output=slurmOut/slurm_%a.out
 
+# INPUT
+# $1 full file name (including directory) for the data file
+
+umask 077
+
+dataDir="$1"
 index=$SLURM_ARRAY_TASK_ID
 job=$SLURM_JOB_ID
-ppn=$SLURM_JOB_CPUS_PER_NODE
-module purge
-module load matlab/2018b
-export MATLABPATH=$HOME/matlab-output
 
-cat<<EOF | matlab -nodisplay
-cd ~/AISP/categorizationWill
+module purge
+module load matlab/R2018b
+
+cat<<EOF | matlab -nodisplay -nosplash
 job_id = str2num(strjoin(regexp('$job','\d','match'), ''))
 rng(job_id)
-cluster_fcn_fancy(job_id,$index);
+
+cluster_fcn_fancy("$dataDir", job_id, $index);
 
 EOF

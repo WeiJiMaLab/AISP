@@ -16,6 +16,18 @@ uniqueKappa_s = unique(kappa_s);
     aisp_computeOptimalPointEstOfset(uniqueCases(:, 1), uniqueCases(:, 2), ...
     uniqueKappa_s, mu_s);
 
+% %%% Debugging 
+% samples = 20;
+% ofsetDebug = nan([size(ofset), samples]);
+% for iSample = 1 : samples
+%     [ofsetDebug(:, :, iSample), ~, ~, ~] = ...
+%         aisp_computeOptimalPointEstOfset(uniqueCases(:, 1), uniqueCases(:, 2), ...
+%         uniqueKappa_s, mu_s, true);
+% end
+% ofsetSd = std(ofsetDebug, [], 3);
+% disp('**** Debug test ****')
+% disp(ofsetSd)
+% %%%
 
 % Apply the offset
 allTrialsOfset = nan(size(nItems));
