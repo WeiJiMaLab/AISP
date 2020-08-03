@@ -19,11 +19,11 @@ opt_bads.NoiseFinalSamples = 100;
 opt_bads.NoiseSize = 5;
 
 opt_ibs = ibslike;
-opt_ibs.Nreps = 25;
+opt_ibs.Nreps = 25; %500;
 opt_ibs.MaxIter = 2 * (10^4);
 opt_ibs.Vectorized = 'on';
 
-opt_varLimit = 4;
+opt_varLimit = 100; %4
 
 FUN = @(pars, data) ibs_fun(data, pars, type);
 fun_handle = @(pars) ibslike_var(FUN, pars, DatSubj.Response, designMat, ...
