@@ -5,6 +5,12 @@ addpath(genpath('../ibs/'))
 addpath('./visualSearch')
 addpath('../lautils-mat/stats')
 
+% Create the directory we will use for saving the results
+if ~exist('pars', 'dir')
+    mkdir('pars')
+end
+
+% Has this fit been run previously?
 saveFile = sprintf('./pars/pars_%s_%d_%d.mat',type,iPtpnt,iRep);
 if exist(saveFile, 'file')
     warning('Skipping this fit as it has already been completed.')
