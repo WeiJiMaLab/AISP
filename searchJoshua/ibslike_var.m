@@ -5,7 +5,7 @@ function [val_out, var_out, n] = ibslike_var(FUN, PARAMS, RESPMAT, DESIGNMAT, op
 
 [value, var, ~, Details] = ibslike(FUN, PARAMS, RESPMAT, DESIGNMAT, options);
 % disp(['Samples per trial: ' num2str(Details.NsamplesPerTrial )])
-disp(sqrt(var))
+% disp(sqrt(var))
 
 val_sum = value;
 var_sum = var;
@@ -16,7 +16,7 @@ while (var_sum / n / n) > var_limit
     var_sum = var_sum + var;
     val_sum = val_sum + value;
     n = n + 1;
-    disp(sqrt(var))
+%     disp(sqrt(var))
 end
 
 val_out = val_sum / n;
