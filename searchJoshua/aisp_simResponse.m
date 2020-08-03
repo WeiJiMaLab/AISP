@@ -31,6 +31,8 @@ elseif strcmp(type, 'PE2')
     d = aisp_computeOptimalPointEstDV(percepts, Data.SetSize, relKappaX, ...
         Data.KappaS, 0);
     
+else
+    error('Bug')
 end
 
 

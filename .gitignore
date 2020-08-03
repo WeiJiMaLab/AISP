@@ -6,3 +6,4 @@ Icon?
 figures
 ztmp*.*
 *.out
+tmp/

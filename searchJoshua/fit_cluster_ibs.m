@@ -19,14 +19,14 @@ opt_bads.NoiseFinalSamples = 100;
 opt_bads.NoiseSize = 5;
 
 opt_ibs = ibslike;
-opt_ibs.Nreps = 25; %500;
+opt_ibs.Nreps = 50; %500;
 opt_ibs.MaxIter = 2 * (10^4);
 opt_ibs.Vectorized = 'on';
 
-opt_varLimit = 100; %4
+opt_varLimit = Inf; %4
 
-FUN = @(pars, data) ibs_fun(data, pars, type);
-fun_handle = @(pars) ibslike_var(FUN, pars, DatSubj.Response, designMat, ...
+RespFun = @(pars, data) aisp_simResponseWrapper(data, pars, type);
+fun_handle = @(pars) ibslike_var(RespFun, pars, DatSubj.Response, designMat, ...
     opt_ibs, opt_varLimit);
 
 [X0,LB,UB,PLB,PUB] = get_bads_bounds();

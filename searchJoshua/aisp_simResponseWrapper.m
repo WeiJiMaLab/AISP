@@ -1,5 +1,6 @@
-function response = ibs_fun(data, pars, type)
-% simulates responses for ibs-sampling
+function response = aisp_simResponseWrapper(data, pars, type)
+% Simulates responses for ibs-sampling, but accepts inputs in the form required
+% for the IBS code.
 
 %% Change format of data
 DesignStruct = struct2DesignMat(data, 'to struct');
