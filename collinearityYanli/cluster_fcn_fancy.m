@@ -30,11 +30,11 @@ while idx > size(runs, 1)
         for iType = 1:Ntype
             switch iType
                 case 1
-                    files = dir(sprintf('pars/pars_ibs_Bayes_%d_*', iSubj));
+                    files = dir(sprintf('pars/pars_Bayes_%d_*', iSubj));
                 case 2
-                    files = dir(sprintf('pars/pars_ibs_Freq_%d_*', iSubj));
+                    files = dir(sprintf('pars/pars_Freq_%d_*', iSubj));
                 case 3
-                    files = dir(sprintf('pars/pars_ibs_Var_%d_*', iSubj));
+                    files = dir(sprintf('pars/pars_Var_%d_*', iSubj));
             end
             evals = zeros(length(files), 1);
             for iFile = 1:length(files)
