@@ -34,7 +34,7 @@ while idx > size(runs, 1)
                 case 2
                     files = dir(sprintf('pars/pars_Freq_%d_*', iSubj));
                 case 3
-                    files = dir(sprintf('pars/pars_Var_%d_*', iSubj));
+                    files = dir(sprintf('pars/pars_Freq2_%d_*', iSubj));
             end
             evals = zeros(length(files), 1);
             for iFile = 1:length(files)
