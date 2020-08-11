@@ -1,8 +1,5 @@
 function [DSet, Nptpnts] = getData(dataDir)
 
-if strcmp(dataDir, 'local')
-    dataDir = 'D:\Research data _ BACKED UP\Visual search\Main Study\In use\StandardFormat_participantExcluded.mat';
-end
 Loaded = load(dataDir);
 DSet = Loaded.DSet;
 

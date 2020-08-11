@@ -1,6 +1,6 @@
-function Figures = aisp_compareModelAndData(dataDir, model)
+function Figures = aisp_compareModelAndData(dataDir, parsDir, model)
 
-[SimDSet, DSet] = aisp_simDataset(dataDir, model);
+[SimDSet, DSet] = aisp_simDataset(dataDir, parsDir, model);
 
 % Add summary stats to the dataset
 % TODO remove the duplication here

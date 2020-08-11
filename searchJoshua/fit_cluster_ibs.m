@@ -1,4 +1,20 @@
-function fit_cluster_ibs(iRep, iPtpnt, type, DSet)
+function fit_cluster_ibs(iRep, iPtpnt, type, DSet, varargin)
+
+% INPUT
+% varargin{1}: Boolean. Default false. Whether to display information helpful
+% for debuging.
+
+if length(varargin) >= 1
+    debugMode = varargin{1};
+else
+    debugMode = false;
+end
+
+% In debug model ibslike_var uses persistant variables. Clear these for a fresh
+% start
+if debugMode
+    clear ibslike_var.m
+end
 
 addpath(genpath('../bads/'))
 addpath(genpath('../ibs/'))
@@ -20,20 +36,19 @@ end
 DatSubj = DSet.P(iPtpnt).Data;
 designMat = struct2DesignMat(DatSubj, 'to matrix');
 
+% Fitting settings
+opt_varLimit = 4; %4; can be higher if needed
 opt_bads = bads;
 opt_bads.NoiseFinalSamples = 100;
-opt_bads.NoiseSize = 5;
-
+opt_bads.NoiseSize = sqrt(opt_varLimit);
 opt_ibs = ibslike;
-opt_ibs.Nreps = 50; %500;
+opt_ibs.Nreps = 1; %1;
 opt_ibs.MaxIter = 2 * (10^4);
 opt_ibs.Vectorized = 'on';
 
-opt_varLimit = Inf; %4
-
 RespFun = @(pars, data) aisp_simResponseWrapper(data, pars, type);
 fun_handle = @(pars) ibslike_var(RespFun, pars, DatSubj.Response, designMat, ...
-    opt_ibs, opt_varLimit);
+    opt_ibs, opt_varLimit, debugMode);
 
 [X0,LB,UB,PLB,PUB] = get_bads_bounds();
 

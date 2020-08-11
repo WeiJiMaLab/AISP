@@ -1,4 +1,4 @@
-function Figures = plot_likelihoods(dataDir)
+function Figures = plot_likelihoods(dataDir, parsDir)
 
 [~, Nptpnts] = getData(dataDir);
 Config = load('Config.mat');
@@ -7,7 +7,7 @@ Nmodels = length(Config.ModelList);
 nLogLs = nan(Nptpnts,Nmodels);
 stds = nan(Nptpnts,Nmodels);
 for itype = 1 : Nmodels 
-    fname = ['pars/pars_' Config.ModelList{itype} '.mat'];
+    fname = [parsDir '/pars_' Config.ModelList{itype} '.mat'];
     f = load(fname);
 
     sorted = sort(f.nLogLs,2);

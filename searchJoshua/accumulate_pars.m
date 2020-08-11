@@ -1,11 +1,14 @@
-function accumulate_pars(dataDir)
+function accumulate_pars(dataDir, parsDir)
+
+% INPUT
+% dataDir: Directory containing the original unfitted dataset
 
 [~, Nptpnts] = getData(dataDir);
 Config = load('Config.mat');
 Nreps = Config.Nreps;
 
 for itype = 1 : length(Config.ModelList)
-    fname = ['pars/pars_' Config.ModelList{itype}];
+    fname = [parsDir '/pars_' Config.ModelList{itype}];
     files = dir([fname,'_*']);
     
     % Load the first file just to find out the number of parameters

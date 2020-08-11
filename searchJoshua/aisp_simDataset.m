@@ -1,4 +1,4 @@
-function [SimDSet, DSet] = aisp_simDataset(dataDir, model)
+function [SimDSet, DSet] = aisp_simDataset(dataDir, parsDir, model)
 % Takes the dataset given by DSet and simulates new responses using "model", and
 % the best fitting parameters. Note that nothing except responses and accuracy 
 % is simulated and SimDSet is in all other respects identical to DSet.
@@ -8,7 +8,7 @@ SimDSet = DSet;
 
 %% Find the best fitting parameters
 
-fname = ['pars/pars_' model '.mat'];
+fname = [parsDir '/pars_' model '.mat'];
 f = load(fname);
 
 bestPars = aisp_collectBestFittingParams(f.nLogLs, f.pars);
