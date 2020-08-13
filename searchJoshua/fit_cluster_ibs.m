@@ -42,7 +42,7 @@ opt_bads = bads;
 opt_bads.NoiseFinalSamples = 100;
 opt_bads.NoiseSize = sqrt(opt_varLimit);
 opt_ibs = ibslike;
-opt_ibs.Nreps = 1; %1;
+opt_ibs.Nreps = 20; %1;
 opt_ibs.MaxIter = 2 * (10^4);
 opt_ibs.Vectorized = 'on';
 

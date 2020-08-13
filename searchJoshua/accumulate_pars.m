@@ -1,7 +1,12 @@
-function accumulate_pars(dataDir, parsDir)
+function accumulate_pars(dataDir, parsDir, firstOrAll)
 
 % INPUT
 % dataDir: Directory containing the original unfitted dataset
+% parsDir: Where to find the fitted params, and where to save the files with all
+% the parameters collected
+% firstOrAll: 'first' or 'all'. Collect the parameters associated with the first
+% round of fitting only (up to Config.Nreps), or collect all parameters
+% including any that were later scheduled using cluster_fcn_fancy
 
 [~, Nptpnts] = getData(dataDir);
 Config = load('Config.mat');
@@ -20,16 +25,21 @@ for itype = 1 : length(Config.ModelList)
     for iFile = 1:length(files)
         f = load(fullfile(files(iFile).folder,files(iFile).name));
         fparts = split(files(iFile).name,{'_','.'});
-        iSubj = str2double(fparts{end-2});
+        iPtpnt = str2double(fparts{end-2});
         iRep = str2double(fparts{end-1});
-        if isfield(f, 'likelihood')
-            nLogLs(iSubj,iRep) = f.likelihood;
-            % TODO Remove this option. 
+        if strcmp(firstOrAll, 'first')
+            if iRep <= Config.Nreps
+                nLogLs(iPtpnt,iRep) = f.nLogL;
+                pars(iPtpnt,:,iRep) = f.pars;
+            end
         else
-            nLogLs(iSubj,iRep) = f.nLogL;
+            error('Not coded up yet')
         end
-        pars(iSubj,:,iRep) = f.pars;
     end
     
     save([fname,'.mat'],'pars','nLogLs')
 end
+
+assert(~any(isnan(pars(:))))
+assert(~any(isnan(nLogLs(:))))
+
