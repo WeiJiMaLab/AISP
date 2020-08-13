@@ -34,7 +34,7 @@ while idx > size(runs, 1)
     f = fopen('./tmp/block_runs', 'w');
     for iPtpnt = 1:Nptpnts
         for iType = 1:Ntype
-            files = dir(sprintf('pars/pars_ibs_%s_%d_*', ...
+            files = dir(sprintf('pars/pars_%s_%d_*', ...
                 Config.ModelList{iType}, iPtpnt));
             
             evals = nan(length(files), 1);
@@ -42,8 +42,11 @@ while idx > size(runs, 1)
                 data = load(fullfile(files(iFile).folder, files(iFile).name));
                 evals(iFile) = data.nLogL;
             end
+   %         disp(['***** Evaluations found for participant ' num2str(iPtpnt) ' model ' num2str(iType) ': '])
+   %         disp(evals)
             best = min(evals);
-            n_good = sum(evals < best + slack);
+            n_good = sum(evals < (best + slack));
+            disp(['***** Num good runs for participant ' num2str(iPtpnt) ' model ' num2str(iType) ': ' num2str(n_good)])
             if n_good < N_target
                 iRep = max(runs(runs(:,1)==iPtpnt & runs(:,3)==iType,2)) + 1;
                 runs = [runs; [iPtpnt, iRep, iType]];
