@@ -17,15 +17,20 @@ end
 
 pdata = nLogLs(:,1)-nLogLs;
 
+xLocs = 0.5:2.5;
 Figures.Likelihoods = figure;
-bar(mean(pdata),'FaceColor','k')
+bar(xLocs, mean(pdata),'FaceColor','k')
 hold on
-plot((1:3) +0.05*randn(size(pdata)),pdata,'.','Color',[0.4,0.4,0.4],'MarkerSize',20)
+plot(xLocs +0.05*randn(size(pdata)),pdata,'.','Color',[0.4,0.4,0.4])
 box off
 set(gca,'TickDir','out')
-ylabel('LL - LLBayes','FontSize',18)
-set(gca,'FontSize',14)
-xticklabels(Config.ModelList)
+ylabel('LL - LLBayes')
+set(gca)
+xlim([0, 3])
+xticks(xLocs)
+
+% Set labels, although replace some to make more interpretable
+xticklabels(Config.ModelLabel)
 
 
 pdata2 = stds;
