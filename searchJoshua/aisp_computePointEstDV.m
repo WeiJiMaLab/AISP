@@ -80,6 +80,10 @@ if strcmp(maxOver, 'stimOnly')
     d = log( (1./nItems) .* maxProduct ) + logVmTerm;
     
 elseif strcmp(maxOver, 'stimAndTarg')
+    if ~(length(mu_s) == 1 && mu_s == 0)
+        error('Not coded up yet')
+    end
+    
     cosPercept = cos(percept);
     kappa_d = sqrt((kappa_x.^2) + (kappa_s.^2) + (2*kappa_x.*kappa_s.*cosPercept));
     
