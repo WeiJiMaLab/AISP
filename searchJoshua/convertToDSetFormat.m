@@ -13,6 +13,9 @@ end
 Config = load('Config.mat');
 
 for iModel = 1 : length(Config.ModelList)
+    for iPtpnt = 1 : length(DSet.P)
+        DSet.P(iPtpnt).Models(iModel).Settings.ModelName = Config.ModelList{iModel};
+    end
     fname = [parsDir '/pars_' Config.ModelList{iModel}];
     files = dir([fname,'_*']);
     numFits = zeros(length(DSet.P), 1);
