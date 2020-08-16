@@ -25,7 +25,7 @@ if strcmp(type, 'Bayes')
 
 elseif strcmp(type, 'PE')
     d = aisp_computePointEstDV(percepts, Data.SetSize, relKappaX, ...
-        Data.KappaS, 0);
+        Data.KappaS, 0, 'stimAndTarg');
         
 elseif strcmp(type, 'PE2')
     d = aisp_computeOptimalPointEstDV(percepts, Data.SetSize, relKappaX, ...

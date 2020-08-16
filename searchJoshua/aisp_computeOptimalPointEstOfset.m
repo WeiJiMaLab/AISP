@@ -84,11 +84,11 @@ if strcmp(calc, 'new')
         % estimate observer
         x0 = aisp_addNoiseToStim(thisKappa_x, s0);
         d0 = aisp_computePointEstDV(x0, thisNItems, thisKappa_x, ...
-            thisKappa_s, mu_s);
+            thisKappa_s, mu_s, 'stimAndTarg');
         
         x1 = aisp_addNoiseToStim(thisKappa_x, s1);
         d1 = aisp_computePointEstDV(x1, thisNItems, thisKappa_x, ...
-            thisKappa_s, mu_s);
+            thisKappa_s, mu_s, 'stimAndTarg');
         
         if (length(size(d0))~=2) || (size(d0, 2)~=1); error('Bug'); end
         if (length(size(d1))~=2) || (size(d1, 2)~=1); error('Bug'); end

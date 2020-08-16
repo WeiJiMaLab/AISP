@@ -1,4 +1,5 @@
-function d = aisp_computePointEstDV(percept, nItems, kappa_x, kappa_s, mu_s)
+function d = aisp_computePointEstDV(percept, nItems, kappa_x, kappa_s, mu_s, ...
+    maxOver)
 % Compute the decision variable for the point estimate observer
 
 % INPUT
@@ -9,10 +10,17 @@ function d = aisp_computePointEstDV(percept, nItems, kappa_x, kappa_s, mu_s)
 % kappa_s   Overserver's belief about the concentration parameter of the 
 %           distractor distribution
 % mu_s      Center of the distractor distribution
+% maxOver   What kind of point estimate observer should the function behave
+%           like? An observer who maximises over the values for the stimuli only
+%           ('stimOnly'), or an observer who maximises over both stimuli and the
+%           location of the target ('stimAndTarg')?
 
 %% Setup
 % Check input
 if size(percept, 2) > 8; error('Bug'); end
+if ~ismember(maxOver, {'stimOnly', 'stimAndTarg'})
+    error('Incorrect use of inputs.')
+end
 
 % We use implicit expansion below so it is very important that all input
 % vectors are the expected shape.
@@ -39,35 +47,49 @@ end
 
 %% Main calculations
 
-% TODO not sure if the arguments to atan2 are in the correct order
-cosPercept = cos(percept);
-mu_d = percept + atan2(-sin(percept), (kappa_x./kappa_s)+cosPercept);
-kappa_d = sqrt((kappa_x.^2) + (kappa_s.^2) + (2*kappa_x.*kappa_s.*cosPercept));
-
-varphi = exp(kappa_d .* (cos(mu_d) -1));
-
-
-% Find the number of elements, tildeL, in Omega, that maximise J (see
-% derivations). From the derivations we know that if tildeL items are included
-% they will be the items with the greatest values of varphi. 
-varphi = sort(varphi, 2, 'descend', 'MissingPlacement', 'last');
-varphiProd = cumprod(varphi, 2);
-tildeL = nan(1, size(varphi, 2), 1);
-tildeL(:) = 1 : size(varphi, 2);
-
-% Compute tildeL * product of varphi, for all possibel numbers of tildeL, and
-% pick the maximum value
-maxProduct = max(varphiProd.*tildeL, [], 2);
-if any(isnan(maxProduct(:))); error('Bug'); end
-
-if length(mu_s) == 1 && mu_s == 0
-    logBesseli = aisp_computeLogBesseliForDuplicatedValues(kappa_s);
-    logVmTerm = log(2*pi) - kappa_s + logBesseli;
-    % TODO check that this matches a von mises evaluated at x=0, and with mean
-    % mu=0. (Not sure if got the right bessel function so important to check.
+if strcmp(maxOver, 'stimOnly')
+    % TODO not sure if the arguments to atan2 are in the correct order
+    cosPercept = cos(percept);
+    mu_d = percept + atan2(-sin(percept), (kappa_x./kappa_s)+cosPercept);
+    kappa_d = sqrt((kappa_x.^2) + (kappa_s.^2) + (2*kappa_x.*kappa_s.*cosPercept));
+    
+    varphi = exp(kappa_d .* (cos(mu_d) -1));
+    
+    
+    % Find the number of elements, tildeL, in Omega, that maximise J (see
+    % derivations). From the derivations we know that if tildeL items are included
+    % they will be the items with the greatest values of varphi.
+    varphi = sort(varphi, 2, 'descend', 'MissingPlacement', 'last');
+    varphiProd = cumprod(varphi, 2);
+    tildeL = nan(1, size(varphi, 2), 1);
+    tildeL(:) = 1 : size(varphi, 2);
+    
+    % Compute tildeL * product of varphi, for all possibel numbers of tildeL, and
+    % pick the maximum value
+    maxProduct = max(varphiProd.*tildeL, [], 2);
+    if any(isnan(maxProduct(:))); error('Bug'); end
+    
+    if length(mu_s) == 1 && mu_s == 0
+        logBesseli = aisp_computeLogBesseliForDuplicatedValues(kappa_s);
+        logVmTerm = log(2*pi) - kappa_s + logBesseli;
+        % TODO check that this matches a von mises evaluated at x=0, and with mean
+        % mu=0. (Not sure if got the right bessel function so important to check.
+    else
+        error('Not coded up yet')
+    end
+    d = log( (1./nItems) .* maxProduct ) + logVmTerm;
+    
+elseif strcmp(maxOver, 'stimAndTarg')
+    cosPercept = cos(percept);
+    kappa_d = sqrt((kappa_x.^2) + (kappa_s.^2) + (2*kappa_x.*kappa_s.*cosPercept));
+    
+    % Find the term that needs to be maximised over
+    toMax = (kappa_x.*cosPercept) - kappa_d;
+    
+    d = log((2*pi) ./ nItems) ...
+        + aisp_computeLogBesseliForDuplicatedValues(kappa_s) ...
+        + max(toMax, [], 2);
 else
-    error('Not coded up yet')
+    error('Bug')
 end
-d = log( (1./nItems) .* maxProduct ) + logVmTerm;
-
 

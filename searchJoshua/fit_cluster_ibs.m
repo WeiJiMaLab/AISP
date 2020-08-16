@@ -19,6 +19,7 @@ end
 addpath(genpath('../bads/'))
 addpath(genpath('../ibs/'))
 addpath('./visualSearch')
+addpath('./visualSearch/analysisFuns')
 addpath('../lautils-mat/stats')
 
 % Create the directory we will use for saving the results
@@ -37,12 +38,12 @@ DatSubj = DSet.P(iPtpnt).Data;
 designMat = struct2DesignMat(DatSubj, 'to matrix');
 
 % Fitting settings
-opt_varLimit = 4; %4; can be higher if needed
+opt_varLimit = 90; %4; can be higher if needed
 opt_bads = bads;
 opt_bads.NoiseFinalSamples = 100;
 opt_bads.NoiseSize = sqrt(opt_varLimit);
 opt_ibs = ibslike;
-opt_ibs.Nreps = 20; %1;
+opt_ibs.Nreps = 5; %1; 20;
 opt_ibs.MaxIter = 2 * (10^4);
 opt_ibs.Vectorized = 'on';
 
