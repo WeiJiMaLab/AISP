@@ -157,3 +157,7 @@ finalAssocKappa_x = assocKappa_x;
 finalAssocKappa_s = assocKappa_s;
 ofset = optimalCrit;
 
+if any(isnan(ofset(:))); error('Bug'); end
+
+
+
