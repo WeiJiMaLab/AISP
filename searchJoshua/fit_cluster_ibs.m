@@ -1,6 +1,7 @@
-function fit_cluster_ibs(iRep, iPtpnt, type, DSet, varargin)
+function fit_cluster_ibs(iRep, iPtpnt, type, DSet, idx, varargin)
 
 % INPUT
+% idx: Index of the job. Used when saving the results
 % varargin{1}: Boolean. Default false. Whether to display information helpful
 % for debuging.
 
@@ -28,7 +29,7 @@ if ~exist('pars', 'dir')
 end
 
 % Has this fit been run previously?
-saveFile = sprintf('./pars/pars_%s_%d_%d.mat',type,iPtpnt,iRep);
+saveFile = sprintf('./pars/pars_%d_%s_%d_%d.mat',idx,type,iPtpnt,iRep);
 if exist(saveFile, 'file')
     warning('Skipping this fit as it has already been completed.')
     return
@@ -43,7 +44,7 @@ opt_bads = bads;
 opt_bads.NoiseFinalSamples = 100;
 opt_bads.NoiseSize = sqrt(opt_varLimit);
 opt_ibs = ibslike;
-opt_ibs.Nreps = 20; %1;
+opt_ibs.Nreps = 1;
 opt_ibs.MaxIter = 2 * (10^4);
 opt_ibs.Vectorized = 'on';
 
