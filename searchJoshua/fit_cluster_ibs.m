@@ -46,7 +46,7 @@ opt_bads.NoiseSize = sqrt(opt_varLimit);
 opt_ibs = ibslike;
 opt_ibs.Nreps = 1;
 opt_ibs.MaxIter = 2 * (10^4);
-opt_ibs.Vectorized = 'on';
+% opt_ibs.Vectorized = 'on';
 
 RespFun = @(pars, data) aisp_simResponseWrapper(data, pars, type);
 fun_handle = @(pars) ibslike_var(RespFun, pars, DatSubj.Response, designMat, ...

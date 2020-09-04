@@ -3,7 +3,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --time=5:00:00
 #SBATCH --job-name=aispVS
-#SBATCH --output=slurmOut/slurm_%a.out
+#SBATCH --output=slurmOut/slurm_%j.out
 
 # INPUT
 # $1 Index of the job to run
