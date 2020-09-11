@@ -3,14 +3,16 @@
 # Submits all jobs which don't have an associated results file.
 
 # INPUT
-# $1 How many jobs should the function run (if they have not already been run)?
-# $2 full file name (including directory) for the data file
+# $1 Which jobs should the function run (if they have not already been run)? This number should be the begining of the range.
+# $2 Which jobs should the function run (if they have not already been run)? This number should be the end of the range.
+# $3 full file name (including directory) for the data file
 
-numJobs=$1
-dataDir=$2
+startJobs=$1
+endJobs=$2
+dataDir=$3
 
 # Loop through all job files in the direcotry
-for idx in $(seq 1 $numJobs); do
+for idx in $(seq $startJobs $endJobs); do
 
     resultExists=0
     resultToFind=/pars/pars_$idx

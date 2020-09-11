@@ -34,7 +34,7 @@ while idx > size(runs, 1)
     f = fopen('./tmp/block_runs', 'w');
     for iPtpnt = 1:Nptpnts
         for iType = 1:Ntype
-            files = dir(sprintf('pars/pars_%s_%d_*', ...
+            files = dir(sprintf('pars/pars_*_%s_%d_*', ...
                 Config.ModelList{iType}, iPtpnt));
             
             evals = nan(length(files), 1);
