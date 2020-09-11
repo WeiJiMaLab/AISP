@@ -92,6 +92,8 @@ if strcmp(calc, 'new')
         
         if (length(size(d0))~=2) || (size(d0, 2)~=1); error('Bug'); end
         if (length(size(d1))~=2) || (size(d1, 2)~=1); error('Bug'); end
+        if (size(d0, 1)~=nSim); error('Bug'); end
+        if (size(d1, 1)~=nSim); error('Bug'); end
         
         % bisection method
         crit0 = min(d1);

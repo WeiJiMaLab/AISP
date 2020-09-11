@@ -13,7 +13,8 @@ Config = load('Config.mat');
 Nreps = Config.Nreps;
 
 for itype = 1 : length(Config.ModelList)
-    fname = [parsDir '/pars_' Config.ModelList{itype}];
+    fname = [parsDir '\pars_*_' Config.ModelList{itype}];
+    shortName = [parsDir '\pars_' Config.ModelList{itype}];
     files = dir([fname,'_*']);
     
     % Load the first file just to find out the number of parameters
@@ -29,6 +30,10 @@ for itype = 1 : length(Config.ModelList)
         iRep = str2double(fparts{end-1});
         if strcmp(firstOrAll, 'first')
             if iRep <= Config.Nreps
+                if (~isnan(nLogLs(iPtpnt,iRep))) ...
+                        || (any(~isnan(pars(iPtpnt, :, iRep))))
+                    error('There already seems to be data here.')
+                end
                 nLogLs(iPtpnt,iRep) = f.nLogL;
                 pars(iPtpnt,:,iRep) = f.pars;
             end
@@ -37,7 +42,7 @@ for itype = 1 : length(Config.ModelList)
         end
     end
     
-    save([fname,'.mat'],'pars','nLogLs')
+    save([shortName,'.mat'],'pars','nLogLs')
 end
 
 assert(~any(isnan(pars(:))))

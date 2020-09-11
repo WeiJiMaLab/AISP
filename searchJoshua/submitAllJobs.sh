@@ -16,7 +16,7 @@ for idx in $(seq 1 $numJobs); do
     resultToFind=/pars/pars_$idx
 
     for filename in ./pars/*.mat; do
-        if [[ "$filename" == *"$resultToFind"* ]]; then
+        if [[ "$filename" == *"$resultToFind"_* ]]; then
             resultExists=1
         fi
     done

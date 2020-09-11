@@ -15,11 +15,12 @@ for itype = 1 : Nmodels
     nLogLs(:,itype) = min(f.nLogLs,[],2,'omitnan');
 end
 
+% First plot
 pdata = nLogLs(:,1)-nLogLs;
 
 xLocs = 0.5:2.5;
 Figures.Likelihoods = figure;
-bar(xLocs, mean(pdata),'FaceColor','k')
+bPlot = bar(xLocs, mean(pdata),'FaceColor','k')
 hold on
 plot(xLocs +0.05*randn(size(pdata)),pdata,'.','Color',[0.4,0.4,0.4])
 box off
@@ -30,9 +31,16 @@ xlim([0, 3])
 xticks(xLocs)
 
 % Set labels, although replace some to make more interpretable
-xticklabels(Config.ModelLabel)
+xticklabels(Config.ModelLabel);
+
+set(findall(gcf,'-property','FontSize'),'FontSize',10)
+set(findall(gcf,'Type','Line'), 'LineWidth', 1)
+set(findall(gca,'Type','Line'), 'LineWidth', 1)
+bPlot.BaseLine.LineWidth = 1;
+set(gca, 'LineWidth', 1)
 
 
+% Second plot
 pdata2 = stds;
 
 figure 
@@ -44,3 +52,4 @@ set(gca,'TickDir','out')
 ylabel('std of estimates','FontSize',18)
 set(gca,'FontSize',14)
 xticklabels(Config.ModelList)
+
