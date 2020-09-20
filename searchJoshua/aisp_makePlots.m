@@ -1,4 +1,4 @@
-function aisp_makePlots(dataDir, parsDir, figDir, firstOrAll)
+function aisp_makePlots(dataDir, parsDir, figDir, firstOrAll, varargin)
 
 % INPUT
 % dataDir: Directory containing the original unfitted dataset
@@ -7,6 +7,8 @@ function aisp_makePlots(dataDir, parsDir, figDir, firstOrAll)
 % firstOrAll: 'first' or 'all'. Collect the parameters associated with the first
 % round of fitting only (up to Config.Nreps), or collect all parameters
 % including any that were later scheduled using cluster_fcn_fancy
+% varargin: Boolean. Override error if there appear to be duplicate fits? Use with
+% caution, probably indicates a bug.
 
 addpath('./plotFuns')
 addpath('../lautils-mat/stats')
@@ -16,9 +18,15 @@ addpath('./visualSearch/plotFuns')
 addpath('./visualSearch/analysisFuns')
 addpath('./visualSearch/modellingTools')
 
+if ~isempty(varargin)
+    overrideDupError = varargin{1};
+else
+    overrideDupError = false;
+end
+
 Config = load('Config.mat');
 
-accumulate_pars(dataDir, parsDir, firstOrAll)
+accumulate_pars(dataDir, parsDir, firstOrAll, overrideDupError)
 
 %% Comparison between models
 Figures = plot_likelihoods(dataDir, parsDir);
