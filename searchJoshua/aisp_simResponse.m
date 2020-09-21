@@ -16,9 +16,6 @@ percepts = aisp_addNoiseToStim(relKappaX, Data.Orientation);
 %% Simulate responses based on these percepts
 
 % What response is given in each case?
-kappaX = exp(ParamStruct.LnKappa_x);
-relKappaX = kappaX(Data.SetSizeCond);
-
 if strcmp(type, 'Bayes')
     d = aisp_computeBaysianDV(percepts, Data.SetSize, relKappaX, ...
         Data.KappaS, 0);

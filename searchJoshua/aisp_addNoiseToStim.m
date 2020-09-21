@@ -7,9 +7,6 @@ function percepts = aisp_addNoiseToStim(kappa_x, stim)
 % INPUT
 % kappa_x: [num trials X 1] vector describing the value of kappa_x in each
 % trial, or single value
-% setSizeCond: [num trials X 1] vector describing the set size condition. This
-% is a number between 1 and the total number of possible set sizes. It is not
-% the set size itself.
 % stim   [num trials X num locations] array describing the orientation of the
 %        Gabor patches
 
@@ -32,7 +29,7 @@ noise = NaN(size(stim));
 presentedLocs = ~isnan(stim);
 
 
-% Find the relevant Kappa_x value. This depends on the set size.
+% Find the relevant Kappa_x value
 relKappaXShaped = repmat(kappa_x, 1, size(stim, 2));
 
 if length(size(stim)) == 3

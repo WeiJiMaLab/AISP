@@ -84,6 +84,8 @@ elseif strcmp(maxOver, 'stimAndTarg')
         error('Not coded up yet')
     end
     
+    % TODO add checks that everything is the expected shape
+    
     cosPercept = cos(percept);
     kappa_d = sqrt((kappa_x.^2) + (kappa_s.^2) + (2*kappa_x.*kappa_s.*cosPercept));
     

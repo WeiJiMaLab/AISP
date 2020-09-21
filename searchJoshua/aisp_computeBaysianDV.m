@@ -95,6 +95,8 @@ if termBShortcut
         
     end
     
+    % TODO
+    % Add in checks here that all the terms are of the expected shape
     
     d_loc = (kappa_x .* termB) + termA - termC;
     
