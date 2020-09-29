@@ -1,4 +1,4 @@
-function aisp_makePlots(dataDir, parsDir, figDir, firstOrAll, varargin)
+function DSet = aisp_makePlots(dataDir, parsDir, figDir, firstOrAll, varargin)
 
 % INPUT
 % dataDir: Directory containing the original unfitted dataset
