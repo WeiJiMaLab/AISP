@@ -69,8 +69,10 @@ for iAx = 1 : length(bigPlotAx(:))
     delete(bigPlotAx{iAx})
 end
         
-        
-        
+
+% TODO
+warning(['Code does not yet remove unecessary numbers for axes, where ', ...
+    'axes are duplicated on several rows/columns.'])
         
         
         
