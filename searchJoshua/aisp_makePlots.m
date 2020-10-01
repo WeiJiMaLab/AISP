@@ -31,7 +31,7 @@ accumulate_pars(dataDir, parsDir, firstOrAll, overrideDupError)
 %% Comparison between models
 Figures = plot_likelihoods(dataDir, parsDir);
 figure(Figures.Likelihoods);
-mT_exportNicePdf(5, 5, figDir, 'modelComparison')
+mT_exportNicePdf(4, 5, figDir, 'modelComparison')
 
 
 %% Comparison between models and data
