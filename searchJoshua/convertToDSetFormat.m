@@ -16,8 +16,8 @@ for iModel = 1 : length(Config.ModelList)
     for iPtpnt = 1 : length(DSet.P)
         DSet.P(iPtpnt).Models(iModel).Settings.ModelName = Config.ModelList{iModel};
     end
-    fname = [parsDir '/pars_*_' Config.ModelList{iModel}];
-    files = dir([fname,'_*']);
+    
+    files = findModelAssocFitFiles(parsDir, Config.ModelList{iModel});
     numFits = zeros(length(DSet.P), 1);
     
     for iFile = 1:length(files)

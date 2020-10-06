@@ -18,16 +18,16 @@ end
 % First plot
 pdata = nLogLs(:,1)-nLogLs;
 
-xLocs = 0.5:2.5;
+xLocs = 0.5:(Nmodels-0.5);
 Figures.Likelihoods = figure;
-bPlot = bar(xLocs, mean(pdata),'FaceColor','k')
+bPlot = bar(xLocs, mean(pdata),'FaceColor','k');
 hold on
 plot(xLocs +0.05*randn(size(pdata)),pdata,'.','Color',[0.4,0.4,0.4])
 box off
 set(gca,'TickDir','out')
 ylabel('LL - LLBayes')
 set(gca)
-xlim([0, 3])
+xlim([0, Nmodels])
 xticks(xLocs)
 
 % Set labels, although replace some to make more interpretable
@@ -46,7 +46,7 @@ pdata2 = stds;
 figure 
 bar(mean(pdata2),'FaceColor','k')
 hold on
-plot((1:3) +0.05*randn(size(pdata2)),pdata2,'.','Color',[0.4,0.4,0.4],'MarkerSize',20)
+plot((1:Nmodels) +0.05*randn(size(pdata2)),pdata2,'.','Color',[0.4,0.4,0.4],'MarkerSize',20)
 box off
 set(gca,'TickDir','out')
 ylabel('std of estimates','FontSize',18)

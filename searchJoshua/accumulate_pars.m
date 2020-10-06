@@ -21,24 +21,8 @@ Config = load('Config.mat');
 Nreps = Config.Nreps;
 
 for itype = 1 : length(Config.ModelList)
-    fname = [parsDir '\pars_*_' Config.ModelList{itype}];
-    shortName = [parsDir '\pars_' Config.ModelList{itype}];
-    files = dir([fname,'_*']);
     
-    % With all the candidate files, run a stricter test to ensure we have
-    % located only those files we really want. This became necessary when I
-    % unfortunately started using a model called 'PE_imagineL', with the
-    % underscore messing the previous syste up.
-    remove = zeros(length(files), 1);
-    for iFile = 1:length(files)
-        
-       pattern = [Config.ModelList{itype} '_\d*_\d*.mat'];
-       match = regexp(files(iFile).name, pattern, 'once');
-       if isempty(match); remove(iFile)=1; end
-    end
-    files(logical(remove))=[];
-    disp(['Model ' Config.ModelList{itype} ...
-        ' files found: ' num2str(length(files))])
+    files = findModelAssocFitFiles(parsDir, Config.ModelList{itype});
     
     % Load the first file just to find out the number of parameters
     f = load(fullfile(files(1).folder,files(1).name));
@@ -85,6 +69,7 @@ for itype = 1 : length(Config.ModelList)
         pars(iPtpnt,:,iRep) = f.pars;
     end
     
+    shortName = [parsDir '\pars_' Config.ModelList{itype}];
     save([shortName,'.mat'],'pars','nLogLs')
 end
 
