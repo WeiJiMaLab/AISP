@@ -5,7 +5,7 @@ colors = get(gca,'colororder');
 data = getData();
 switch type
     case 'Bayes'
-        p = load('pars/parsBayes.mat');
+        p = load('pars/pars_ibs_Bayes.mat');
         l = p.likelihoods;
         [~,maxID] = min(l,[],2);
         pars = zeros(size(p.pars,1),size(p.pars,2));
@@ -17,7 +17,7 @@ switch type
             data(data(:,1)==iSubj,6) = 2*bayes_simulate(data(data(:,1)==iSubj,2:3),sigmas,beta,lambda)-1;
         end
     case 'Freq'
-        p = load('pars/parsFreq.mat');
+        p = load('pars/pars_ibs_Freq.mat');
         l = p.likelihoods;
         [~,maxID] = min(l,[],2);
         pars = zeros(size(p.pars,1),size(p.pars,2));
@@ -29,7 +29,7 @@ switch type
             data(data(:,1)==iSubj,6) = 2*freq_simulate(data(data(:,1)==iSubj,2:3),sigmas,beta,lambda)-1;
         end
     case 'Freq2'
-        p = load('pars/parsFreq2.mat');
+        p = load('pars/pars_ibs_Freq2.mat');
         l = p.likelihoods;
         [~,maxID] = min(l,[],2);
         pars = zeros(size(p.pars,1),size(p.pars,2));
@@ -41,7 +41,7 @@ switch type
             data(data(:,1)==iSubj,6) = 2*freq2_simulate(data(data(:,1)==iSubj,2:3),sigmas,beta,lambda)-1;
         end
     case 'Freq3'
-        p = load('pars/parsFreq3.mat');
+        p = load('pars/pars_ibs_Freq3.mat');
         l = p.likelihoods;
         [~,maxID] = min(l,[],2);
         pars = zeros(size(p.pars,1),size(p.pars,2));
@@ -53,7 +53,7 @@ switch type
             data(data(:,1)==iSubj,6) = 2*freq3_simulate(data(data(:,1)==iSubj,2:3),sigmas,beta,lambda)-1;
         end
     case 'Var'
-        p = load('pars/parsVar.mat');
+        p = load('pars/pars_ibs_Var.mat');
         l = p.likelihoods;
         [~,maxID] = min(l,[],2);
         pars = zeros(size(p.pars,1),size(p.pars,2));

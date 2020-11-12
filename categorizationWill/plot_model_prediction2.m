@@ -61,10 +61,10 @@ for iSubj = 1:11
     yModel = zeros(2,6);
     for iNoise = 1:6
         dNoise = d(d(:,2)==iNoise,:);
-        y(1,iNoise) = 0.5+0.5*mean(dNoise(dNoise(:,5)==1,4));
-        y(2,iNoise) = 0.5+0.5*mean(dNoise(dNoise(:,5)==-1,4));
-        yModel(1,iNoise) = 0.5+0.5*mean(dNoise(dNoise(:,5)==1,6));
-        yModel(2,iNoise) = 0.5+0.5*mean(dNoise(dNoise(:,5)==-1,6));
+        y(1,iNoise) = 0.5+0.5*mean(dNoise(dNoise(:,5)==1,3));
+        y(2,iNoise) = 0.5+0.5*mean(dNoise(dNoise(:,5)==-1,3));
+        yModel(1,iNoise) = 0.5+0.5*mean(dNoise(dNoise(:,5)==1,5));
+        yModel(2,iNoise) = 0.5+0.5*mean(dNoise(dNoise(:,5)==-1,5));
     end
     plot(x,y(1,:),'b.-','MarkerSize',10)
     hold on

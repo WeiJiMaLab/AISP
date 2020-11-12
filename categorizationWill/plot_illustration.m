@@ -1,14 +1,14 @@
 function plot_illustration
 clf
 
-sigma1 = 3;
+sigma1 = 6;
 sigma2 = 12;
-sigmaL = 2;
-x0 = 9;
+sigmaL = 3;
+x0 = 3;
 
 x = linspace(-30,30,1000);
-y1 = exp(-0.5 * x.^2 ./ sigma1.^2) ./ sqrt(2 *pi) ./ sigma1;
-y2 = exp(-0.5 * x.^2 ./ sigma2.^2) ./ sqrt(2 *pi) ./ sigma2;
+y1 = exp(-0.5 * (x+10).^2 ./ sigma1.^2) ./ sqrt(2 *pi) ./ sigma1;
+y2 = exp(-0.5 * (x-10).^2 ./ sigma1.^2) ./ sqrt(2 *pi) ./ sigma1;
 l = exp(-0.5 * (x-x0).^2 ./ sigmaL.^2) ./ sqrt(2 *pi) ./ sigmaL;
 
 subplot(2,3,1)
@@ -22,10 +22,11 @@ set(gca, 'YTick', [])
 set(gca, 'XTickLabel', {'0', '$x$'}, 'TickLabelInterpreter','latex')
 xlabel('Stimulus Level s')
 ylabel('Density')
-legend('C=0', 'C=1', 'likelihood', 'Location', 'northwest')
+legend('$C=0$', '$C=1$', 'likelihood', 'Location', 'northwest', ...
+    'Interpreter','latex')
 legend('boxoff')
 xlim([-25,25])
-title('Priors & likelihoods')
+title('Prior & likelihood')
 
 subplot(2,3,2)
 hold on
@@ -40,15 +41,15 @@ plot([-30,x2], [m2, m2], 'k:', 'LineWidth', 2);
 plot([x1,x1], [0, m1], 'k:', 'LineWidth', 2);
 plot([x2,x2], [0, m2], 'k:', 'LineWidth', 2);
 set(gca, 'TickDir', 'out', 'Fontsize', 14)
-set(gca, 'XTick', [0, x1, x2, x0])
+set(gca, 'XTick', [x1, x0, x2])
 set(gca, 'YTick', [])
-set(gca, 'XTickLabel', {'0', '$\hat{x}_0$', '$\hat{x}_1$', ''}, 'TickLabelInterpreter','latex')
+set(gca, 'XTickLabel', {'$\hat{s}_0$','', '$\hat{s}_1$'}, 'TickLabelInterpreter','latex')
 xlabel('Stimulus Level s')
 ylabel('Posterior Density')
 xlim([-25,25])
 %legend('C=0', 'C=1', 'Location', 'northwest')
 %legend('boxoff')
-title('Posterior')
+title('(Proto-) Posterior')
 
 subplot(2,3,3)
 hold on
@@ -65,9 +66,9 @@ plot([-30,xf], [m2f, m2f], 'k:', 'LineWidth', 2);
 plot([xf,xf], [0, m1f], 'k:', 'LineWidth', 2);
 plot([xf,xf], [0, m2f], 'k:', 'LineWidth', 2);
 set(gca, 'TickDir', 'out', 'Fontsize', 14)
-set(gca, 'XTick', [0, xf, x0])
+set(gca, 'XTick', [0, x0, xf])
 set(gca, 'YTick', [], 'TickDir', 'out')
-set(gca, 'XTickLabel', {'0', '$\hat{x}$', ''}, 'TickLabelInterpreter','latex')
+set(gca, 'XTickLabel', {'0', '', '$\hat{s}$'}, 'TickLabelInterpreter','latex')
 xlabel('Stimulus Level s')
 ylabel('Factorized approximation q')
 xlim([-25,25])
@@ -93,7 +94,8 @@ set(gca, 'YTick', [])
 set(gca, 'XTickLabel', {'0', '$x$'}, 'TickLabelInterpreter','latex')
 xlabel('Stimulus Level s')
 ylabel('Density')
-legend('C=0', 'C=1', 'likelihood', 'Location', 'northwest')
+legend('$C=0$', '$C=1$', 'likelihood', 'Location', 'northwest', ...
+    'Interpreter','latex')
 legend('boxoff')
 xlim([-25,25])
 
@@ -112,7 +114,7 @@ plot([x2,x2], [0, m2], 'k:', 'LineWidth', 2);
 set(gca, 'TickDir', 'out', 'Fontsize', 14)
 set(gca, 'XTick', [x1, x2, x0])
 set(gca, 'YTick', [])
-set(gca, 'XTickLabel', {'$\hat{x}_1$', '$\hat{x}_0$', ''}, 'TickLabelInterpreter','latex')
+set(gca, 'XTickLabel', {'$\hat{s}_0$', '$\hat{s}_1$', ''}, 'TickLabelInterpreter','latex')
 xlabel('Stimulus Level s')
 ylabel('Posterior Density')
 xlim([-25,25])
