@@ -108,5 +108,6 @@ title(hleg,'Eccentricity[pix]', 'FontSize', 14);
 ylim([0,1])
 set(gca, 'TickDir', 'out')
 set(gca, 'FontSize', 14)
+set(gca, 'LineWidth', 2)
 xlabel('Offset [pixel]', 'FontSize',18)
 ylabel('Proportion same reports', 'FontSize',18)
