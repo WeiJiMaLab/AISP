@@ -1,6 +1,11 @@
 function plot_model_prediction(type)
 
 colors = get(gca,'colororder');
+purple = [150 112 177] / 255; %#9670B1
+gold = [223 172 110] / 255; %#DFAC6E
+reddish = [213 96 100] / 255; %#D56064
+blue = [132 158 209] / 255; %#849ED1
+colors = gold + linspace(0, 1, 6)' * (blue - gold);
 
 data = getData();
 switch type
@@ -90,7 +95,7 @@ for iSubj = 1:11
     plot(x,y,'k.-','MarkerSize',10)
     hold on
     plot(x,yModel,'bs--','MarkerSize',10)
-    xlabel('Stimulus Level','FontSize',16)
+    xlabel('Stimulus Orientation','FontSize',16)
     ylabel('Proportion Category 1','FontSize',16)
     ylim([0,1])
     box off
@@ -111,7 +116,7 @@ for iSubj = 1:11
     plot(x,y,'k.','MarkerSize',10)
     hold on
     plot(x,yModel,'b.','MarkerSize',10)
-    xlabel('Stimulus Level','FontSize',16)
+    xlabel('Stimulus Orientation','FontSize',16)
     ylabel('Proportion Category 1','FontSize',16)
     ylim([0,1])
     box off
@@ -155,10 +160,10 @@ for iLine = 1:6
          'EdgeColor','none','facealpha',.5)
 end
 for iLine = 1:6
-    errorbar(x(:,iLine),y(:,iLine),stdData(:,iLine),'.-', ...
-        'MarkerSize',10, 'Color', colors(iLine,:));
+    errorbar(x(:,iLine),y(:,iLine),stdData(:,iLine),'.', ...
+        'MarkerSize',10, 'Color', colors(iLine,:), 'LineWidth', 2.5);
 end
-xlabel('Stimulus Level','FontSize',24)
+xlabel('Stimulus Orientation','FontSize',24)
 ylabel('Proportion Category 1','FontSize',24)
 ylim([0,1])
 box off
@@ -179,7 +184,7 @@ end
 plot(x,y,'k.','MarkerSize',10)
 hold on
 plot(x,yModel,'b.','MarkerSize',10)
-xlabel('Stimulus Level','FontSize',24)
+xlabel('Stimulus Orientation','FontSize',24)
 ylabel('Proportion Category 1','FontSize',24)
 ylim([0,1])
 box off
