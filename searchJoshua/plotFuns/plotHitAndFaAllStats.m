@@ -67,13 +67,13 @@ PlotStyle.Xaxis(3).TickLabels = {' ', '0', ' ', ' ', ' ', '45', ' ', ' ', ' ', '
 
 
 PlotStyle.Yaxis(1).Title = {'Probability ', '''present'' report'};
-PlotStyle.Yaxis(1).Ticks = linspace(0, 1, 9);
+PlotStyle.Yaxis(1).Ticks = linspace(0, 1, 11);
 PlotStyle.Yaxis(1).TickLabels = string(PlotStyle.Yaxis(1).Ticks);
-PlotStyle.Yaxis(1).InvisibleTickLablels = setdiff(1:9, [1, 5, 9]);
+PlotStyle.Yaxis(1).InvisibleTickLablels = setdiff(1:9, [1, 6, 11]);
 PlotStyle.Yaxis(1).RefVal = 0.5;
 
-PlotStyle.Data(1).Colour = mT_pickColour(2);
-PlotStyle.Data(2).Colour = mT_pickColour(3);
+PlotStyle.Data(1).Colour = [223, 172, 110]/255;
+PlotStyle.Data(2).Colour = [132, 158, 209]/255;
 
 PlotStyle.Data(1).PlotType = plotType;
 PlotStyle.Data(2).PlotType = plotType;

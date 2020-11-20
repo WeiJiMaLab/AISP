@@ -1,4 +1,5 @@
-function DSet = aisp_makePlots(dataDir, parsDir, figDir, firstOrAll, varargin)
+function DSet = aisp_makePlots(dataDir, parsDir, figDir, firstOrAll, ...
+    configFile, varargin)
 
 % INPUT
 % dataDir: Directory containing the original unfitted dataset
@@ -7,6 +8,7 @@ function DSet = aisp_makePlots(dataDir, parsDir, figDir, firstOrAll, varargin)
 % firstOrAll: 'first' or 'all'. Collect the parameters associated with the first
 % round of fitting only (up to Config.Nreps), or collect all parameters
 % including any that were later scheduled using cluster_fcn_fancy
+% configFile: string. File path to matlab file to be loaded.
 % varargin: Boolean. Override error if there appear to be duplicate fits? Use with
 % caution, probably indicates a bug.
 
@@ -24,23 +26,24 @@ else
     overrideDupError = false;
 end
 
-Config = load('Config.mat');
+Config = load(configFile);
 
-accumulate_pars(dataDir, parsDir, firstOrAll, overrideDupError)
+accumulate_pars(dataDir, parsDir, firstOrAll, configFile, overrideDupError)
 
 %% Comparison between models
-Figures = plot_likelihoods(dataDir, parsDir);
+Figures = plot_likelihoods(dataDir, parsDir, configFile);
 figure(Figures.Likelihoods);
-mT_exportNicePdf(4, 5, figDir, 'modelComparison')
+mT_exportNicePdf(4, 6.5, figDir, 'modelComparison')
 
 
 %% Comparison between models and data
 
-[bigPlot, indiviudalPlots] = plotAllModelFits(dataDir, parsDir);
+[bigPlot, indiviudalPlots] = plotAllModelFits(dataDir, parsDir, configFile);
 
 % Models together
 figure(bigPlot)
-mT_exportNicePdf(9, 10.5, figDir, 'allModelFits', true);
+scale = 1.1;
+mT_exportNicePdf(9*scale, 10.5*scale, figDir, 'allModelFits', true);
 
 % Models individually
 for iM = 1 : length(Config.ModelList)
@@ -52,8 +55,8 @@ end
 %% Look at how close different runs of the same fit ended
 
 [DSet, ~] = getData(dataDir);
-DSet = convertToDSetFormat(DSet, parsDir);
+DSet = convertToDSetFormat(DSet, parsDir, configFile);
 
-mT_plotFitEndPoints(DSet, true, 2)
+mT_plotFitEndPoints(DSet, false, 2)
 
 

@@ -1,7 +1,10 @@
-function DSet = convertToDSetFormat(DSet, parsDir)
+function DSet = convertToDSetFormat(DSet, parsDir, configFile)
 % Takes the dataset DSet, and the fitting results in parsDir, and combines them
 % to produce a single DSet which contains key fitting results in the format used
 % by the modellingTools repository
+
+% INPUT
+% configFile: string. File path to matlab file to be loaded.
 
 warning('Check this function')
 
@@ -10,7 +13,7 @@ if isfield(DSet.P, 'Models')
 end
 
 
-Config = load('Config.mat');
+Config = load(configFile);
 
 for iModel = 1 : length(Config.ModelList)
     for iPtpnt = 1 : length(DSet.P)

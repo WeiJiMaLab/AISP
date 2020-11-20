@@ -1,4 +1,4 @@
-function dispResultsForOneFit(DSet, parsDir, participant, model)
+function dispResultsForOneFit(DSet, parsDir, participant, model, configFile)
 % Compare the results of different runs for the same fit
 
 % INPUT
@@ -6,13 +6,14 @@ function dispResultsForOneFit(DSet, parsDir, participant, model)
 % parsDir: Directory containing the fitted parameter data from the cluster
 % participant: Number of participant to look at
 % model: Number of model to look at
+% configFile: string. File path to matlab file to be loaded.
 
 % Collect some info
 [X0,LB,UB,PLB,PUB] = get_bads_bounds();
 numParams = length(X0);
 numPlots = numParams + 1;
 
-Config = load('Config.mat');
+Config = load(configFile);
 savedName = [parsDir '\pars_' Config.ModelList{model}];
 LoadedData = load([savedName,'.mat']);
 fittedPars = LoadedData.pars;

@@ -1,7 +1,10 @@
-function Figures = plot_likelihoods(dataDir, parsDir)
+function Figures = plot_likelihoods(dataDir, parsDir, configFile)
+
+% INPUT
+% configFile: string. File path to matlab file to be loaded.
 
 [~, Nptpnts] = getData(dataDir);
-Config = load('Config.mat');
+Config = load(configFile);
 Nmodels = length(Config.ModelList);
 
 nLogLs = nan(Nptpnts,Nmodels);
@@ -22,7 +25,8 @@ xLocs = 0.5:(Nmodels-0.5);
 Figures.Likelihoods = figure;
 bPlot = bar(xLocs, mean(pdata),'FaceColor','k');
 hold on
-plot(xLocs +0.05*randn(size(pdata)),pdata,'.','Color',[0.4,0.4,0.4])
+plot(xLocs +0.05*randn(size(pdata)),pdata,'.','Color',[0.4,0.4,0.4], ...
+    'MarkerSize', 7)
 box off
 set(gca,'TickDir','out')
 ylabel('LL - LLBayes')

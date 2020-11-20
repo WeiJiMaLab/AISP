@@ -7,4 +7,4 @@ figures
 ztmp*.*
 *.out
 tmp/
-Dirs.mat
+Dirs_*models.mat
