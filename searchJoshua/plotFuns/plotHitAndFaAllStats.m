@@ -52,24 +52,27 @@ PlotStyle.General = 'paper';
 
 PlotStyle.Xaxis(1).Title = {'T-D mean', '(deg)'};
 PlotStyle.Xaxis(1).Ticks = ...
-    [-pi/16, 0, pi/8, pi/4, 3*pi/8, pi/2, 5*pi/8, 3*pi/4, 7*pi/8, pi];
-PlotStyle.Xaxis(1).TickLabels = {' ', '0', ' ', ' ', ' ', '45', ' ', ' ', ' ', '90'};
+    [0, pi/8, pi/4, 3*pi/8, pi/2, 5*pi/8, 3*pi/4, 7*pi/8, pi];
+PlotStyle.Xaxis(1).TickLabels = {'0', ' ', ' ', ' ', '45', ' ', ' ', ' ', '90'};
+PlotStyle.Xaxis(1).Lims = [-pi/16, pi];
 
 PlotStyle.Xaxis(2).Title = 'D variance';
-PlotStyle.Xaxis(2).Ticks = [-0.05, linspace(0, 1, 11)];
+PlotStyle.Xaxis(2).Ticks = linspace(0, 1, 11);
 PlotStyle.Xaxis(2).TickLabels = string(PlotStyle.Xaxis(2).Ticks);
-PlotStyle.Xaxis(2).InvisibleTickLablels = setdiff([1:11], ([1, 6, 11]+1));
+PlotStyle.Xaxis(2).InvisibleTickLablels = setdiff([1:11], [1, 6, 11]);
+PlotStyle.Xaxis(2).Lims = [-0.05, 1];
 
 PlotStyle.Xaxis(3).Title = {'Min T-D', 'difference (deg)'};
 PlotStyle.Xaxis(3).Ticks = ...
-    [-pi/16, 0, pi/8, pi/4, 3*pi/8, pi/2, 5*pi/8, 3*pi/4, 7*pi/8, pi];
-PlotStyle.Xaxis(3).TickLabels = {' ', '0', ' ', ' ', ' ', '45', ' ', ' ', ' ', '90'};
+    [0, pi/8, pi/4, 3*pi/8, pi/2, 5*pi/8, 3*pi/4, 7*pi/8, pi];
+PlotStyle.Xaxis(3).TickLabels = {'0', ' ', ' ', ' ', '45', ' ', ' ', ' ', '90'};
+PlotStyle.Xaxis(3).Lims = [-pi/16, pi];
 
 
 PlotStyle.Yaxis(1).Title = {'Probability ', '''present'' report'};
 PlotStyle.Yaxis(1).Ticks = linspace(0, 1, 11);
 PlotStyle.Yaxis(1).TickLabels = string(PlotStyle.Yaxis(1).Ticks);
-PlotStyle.Yaxis(1).InvisibleTickLablels = setdiff(1:9, [1, 6, 11]);
+PlotStyle.Yaxis(1).InvisibleTickLablels = setdiff(1:11, [1, 6, 11]);
 PlotStyle.Yaxis(1).RefVal = 0.5;
 
 PlotStyle.Data(1).Colour = [223, 172, 110]/255;
