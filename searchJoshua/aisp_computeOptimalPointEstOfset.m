@@ -8,9 +8,10 @@ function [ofset, finalAssocNItems, finalAssocKappa_x, finalAssocKappa_s] ...
 % kappa_x: Vector same length as nItems. Values of kappa_x for each value of
 % nItems
 % kappa_s: Vector of unique values of kappa_s to use
-% varargin: If set to true, recompute the ofset regardless of whether the imput
+% varargin{1}: If set to true, recompute the ofset regardless of whether the imput
 % options have changed or not. (Normally does not recompute if inputs are the
 % same.)
+% varargin{2}: Make plots for debugging
 
 % NOTE
 % nItems, kappa_x, kappa_s do not have to be unique but this would be a waste of
@@ -30,6 +31,12 @@ if ~isempty(varargin)
     forceRecompute = varargin{1};
 else
     forceRecompute = false;
+end
+
+if length(varargin) > 1
+   debugPlots = varargin{2};
+else
+    debugPlots = false;
 end
 
 persistent optimalCrit
@@ -146,6 +153,14 @@ if strcmp(calc, 'new')
         end
         
         optimalCrit(iCase) = crit1;
+        
+        % Plots for debugging?
+        if debugPlots
+            figure; hold on
+            histogram(d0, 'Normalization', 'countdensity')
+            histogram(d1, 'Normalization', 'countdensity')
+            line([crit1 crit1], ylim());
+        end
     end
     
     % Update persistant variables to reflect that have recomputed the ofset
