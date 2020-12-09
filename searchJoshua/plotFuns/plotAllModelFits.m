@@ -31,8 +31,10 @@ bigPlot = figure;
 
 % Each row/column will have a different offset 
 % TODO this is hard coded -- the number of rows and columns. Change
-xOffset = [0, -0.03, -0.06, -0.09];
-yOffset = [0, 0.03, 0.06, 0.09];
+xOffset = [0, -0.015, -0.03, -0.045];
+% yOffset = [0, 0.03, 0.06, 0.09];
+yOffset = [0, 0, 0, 0];
+yStretch = [0.9, 0.9, 0.9, 0.9];
 
 for iM = 1 : length(Config.ModelList)
     for iPlotCol = 1 : numPlotsInEachSmall
@@ -44,6 +46,7 @@ for iM = 1 : length(Config.ModelList)
         pos = get(bigPlotAx{iM, iPlotCol}, 'Position');
         pos(1) = pos(1) + xOffset(iPlotCol);
         pos(2) = pos(2) + yOffset(iM);
+        pos(4) = pos(4) * yStretch(iM);
         set(bigPlotAx{iM, iPlotCol}, 'Position', pos);
     end
 end
@@ -74,7 +77,9 @@ for iM = 1 : length(Config.ModelList)
             
             currentLabel = copied{iPlotCol}.YLabel.String;
             ylabel(copied{iPlotCol}, ...
-                {['{\bf ' firstLabel '}'], Config.ModelLabel{iM}});
+                {['{' firstLabel '}']}, 'FontSize', 10);
+            title(copied{iPlotCol}, Config.ModelLabel{iM}, 'FontSize', 10)
+            copied{iPlotCol}.TitleHorizontalAlignment = 'left';
         end
         
         % Removing duplicated tick labels

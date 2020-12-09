@@ -51,9 +51,8 @@ Series(2).FindIncludedTrials = @(st) (st.Target==0);
 PlotStyle.General = 'paper';
 
 PlotStyle.Xaxis(1).Title = {'T-D mean', '(deg)'};
-PlotStyle.Xaxis(1).Ticks = ...
-    [0, pi/8, pi/4, 3*pi/8, pi/2, 5*pi/8, 3*pi/4, 7*pi/8, pi];
-PlotStyle.Xaxis(1).TickLabels = {'0', ' ', ' ', ' ', '45', ' ', ' ', ' ', '90'};
+PlotStyle.Xaxis(1).Ticks = (pi/180)*(0:20:180);
+PlotStyle.Xaxis(1).TickLabels = {'0', ' ', ' ', '30', ' ', ' ', '60', ' ', ' ', '90'};
 PlotStyle.Xaxis(1).Lims = [-pi/16, pi];
 
 PlotStyle.Xaxis(2).Title = 'D variance';
@@ -63,9 +62,8 @@ PlotStyle.Xaxis(2).InvisibleTickLablels = setdiff([1:11], [1, 6, 11]);
 PlotStyle.Xaxis(2).Lims = [-0.05, 1];
 
 PlotStyle.Xaxis(3).Title = {'Min T-D', 'difference (deg)'};
-PlotStyle.Xaxis(3).Ticks = ...
-    [0, pi/8, pi/4, 3*pi/8, pi/2, 5*pi/8, 3*pi/4, 7*pi/8, pi];
-PlotStyle.Xaxis(3).TickLabels = {'0', ' ', ' ', ' ', '45', ' ', ' ', ' ', '90'};
+PlotStyle.Xaxis(3).Ticks = (pi/180)*(0:20:180);
+PlotStyle.Xaxis(3).TickLabels = {'0', ' ', ' ', '30', ' ', ' ', '60', ' ', ' ', '90'};
 PlotStyle.Xaxis(3).Lims = [-pi/16, pi];
 
 

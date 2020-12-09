@@ -43,7 +43,7 @@ mT_exportNicePdf(4, 6.5, figDir, 'modelComparison')
 % Models together
 figure(bigPlot)
 scale = 1.1;
-mT_exportNicePdf(9*scale, 10.5*scale, figDir, 'allModelFits', true);
+mT_exportNicePdf(10.5*scale, 10.5*scale, figDir, 'allModelFits', true);
 
 % Models individually
 for iM = 1 : length(Config.ModelList)
