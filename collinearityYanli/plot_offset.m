@@ -11,6 +11,12 @@ end
 if ~exist('n_repeat', 'var') || isempty(n_repeat)
     n_repeat = 25;
 end
+% Colors from aspen
+purple = [150 112 177] / 255; %#9670B1
+gold = [223 172 110] / 255; %#DFAC6E
+reddish = [213 96 100] / 255; %#D56064
+blue = [132 158 209] / 255; %#849ED1
+colors = blue + linspace(0, 1, 4)' * (gold - blue);
 
 bins = [-inf, linspace(-50, 50, n_bin-1), inf];
 subs = unique(data(:,1));
@@ -60,19 +66,16 @@ end
 
 
 for i_ecc = 1:4
+    col = colors(i_ecc, :);
     switch i_ecc
         case 1
             dat = data(data(:,2)==0,:);
-            col = 'r';
         case 2
             dat = data(data(:,2)==240,:);
-            col = 'g';
         case 3
             dat = data(data(:,2)==480,:);
-            col = 'b';
         case 4
             dat = data(data(:,2)==840,:);
-            col = 'k';
     end
     %s = mean(dat(:,5:6),2) - dat(:,2);
     sdiff = dat(:,6) - dat(:,5);
@@ -99,15 +102,28 @@ for i_ecc = 1:4
         y = [p_model-std_model./sqrt(length(subs)),flip(p_model+std_model./sqrt(length(subs)))]';
         plot(polyshape(x,y), 'LineStyle', 'none', 'FaceColor', col, 'FaceAlpha', 0.5)
     end
-    errorbar(s_bin, p_same, p_std ./ sqrt(length(subs)), '.-', 'Color', col, ...
+    errorbar(s_bin, p_same, p_std ./ sqrt(length(subs)), '.', 'Color', col, ...
         'MarkerSize', 10, 'LineWidth', 2)
 end
 
-hleg = legend({'0','','240','','480','','840',''}, 'box','off', 'FontSize', 12);
+hleg = legend({'0','','240','','480','','840',''}, 'box','off', 'FontSize', 16);
 title(hleg,'Eccentricity[pix]', 'FontSize', 14);
 ylim([0,1])
+yax = get(gca, 'YAxis');
+set(yax, 'TickLength', [0.02,0.05])
+set(yax, 'TickValues', [0,0.5,1])
+set(yax, 'MinorTick', 'on')
+set(yax, 'MinorTickValues', [0.1,0.2,0.3,0.4,0.6,0.7,0.8,0.9])
 set(gca, 'TickDir', 'out')
-set(gca, 'FontSize', 14)
+set(gca, 'FontSize', 16)
 set(gca, 'LineWidth', 2)
-xlabel('Offset [pixel]', 'FontSize',18)
-ylabel('Proportion same reports', 'FontSize',18)
+xax = get(gca, 'XAxis');
+set(xax, 'TickLength', [0.02,0.05])
+set(xax, 'TickValues', [-100,-50,0,50,100])
+set(xax, 'MinorTick', 'on')
+set(xax, 'MinorTickValues', -100:10:100)
+set(gca, 'TickDir', 'out')
+set(gca, 'FontSize', 16)
+set(gca, 'LineWidth', 2)
+xlabel('Offset [pixel]', 'FontSize',20)
+ylabel('Proportion same reports', 'FontSize',20)

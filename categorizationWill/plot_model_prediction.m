@@ -161,13 +161,13 @@ for iLine = 1:6
 end
 for iLine = 1:6
     errorbar(x(:,iLine),y(:,iLine),stdData(:,iLine),'.', ...
-        'MarkerSize',10, 'Color', colors(iLine,:), 'LineWidth', 2.5);
+        'MarkerSize',10, 'Color', colors(iLine,:), 'LineWidth', 3);
 end
 xlabel('Stimulus Orientation','FontSize',24)
 ylabel('Proportion Category 1','FontSize',24)
 ylim([0,1])
 box off
-set(gca,'TickDir','out', 'FontSize', 16)
+set(gca,'TickDir','out', 'FontSize', 16, 'LineWidth', 4)
 
 subplot(1,2,2)
 k = 0;
@@ -188,6 +188,6 @@ xlabel('Stimulus Orientation','FontSize',24)
 ylabel('Proportion Category 1','FontSize',24)
 ylim([0,1])
 box off
-set(gca,'TickDir','out', 'FontSize', 16)
+set(gca,'TickDir','out', 'FontSize', 16, 'LineWidth', 2)
 %set(gcf,'Position',[560,723,560,225])
 set(gcf,'Position',[560,723,1120,450])
