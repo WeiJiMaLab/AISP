@@ -21,11 +21,18 @@ fun_handle = @(pars) ibslike_var(FUN,pars,response,stimulus,opt_ibs, var_limit);
 
 [X0, LB, UB, PLB, PUB] = get_bads_bounds();
 
-[pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
 
 switch type
     case 'bayes'
+        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/searchShan/pars/pars_ibs_Bayes_%d_%d.mat',iSubj,iRep),'pars','likelihood')
     case 'freq'
+        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/searchShan/pars/pars_ibs_Freq_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+    case 'sample1'
+        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+        save(sprintf('~/AISP/searchShan/pars/pars_ibs_Sample1_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+    case 'sample'
+        [pars,likelihood] = bads(fun_handle,[X0,10],[LB,1],[UB,10000],[PLB,1],[PUB,1000],options);
+        save(sprintf('~/AISP/searchShan/pars/pars_ibs_Sample_%d_%d.mat',iSubj,iRep),'pars','likelihood')
 end

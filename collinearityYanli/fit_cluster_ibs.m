@@ -29,4 +29,15 @@ switch type
     case 'PE2'
         [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/collinearityYanli/pars/pars_Freq2_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+    case 'sample1'
+        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+        save(sprintf('~/AISP/collinearityYanli/pars/pars_sample1_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+    case 'sample'
+        X0 = [X0, 10];
+        LB = [LB, 1];
+        UB = [UB, 10000];
+        PLB = [PLB, 1];
+        PUB = [PUB, 1000];
+        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+        save(sprintf('~/AISP/collinearityYanli/pars/pars_sample_%d_%d.mat',iSubj,iRep),'pars','likelihood')
 end

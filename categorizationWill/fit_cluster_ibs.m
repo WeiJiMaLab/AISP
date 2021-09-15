@@ -35,4 +35,10 @@ switch type
     case 'var'
         [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_Var_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+    case 'sample'
+        [pars,likelihood] = bads(fun_handle,[X0,10],[LB,1],[UB,10000],[PLB,1],[PUB, 1000],options);
+        save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_sample_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+    case 'sample1'
+        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+        save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_sample_%d_%d.mat',iSubj,iRep),'pars','likelihood')
 end

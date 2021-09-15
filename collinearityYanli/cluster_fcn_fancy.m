@@ -64,4 +64,6 @@ elseif iType == 2
     fit_cluster_ibs(iRep, iSubj, 'PE')
 elseif iType == 3
     fit_cluster_ibs(iRep, iSubj, 'PE2')
+elseif iType == 3
+    fit_cluster_ibs(iRep, iSubj, 'sample')
 end

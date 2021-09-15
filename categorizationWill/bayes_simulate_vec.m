@@ -1,4 +1,4 @@
-function responses = bayes_simulate_var(data,sigmas,beta,lambda)
+function responses = bayes_simulate_vec(data,sigmas,beta,lambda)
 % function responses = bayes_simulate(data,sigmas,beta,lambda)
 % simulates respones of the bayesian observer.
 % data should be a matrix of size trials x 2 with columns:
