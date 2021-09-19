@@ -1,5 +1,5 @@
 function resp = aisp_simResponse(type, ParamStruct, Data)
-% Simulate a response assuming that the trial is not the result of a lapse
+% Simulate a response
 
 % INPUT
 % type: Which model to simulate with?

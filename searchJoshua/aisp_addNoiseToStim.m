@@ -20,35 +20,4 @@ if all(size(kappa_x) == [1, 1])
     kappa_x = repmat(kappa_x, size(stim, 1), 1);
 end
 
-% Produce array of simulated von Mises noise. Set up an array where rows are
-% trials, and the third dimention indexes trial simulations (draws).
-noise = NaN(size(stim));
-
-
-% Only need to simulate noise for locations in which a stimulus was presented.
-presentedLocs = ~isnan(stim);
-
-
-% Find the relevant Kappa_x value
-relKappaXShaped = repmat(kappa_x, 1, size(stim, 2));
-
-if length(size(stim)) == 3
-    relKappaXShaped = repmat(relKappaXShaped, 1, 1, size(stim, 3));
-end
-
-relKappaXShaped(~presentedLocs) = NaN;
-
-noise ...
-    = qrandvm(0, relKappaXShaped, size(noise));
-
-
-% Add to the stimuli and then map them back in range if they are outside
-% [-pi pi]
-percepts = stim + noise;
-
-percepts = vS_mapBackInRange(percepts, -pi, pi);
-
-
-% Check we have NaNs in the same place as we started
-if any(any(any(isnan(stim) ~= isnan(percepts)))); error('bug'); end
-
+percepts = addNoise(stim, kappa_x);

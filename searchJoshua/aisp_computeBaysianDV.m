@@ -8,7 +8,7 @@ function d = aisp_computeBaysianDV(percept, nItems, kappa_x, kappa_s, ...
 % have not been implimented.
 
 % INPUT
-% percept   [numTrials x setSize x numSamples] array of stimulus percepts
+% percept   [numTrials x setSize] array of stimulus percepts
 % nItems
 % kappa_x   Observer's belief about the concetration parameter of the 
 %           measurement noise
@@ -23,6 +23,7 @@ function d = aisp_computeBaysianDV(percept, nItems, kappa_x, kappa_s, ...
 
 % Check input
 if size(percept, 2) > 8; error('Bug'); end
+assert(length(size(percept)) == 2)
 
 % We use implicit expansion below so it is very important that all input
 % vectors are the expected shape.
