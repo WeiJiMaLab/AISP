@@ -12,9 +12,9 @@ beta = pars(6);
 lambda = pars(7);
 if length(pars) > 7
     n_samples = floor(pars(8));
-    if n_samples > 100000
-        n_samples = 100000;
-        warning('n_samples reduced to 100000 to avoid extreme computation')
+    if n_samples > 10000
+        n_samples = 10000;
+        warning('n_samples reduced to 10000 to avoid extreme computation')
     end
 else
     n_samples = 1;
