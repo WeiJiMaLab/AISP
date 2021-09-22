@@ -73,10 +73,10 @@ elseif iType == 2
     fit_cluster_ibs(iRep, iSubj, 'freq')
 elseif iType == 3
     fit_cluster_ibs(iRep, iSubj, 'var')
-elseif iType == 3
+elseif iType == 4
     fit_cluster_ibs(iRep, iSubj, 'sample1')
-elseif iType == 3
+elseif iType == 5
     fit_cluster_ibs(iRep, iSubj, 'sample')
-elseif iType == 3
+elseif iType == 6
     fit_cluster_ibs(iRep, iSubj, 'cssample')
 end
