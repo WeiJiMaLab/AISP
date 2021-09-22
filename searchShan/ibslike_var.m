@@ -2,18 +2,20 @@ function [val_out, var_out, n] = ibslike_var(FUN, PARAMS, RESPMAT, DESIGNMAT, op
 % function ibslike_var(FUN, PARAMS, RESPMAT, DESIGNMAT, options, var_limit)
 % This wrapper function runs ibslike with all parameters just passed
 % through until the variance of the estimate is smaller than var_limit
-
+tic;
 [value, var] = ibslike(FUN, PARAMS, RESPMAT, DESIGNMAT, options);
 val_sum = value;
 var_sum = var;
 n = 1;
+%fprintf('%f s, %f variance \n', toc, var_sum / n / n)
 
 while (var_sum / n / n) > var_limit
+    % tic;
     [value, var] = ibslike(FUN, PARAMS, RESPMAT, DESIGNMAT, options);
     var_sum = var_sum + var;
     val_sum = val_sum + value;
     n = n + 1;
-    % fprintf('%f\n', var_sum / n / n)
+    % fprintf('%f s, %f variance \n', toc, var_sum / n / n)
 end
 
 val_out = val_sum / n;

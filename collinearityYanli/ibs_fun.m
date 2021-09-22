@@ -12,4 +12,6 @@ switch type
         response = pe2_simulate(data(:,[2,5,6]), pars);
     case {'sample', 'sample1'}
         response = sample_simulate(data(:,[2,5,6]), pars);
+    case 'cssample'
+        response = cssample_simulate(data(:,[2,5,6]), pars);
 end

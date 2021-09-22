@@ -34,7 +34,11 @@ while idx > size(runs, 1)
                 case 2
                     files = dir(sprintf('pars/pars_ibs_Freq_%d_*', iSubj));
                 case 3
-                    files = dir(sprintf('pars/pars_ibs_Var_%d_*', iSubj));
+                    files = dir(sprintf('pars/pars_ibs_Sample1_%d_*', iSubj));
+                case 4
+                    files = dir(sprintf('pars/pars_ibs_Sample_%d_*', iSubj));
+                case 5
+                    files = dir(sprintf('pars/pars_ibs_cssample_%d_*', iSubj));
             end
             evals = zeros(length(files), 1);
             for iFile = 1:length(files)
@@ -62,4 +66,10 @@ if iType == 1
     fit_cluster_ibs(iRep, iSubj, 'bayes')
 elseif iType == 2
     fit_cluster_ibs(iRep, iSubj, 'freq')
+elseif iType == 3
+    fit_cluster_ibs(iRep, iSubj, 'sample1')
+elseif iType == 4
+    fit_cluster_ibs(iRep, iSubj, 'sample')
+elseif iType == 5
+    fit_cluster_ibs(iRep, iSubj, 'cssample')
 end

@@ -40,4 +40,12 @@ switch type
         PUB = [PUB, 1000];
         [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/collinearityYanli/pars/pars_sample_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+    case 'cssample'
+        X0 = [X0, 10];
+        LB = [LB, 1];
+        UB = [UB, 10000];
+        PLB = [PLB, 1];
+        PUB = [PUB, 1000];
+        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+        save(sprintf('~/AISP/collinearityYanli/pars/pars_cssample_%d_%d.mat',iSubj,iRep),'pars','likelihood')
 end

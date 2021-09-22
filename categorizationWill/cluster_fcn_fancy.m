@@ -2,7 +2,7 @@ function cluster_fcn_fancy(job_id, idx)
 fprintf('Job %d:\n', job_id)
 fprintf('Started Job #%d\n', idx)
 
-Ntype = 3;
+Ntype = 6;
 Nsubject = 11;
 Nmin = 20;
 slack = 2;
@@ -35,6 +35,12 @@ while idx > size(runs, 1)
                     files = dir(sprintf('pars/pars_ibs_Freq_%d_*', iSubj));
                 case 3
                     files = dir(sprintf('pars/pars_ibs_Var_%d_*', iSubj));
+                case 4
+                    files = dir(sprintf('pars/pars_ibs_sample1_%d_*', iSubj));
+                case 5
+                    files = dir(sprintf('pars/pars_ibs_sample_%d_*', iSubj));
+                case 6
+                    files = dir(sprintf('pars/pars_ibs_cssample_%d_*', iSubj));
             end
             evals = zeros(length(files), 1);
             for iFile = 1:length(files)
@@ -64,4 +70,10 @@ elseif iType == 2
     fit_cluster_ibs(iRep, iSubj, 'freq')
 elseif iType == 3
     fit_cluster_ibs(iRep, iSubj, 'var')
+elseif iType == 3
+    fit_cluster_ibs(iRep, iSubj, 'sample1')
+elseif iType == 3
+    fit_cluster_ibs(iRep, iSubj, 'sample')
+elseif iType == 3
+    fit_cluster_ibs(iRep, iSubj, 'cssample')
 end
