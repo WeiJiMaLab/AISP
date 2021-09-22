@@ -13,7 +13,7 @@ index=$SLURM_ARRAY_TASK_ID
 job=$SLURM_JOB_ID
 ppn=$SLURM_JOB_CPUS_PER_NODE
 module purge
-module load matlab/2018b
+module load matlab/2020b
 export MATLABPATH=$HOME/matlab-output
 
 cat<<EOF | matlab -nodisplay
