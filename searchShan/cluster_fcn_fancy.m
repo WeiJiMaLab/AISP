@@ -49,6 +49,9 @@ while idx > size(runs, 1)
             n_good = sum(evals < best + slack);
             if n_good < Ntarget
                 iRep = max(runs(runs(:,1)==iSubj & runs(:,3)==iType,2)) + 1;
+                if isempty(iRep)
+                    iRep = 1;
+                end
                 runs = [runs; [iSubj, iRep, iType]];
             end
         end
