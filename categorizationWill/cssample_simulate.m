@@ -49,14 +49,14 @@ for i = 1:n_samples
     l1_samp_new = - (s1_samp_new-x).^2 ./ 2 ./ sigmaNoise .^2 ...
         - s1_samp_new.^2 ./ 2 ./ (sigma1 .^2) - ls1 - lsn;
     accept = rand(n_trials,1)< exp(l1_samp_new-l1_samp);
-    s1_samp(accept) = s1_samp_new(accept);
+    % s1_samp(accept) = s1_samp_new(accept);
     l1_samp(accept) = l1_samp_new(accept);
     % sample s2
     s2_samp_new = sigma2 * randn(n_trials,1);
     l2_samp_new = - (s2_samp_new-x).^2 ./ 2 ./ sigmaNoise .^2 ...
         - s2_samp_new.^2 ./ 2 ./ (sigma2 .^2) - ls2 - lsn;
     accept = rand(n_trials,1)< exp(l2_samp_new-l2_samp);
-    s2_samp(accept) = s2_samp_new(accept);
+    % s2_samp(accept) = s2_samp_new(accept);
     l2_samp(accept) = l2_samp_new(accept);
     % sample C
     p_c = exp(l1_samp-l2_samp) ./ (exp(l1_samp-l2_samp) + 1);
@@ -66,6 +66,7 @@ for i = 1:n_samples
     % s_1(:,i) = s1_samp;
     % s_2(:,i) = s2_samp;
 end
-d = log(sum(C, 2) + 1) - log(n_samples - sum(C, 2) + 1);
+% 1 is the wide category = 2 here
+d = log(n_samples - sum(C, 2) + 1) - log(sum(C, 2) + 1);
 p = lambda/2 + (1-lambda)./(1+exp(beta(1)+beta(2)*d));
 responses = (rand(n_trials, 1) < p);
