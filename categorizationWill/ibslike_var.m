@@ -7,14 +7,14 @@ function [val_out, var_out, n] = ibslike_var(FUN, PARAMS, RESPMAT, DESIGNMAT, op
 val_sum = value;
 var_sum = var;
 n = 1;
-fprintf('%f s, %f variance \n', toc, var_sum / n / n)
+% fprintf('%f s, %f variance \n', toc, var_sum / n / n)
 
 while (var_sum / n / n) > var_limit
     [value, var] = ibslike(FUN, PARAMS, RESPMAT, DESIGNMAT, options);
     var_sum = var_sum + var;
     val_sum = val_sum + value;
     n = n + 1;
-    fprintf('%f s, %f variance \n', toc, var_sum / n / n)
+    % fprintf('%f s, %f variance \n', toc, var_sum / n / n)
 end
 
 val_out = val_sum / n;
