@@ -8,3 +8,4 @@ ztmp*.*
 *.out
 tmp/
 Dirs_*models.mat
+*produceDirs.m

@@ -4,7 +4,7 @@ function d = aisp_computeSamplingDV(percept, nItems, kappa_x, kappa_s, ...
 % evaluate tricky integrals 
 
 % INPUT
-% percept   [numTrials x setSize x numSamples] array of stimulus percepts
+% percept   [numTrials x setSize] array of stimulus percepts
 % nItems
 % kappa_x   Observer's belief about the concetration parameter of the 
 %           measurement noise
@@ -31,23 +31,54 @@ end
 
 assert(length(nItems) == size(percept, 1))
 
+% Draw samples assuming target is absent
+absentSamples = zeros(size(percept));
+absentSamples(isnan(percept)) = nan;
+absentSamples = addNoise(absentSamples, kappa_s);
 
-% Process each possible number of items in turn
+% Draw samples assuming target is present
 targetSamples = zeros(size(percept));
 targetSamples(isnan(percept)) = nan;
 targetSamples = addNoise(targetSamples, kappa_s);
 
-%%% WOKRING HERE
-% Need to also samples the absent samples as above, then samples target
-% and set to zero
-
-% Sample target location, and set these samples to 0
-absentSamples = nan(size(percept));
-for iNumItems = 1 : size(percept, 2)
-    relTrials = nItems == iNumItems;
+% Simulating target locations is a little tricky as not all positions in
+% percept are occupied. Some are nan's representing that no stimulus was
+% presented there at all
+warning('Check code looks good in operation') % WORKING HERE -- do this check
+targetLoc = false(size(percept));
+toDo = true(size(targetLoc, 1), 1);
+while sum(toDo) > 0
+    proposeTargLoc = randi(size(targetLoc, 2), sum(toDo), 1);
+    linIdx = sub2ind(size(targetLoc), find(toDo), proposeTargLoc);
+    targetLoc(linIdx) = true;
     
-    if sum(relTrials) == 0
-        continue
-    end
+    targetLoc(isnan(targetSamples)) = false;
+    
+    numTargets = sum(targetLoc, 2);
+    toDo = numTargets ~= 1;
+    assert(all(numTargets(toDo) == 0))
+end
+
+targetSamples(targetLoc) = 0;
+assert(isequal(isnan(targetSamples), isnan(percept)))
+
+% Evaluate the samples
+vals = % WORKING HERE -- need to impliment a check that a row isn't just nans because
+% in this case prod() returns 1
+absIntegral = prod(vmpdf(percept, absentSamples, kappa_x), 2, 'omitnan');
+targetIntegral = nanprod(vmpdf(percept, targetSamples, kappa_x), 2);
+
+d = log(targetIntegral / absIntegral);
+assert(all(size(d) == [size(percept, 1), 1]))
+
+
+
+
+
+
+
+
+
+
     
     

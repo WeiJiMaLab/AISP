@@ -4,7 +4,7 @@ fprintf('Job %d:\n',job_id)
 fprintf('Started Job #%d\n',index)
 
 [DSet, Nptpnts] = getData(dataDir);
-Config = load('Config.mat');
+Config = produceConfig();
 Nreps = Config.Nreps;
 
 if index <= Nptpnts*Nreps

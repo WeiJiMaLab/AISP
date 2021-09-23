@@ -9,7 +9,7 @@ fprintf('Job %d:\n', job_id)
 fprintf('Started Job #%d\n', idx)
 
 [DSet, Nptpnts] = getData(dataDir);
-Config = load('Config.mat');
+Config = produceConfig();
 NMinReps = Config.Nreps;
 Ntype = length(Config.ModelList);
 
