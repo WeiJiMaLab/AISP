@@ -21,6 +21,7 @@ function d = aisp_computePointEstDV(percept, nItems, kappa_x, kappa_s, mu_s, ...
 %% Setup
 % Check input
 if size(percept, 2) > 8; error('Bug'); end
+assert(length(size(percept)) == 2)
 if ~ismember(maxOver, {'stimOnly', 'stimAndTarg', 'stimAndTarg_incImagine'})
     error('Incorrect use of inputs.')
 end

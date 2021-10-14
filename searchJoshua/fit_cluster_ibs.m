@@ -22,6 +22,7 @@ addpath(genpath('../ibs/'))
 addpath('./visualSearch')
 addpath('./visualSearch/analysisFuns')
 addpath('../lautils-mat/stats')
+addpath('../lautils-mat/math')
 
 % Create the directory we will use for saving the results
 if ~exist('pars', 'dir')

@@ -1,6 +1,8 @@
 function d = aisp_computeOptimalPointEstDV(percept, nItems, kappa_x, kappa_s, mu_s)
 % Compute the decision variable for the optimal point estimate observer
 
+assert(length(size(percept)) == 2)
+
 % First compute the standard point estiamte
 d = aisp_computePointEstDV(percept, nItems, kappa_x, kappa_s, mu_s, ...
     'stimAndTarg');

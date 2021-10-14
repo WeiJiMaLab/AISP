@@ -1,5 +1,5 @@
 function d = aisp_computeSamplingDV(percept, nItems, kappa_x, kappa_s, ...
-    mu_s)
+    mu_s, nSamples)
 % Compute the decision variable of an observer who uses sampling to
 % evaluate tricky integrals 
 
@@ -11,6 +11,7 @@ function d = aisp_computeSamplingDV(percept, nItems, kappa_x, kappa_s, ...
 % kappa_s   Overserver's belief about the concentration parameter of the 
 %           distractor distribution
 % mu_s      Center of the distractor distribution
+% nSamples  How many samples to take per trial
 
 % JCT, 2021
 
@@ -31,48 +32,83 @@ end
 
 assert(length(nItems) == size(percept, 1))
 
-% Draw samples assuming target is absent
-absentSamples = zeros(size(percept));
-absentSamples(isnan(percept)) = nan;
-absentSamples = addNoise(absentSamples, kappa_s);
+% Draw samples assuming target is absent. Will use a 
+% [numTrials x setSize x numSamples] array
+absentSamples = drawAbsentSamples(percept, kappa_s, nSamples);
 
-% Draw samples assuming target is present
-targetSamples = zeros(size(percept));
-targetSamples(isnan(percept)) = nan;
-targetSamples = addNoise(targetSamples, kappa_s);
+% Draw samples assuming target is present. Can just draw more samples
+% as if absent, and then add targets
+targetSamples = drawAbsentSamples(percept, kappa_s, nSamples);
 
 % Simulating target locations is a little tricky as not all positions in
 % percept are occupied. Some are nan's representing that no stimulus was
-% presented there at all
-warning('Check code looks good in operation') % WORKING HERE -- do this check
-targetLoc = false(size(percept));
-toDo = true(size(targetLoc, 1), 1);
-while sum(toDo) > 0
-    proposeTargLoc = randi(size(targetLoc, 2), sum(toDo), 1);
-    linIdx = sub2ind(size(targetLoc), find(toDo), proposeTargLoc);
-    targetLoc(linIdx) = true;
-    
-    targetLoc(isnan(targetSamples)) = false;
-    
-    numTargets = sum(targetLoc, 2);
-    toDo = numTargets ~= 1;
-    assert(all(numTargets(toDo) == 0))
-end
+% presented there at all. Create an array representing the
+% probability that location at index i or lower is selected as the target. 
+activeLocs = ~isnan(percept);
+cumulatProb = cumsum(activeLocs, 2);
+cumulatProb = cumulatProb ./ cumulatProb(:, end);
 
-targetSamples(targetLoc) = 0;
+% Draw a value between 0 and 1, and then use to select a location
+% acording to the above cumulative probabilities
+uDraw = rand([size(targetSamples, 1), 1, size(targetSamples, 3)]);
+
+lowerCut = [zeros(size(cumulatProb, 1), 1), cumulatProb(:, 2:end)];
+upperCut = cumulatProb;
+
+targMask = (uDraw > lowerCut) & (uDraw < upperCut);
+assert(isequal(size(targMask), size(targetSamples)))
+numTargs = sum(targMask, 2);
+assert(all(numTargs(:) == 1))
+
+targetSamples(targMask) = 0;
 assert(isequal(isnan(targetSamples), isnan(percept)))
 
 % Evaluate the samples
-vals = % WORKING HERE -- need to impliment a check that a row isn't just nans because
-% in this case prod() returns 1
-absIntegral = prod(vmpdf(percept, absentSamples, kappa_x), 2, 'omitnan');
-targetIntegral = nanprod(vmpdf(percept, targetSamples, kappa_x), 2);
+% WORKING HERE AND WORKING IN evalOneTermInD. Just finished but not checked
 
-d = log(targetIntegral / absIntegral);
 assert(all(size(d) == [size(percept, 1), 1]))
 
+end
+
+function absentSamples = drawAbsentSamples(percept, kappas, nSamples)
+% Draw samples assuming target is absent. 
+
+% INPUT
+% percept: [numTrials x setSize] array of stimulus percepts. Only used 
+%   to determine how many samples to draw, and which positions should 
+%   be set to nan
+% kappas: vector as long as the first dimension of percept, and 
+%   determines the kappa for drawing orientations
+% nSamples: scalar. How many samples to draw?
+
+% OUTPUT
+% samples: [numTrials x setSize x numSamples] array
+
+assert(length(size(percept)) == 2)
+
+absentSamples = zeros(size(percept));
+absentSamples(isnan(percept)) = nan;
+
+currentNDims = length(size(absentSamples));
+assert(currentNDims == 2);
+absentSamples = repmat(absentSamples, [ones(1, currentNDims), nSamples]);
+
+absentSamples = addNoise(absentSamples, kappa_s);
+
+end
 
 
+function term = evalOneTermInD(percept, stimSamples, kappa_x)
+% Evaluates one of the log-sum-exp terms in the expression derived for d
+% in the derivations
+
+summed = sum(cos(percept - stimSamples), 2, 'omitnan');
+exponent = kappa_x .* summed;
+term = logsumexp(exponent, 3);
+
+assert(isequal(shape(term), [size(percept, 1), 1]))
+
+end
 
 
 
