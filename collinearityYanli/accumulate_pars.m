@@ -4,7 +4,7 @@ Nsubjs = 8;
 Nreps = 20;
 Npars = 7;
 
-for itype = 1:10
+for itype = 1:3
     switch itype
         case 1
             fname = 'pars/pars_Bayes';
@@ -14,6 +14,13 @@ for itype = 1:10
             fname = 'pars/pars_Freq2';
     end
     files = dir([fname,'_*']);
+    for iFile = 1:length(files)
+        fparts = split(files(iFile).name,{'_','.'});
+        iRep = str2double(fparts{end-1});
+        if iRep > Nreps
+            Nreps = iRep;
+        end
+    end
     pars = nan(Nsubjs,Npars,Nreps);
     likelihoods = nan(Nsubjs,Nreps);
     for iFile = 1:length(files)
@@ -23,6 +30,9 @@ for itype = 1:10
         iRep = str2double(fparts{end-1});
         likelihoods(iSubj,iRep) = f.likelihood;
         pars(iSubj,:,iRep) = f.pars;
+        if f.likelihood == 0
+            keyboard
+        end
     end
     save([fname,'.mat'],'pars','likelihoods')
 end

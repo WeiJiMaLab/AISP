@@ -12,5 +12,9 @@ switch type
         response = bayes_simulate(data, pars);
     case 'freq'
         response = pe_simulate(data, pars);
+    case {'sample', 'sample1'}
+        response = sample_simulate(data, pars);
+    case 'cssample'
+        response = cssample_simulate(data, pars);
 end
 response = -1+2*response; % convert to -1,1

@@ -1,6 +1,6 @@
 function responses = freq2_simulate(data,sigmas,beta,lambda)
 % function responses = freq2_simulate(data,sigmas,beta,lambda)
-% simulates respones of the bayesian observer.
+% simulates respones of the second point estimate observer.
 % data should be a matrix of size trials x 2 with columns:
 %     reliability [1-6] 
 %     stimulus s 

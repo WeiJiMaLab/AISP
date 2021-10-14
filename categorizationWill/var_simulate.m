@@ -16,7 +16,6 @@ sigma1 = 3;
 sigma2 = 12;
 sigma12 = sigma1.^2;
 sigma22 = sigma2.^2;
-sigm = sigmas(data(:,1));
 tol = 10^-5;
 responses = zeros(size(data,1),1);
 for iTrial = 1:size(data,1)
