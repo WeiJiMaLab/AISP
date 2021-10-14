@@ -1,5 +1,5 @@
 function responses = bayes_simulate(stim, pars)
-% function responses = bayes_simulate(data,pars, exact)
+% function responses = bayes_simulate(data,pars)
 % simulates respones of the bayesian observer.
 % stim should be a matrix of size trials x 3 with columns:
 %     mean 

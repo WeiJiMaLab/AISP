@@ -40,10 +40,11 @@ bar(mean(pdata),'FaceColor','k')
 hold on
 plot((1:2) +0.05*randn(size(pdata)),pdata,'.','Color',[0.4,0.4,0.4],'MarkerSize',20)
 box off
-set(gca,'TickDir','out')
-ylabel('LL - LLBayes','FontSize',18)
-set(gca,'FontSize',14)
+set(gca,'TickDir','out', 'LineWidth', 2)
+ylabel('LL - LLBayes','FontSize',20)
+set(gca,'FontSize', 18, 'XColor', 'k', 'YColor', 'k')
 xticklabels({'Bayes', 'Point Estimate'})
+set(gcf, 'Position', [550   750   560   250])
 
 
 pdata2 = stds;
@@ -54,6 +55,6 @@ hold on
 plot((1:2) +0.05*randn(size(pdata2)),pdata2,'.','Color',[0.4,0.4,0.4],'MarkerSize',20)
 box off
 set(gca,'TickDir','out')
-ylabel('std of estimates','FontSize',18)
+ylabel('std of estimates','FontSize',20)
 set(gca,'FontSize',14)
 xticklabels({'Bayes','Point Estimate'})

@@ -9,3 +9,5 @@ ztmp*.*
 tmp/
 Dirs_*models.mat
 *produceDirs.m
+*.asv
+*slurm*

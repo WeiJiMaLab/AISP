@@ -5,30 +5,43 @@ data = getData();
 addpath(genpath('../bads/'))
 addpath(genpath('../ibs/'))
 
+var_limit = 4;
+
 options = bads;
 options.NoiseFinalSamples = 100;
-options.NoiseSize = 5;
+options.NoiseSize = sqrt(var_limit);
 datSubj = data(data(:,1)==iSubj,:);
 opt_ibs = ibslike;
-opt_ibs.Nreps = 25;
-opt_ibs.NegLogLikeThreshold = size(datSubj,1)*log(2);
-%fun_handle = @(pars) likelihood_optim(datSubj,pars,type);
+opt_ibs.Nreps = 1;
+opt_ibs.MaxIter = 20000;
 FUN = @(pars,data) ibs_fun(data,pars,type);
-fun_handle = @(pars) ibslike(FUN,pars,datSubj(:,4),datSubj,opt_ibs);
+fun_handle = @(pars) ibslike_var(FUN,pars,datSubj(:,4),datSubj,opt_ibs, var_limit);
+
+[X0, LB, UB, PLB, PUB] = get_bads_bounds();
+
 switch type
     case 'bayes'
-        [pars,likelihood] = bads(fun_handle,[2,1,0,-1,-1,-1,-4,0,0.01],[-3,-3,-3,-3,-3,-3,-10,-2,eps],[6,6,6,6,6,6,10,5,0.25],[-1,-1,-1,-1,-1,-1,-3,-2,0.01],[5,4,3,3,3,2,10,5,0.1],options);
+        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_Bayes_%d_%d.mat',iSubj,iRep),'pars','likelihood')
     case 'freq'
-        [pars,likelihood] = bads(fun_handle,[2,1,0,-1,-1,-1,-2,0,0.01],[-5,-5,-5,-5,-5,-5,-10,-2,eps],[5,5,5,5,5,5,10,5,0.75],[-3,-3,-3,-3,-3,-3,-4,-2,0.01],[5,4,3,3,3,2,10,5,0.1],options);
+        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_Freq_%d_%d.mat',iSubj,iRep),'pars','likelihood')
     case 'freq2'
-        [pars,likelihood] = bads(fun_handle,[2,1,0,-1,-1,-1,-2,0,0.01],[-5,-5,-5,-5,-5,-5,-10,-2,eps],[5,5,5,5,5,5,10,5,0.75],[-3,-3,-3,-3,-3,-3,-4,-2,0.01],[5,4,3,3,3,2,10,5,0.1],options);
+        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_Freq2_%d_%d.mat',iSubj,iRep),'pars','likelihood')
     case 'freq3'
-        [pars,likelihood] = bads(fun_handle,[2,1,0,-1,-1,-1,-2,0,0.01],[-5,-5,-5,-5,-5,-5,-10,-2,eps],[5,5,5,5,5,5,10,5,0.75],[-3,-3,-3,-3,-3,-3,-4,-2,0.01],[5,4,3,3,3,2,10,5,0.1],options);
+        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_Freq3_%d_%d.mat',iSubj,iRep),'pars','likelihood')
     case 'var'
-        [pars,likelihood] = bads(fun_handle,[2,1,0,-1,-1,-1,-2,0,0.01],[-5,-5,-5,-5,-5,-5,-10,-2,eps],[5,5,5,5,5,5,10,5,0.75],[-3,-3,-3,-3,-3,-3,-4,-2,0.01],[5,4,3,3,3,2,10,5,0.1],options);
+        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_Var_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+    case 'sample'
+        [pars,likelihood] = bads(fun_handle,[X0,10],[LB,1],[UB,10000],[PLB,1],[PUB, 1000],options);
+        save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_sample_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+    case 'sample1'
+        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+        save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_sample1_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+    case 'cssample'
+        [pars,likelihood] = bads(fun_handle,[X0,10],[LB,1],[UB,10000],[PLB,1],[PUB, 1000],options);
+        save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_cssample_%d_%d.mat',iSubj,iRep),'pars','likelihood')
 end

@@ -15,6 +15,15 @@ sigma = 9.06;
 stimulus = sigma * randn(N,2);
 
 switch type
+    case 'data'
+        response = [];
+        stimulus = [];
+        for i = 1:12
+            [stim, resp, perf] = readdata(i);
+            response = cat(1, response, resp);
+            stimulus = cat(1, stimulus, stim);
+        end
+        response = 0.5 + 0.5 * response;
     case 'Bayes'
         response = bayes_simulate(stimulus, pars);
     case 'Freq'

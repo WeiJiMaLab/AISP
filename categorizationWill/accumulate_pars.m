@@ -28,6 +28,13 @@ for itype = 1:10
             fname = 'pars/pars_ibs_Var';
     end
     files = dir([fname,'_*']);
+    for iFile = 1:length(files)
+        fparts = split(files(iFile).name,{'_','.'});
+        iRep = str2double(fparts{end-1});
+        if iRep > Nreps
+            Nreps = iRep;
+        end
+    end
     pars = nan(Nsubjs,Npars,Nreps);
     likelihoods = nan(Nsubjs,Nreps);
     for iFile = 1:length(files)

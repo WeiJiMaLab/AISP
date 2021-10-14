@@ -15,22 +15,4 @@ elseif index <= 2*Nsubjects*Nreps
     iRep = floor((index-1)/Nsubjects)+1;
     fprintf('Fitting PE: Subject #%d, repetition #%d\n',iSubj,iRep)
     fit_cluster_ibs(iRep,iSubj,'freq')
-elseif index <= 3*Nsubjects*Nreps
-    index = index-2*Nsubjects*Nreps;
-    iSubj = mod(index-1,Nsubjects)+1;
-    iRep = floor((index-1)/Nsubjects)+1;
-    fprintf('Fitting PE2: Subject #%d, repetition #%d\n',iSubj,iRep)
-    fit_cluster_ibs(iRep,iSubj,'freq2')
-elseif index <= 4*Nsubjects*Nreps
-    index = index-3*Nsubjects*Nreps;
-    iSubj = mod(index-1,Nsubjects)+1;
-    iRep = floor((index-1)/Nsubjects)+1;
-    fprintf('Fitting PE3: Subject #%d, repetition #%d\n',iSubj,iRep)
-    fit_cluster_ibs(iRep,iSubj,'freq3')
-elseif index <= 5*Nsubjects*Nreps
-    index = index-4*Nsubjects*Nreps;
-    iSubj = mod(index-1,Nsubjects)+1;
-    iRep = floor((index-1)/Nsubjects)+1;
-    fprintf('Fitting Variational: Subject #%d, repetition #%d\n',iSubj,iRep)
-    fit_cluster_ibs(iRep,iSubj,'var')
 end
