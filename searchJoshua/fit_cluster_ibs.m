@@ -17,12 +17,7 @@ if debugMode
     clear ibslike_var.m
 end
 
-addpath(genpath('../bads/'))
-addpath(genpath('../ibs/'))
-addpath('./visualSearch')
-addpath('./visualSearch/analysisFuns')
-addpath('../lautils-mat/stats')
-addpath('../lautils-mat/math')
+addReqPaths()
 
 % Create the directory we will use for saving the results
 if ~exist('pars', 'dir')

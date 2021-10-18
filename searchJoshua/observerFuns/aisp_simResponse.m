@@ -4,6 +4,9 @@ function resp = aisp_simResponse(type, ParamStruct, Data)
 % INPUT
 % type: Which model to simulate with?
 
+% WORKING HERE -- make free param
+nSamples = 100;
+
 %% Simulate percepts
 
 % For all models we need to add noise to the real orientations to generate
@@ -32,9 +35,13 @@ elseif strcmp(type, 'PE2')
     d = aisp_computeOptimalPointEstDV(percepts, Data.SetSize, relKappaX, ...
         Data.KappaS, 0);
     
-elseif strcmp(type, 'sampling')
-    d = aisp_computeSamplingDV(percepts, Data.SetSize, relKappaX, ...
-        Data.KappaS, 0);
+elseif strcmp(type, 'impSamp')
+    d = aisp_computeImpSampDV(percepts, Data.SetSize, relKappaX, ...
+        Data.KappaS, 0, nSamples);
+    
+elseif strcmp(type, 'jointPostSamp')
+    d = aisp_computeJointPostSampDV(percepts, Data.SetSize, relKappaX, ...
+        Data.KappaS, 0, nSamples, true);
 else
     error('Bug')
 end

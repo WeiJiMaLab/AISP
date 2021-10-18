@@ -1,12 +1,13 @@
-function debugRun()
+function debugRun(modelNum)
 
-Dirs = produceDirs(5);
+addReqPaths()
+
+Dirs = produceDirs(6);
 [DSet, Nptpnts] = getData(Dirs.dataDir);
 
 Config = produceConfig();
 
 iRep = 1;
 iPtpnt = 1;
-iType = 5;
 idx = 1;
-fit_cluster_ibs(iRep, iPtpnt, Config.ModelList{iType}, DSet, idx)
+fit_cluster_ibs(iRep, iPtpnt, Config.ModelList{modelNum}, DSet, idx, true)
