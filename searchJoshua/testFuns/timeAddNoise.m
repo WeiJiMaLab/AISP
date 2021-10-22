@@ -1,4 +1,4 @@
-function timeAddNoise()
+function timeAddNoise(varargin)
 
 nTrials = 2000;
 noiseless = rand(nTrials, 6, 200);
@@ -8,7 +8,7 @@ kappas = randi(6, [nTrials, 1]);
 nReps = 20;
 tic
 for iRep = 1 : nReps
-   addNoise(noiseless, kappas);
+   addNoise(noiseless, kappas, varargin{1});
 end
 totalTime = toc;
 
