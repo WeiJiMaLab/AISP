@@ -69,4 +69,6 @@ end
 noisy = addedNoise + noiseless;
 noisy = vS_mapBackInRange(noisy, -pi, pi);
 
+assert(isequal(isnan(addedNoise), isnan(noiseless)))
 assert(isequal(isnan(noisy), isnan(noiseless)))
+

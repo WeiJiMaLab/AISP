@@ -5,7 +5,7 @@ function resp = aisp_simResponse(type, ParamStruct, Data)
 % type: Which model to simulate with?
 
 % WORKING HERE -- make free param
-nSamples = 100;
+nSamples = 2;
 
 %% Simulate percepts
 

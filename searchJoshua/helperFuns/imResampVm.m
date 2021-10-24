@@ -9,16 +9,15 @@ function samples = imResampVm(mu, kappa, nSamples)
 
 % JCT, 2021
 
-persistent evenSpaced
-
 assert(length(mu) == 1)
 assert(length(kappa) == 1)
 
+persistent evenSpaced
 if isempty(evenSpaced)
     evenSpaced = -pi : 0.001 : pi;
 end
-assocProbs = circ_vmpdf(evenSpaced, mu, kappa);
 
+assocProbs = circ_vmpdf(evenSpaced, mu, kappa);
 samples = randsample(evenSpaced, nSamples, true, assocProbs);
 
 

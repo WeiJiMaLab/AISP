@@ -16,6 +16,10 @@ function samples = drawSamples(percept, kappa_s, nSamples, targPresent)
 
 % JCT, 2021
 
+if nSamples == 0
+    error('No samples requested')
+end
+
 samples = drawAbsentSamples(percept, kappa_s, nSamples);
 
 if strcmp(targPresent, 'targPres')
@@ -69,7 +73,8 @@ currentNDims = length(size(absentSamples));
 assert(currentNDims == 2);
 absentSamples = repmat(absentSamples, [ones(1, currentNDims), nSamples]);
 
-absentSamples = addNoise(absentSamples, kappa_s);
+absentSamples = addNoise(absentSamples, kappa_s, 'efficientSamp');
+assert(isequal(find3Dsize(absentSamples), [size(percept), nSamples]))
 
 end
 

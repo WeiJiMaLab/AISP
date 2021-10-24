@@ -28,20 +28,10 @@ nPresent = sum(proposeCat == 1, 3);
 allPropsl = nan(nTrials, size(percept, 2), nSamples);
 
 for iTrial = 1 : nTrials 
-    absentPropsl = drawSamples(percept(iTrial, :), kappa_s(iTrial), ...
-                                nAbsent(iTrial, 1), 'targAbs');
-    presentPropsl = drawSamples(percept(iTrial, :), kappa_s(iTrial), ...
-                                nPresent(iTrial, 1), 'targPres');
-
-    if runChecks
-        assert(isequal(size(absentPropsl), [1, size(percept, 2), ...
-            nAbsent(iTrial)]))
-        assert(isequal(size(presentPropsl), [1, size(percept, 2), ...
-            nPresent(iTrial)]))
-    end
-                            
-    allPropsl(iTrial, :, proposeCat == 0) = absentPropsl;
-    allPropsl(iTrial, :, proposeCat == 1) = presentPropsl;
+    allPropsl = addProposals(allPropsl, proposeCat, percept, kappa_s, ...
+        'absent', nAbsent, nPresent, iTrial, runChecks);
+    allPropsl = addProposals(allPropsl, proposeCat, percept, kappa_s, ...
+        'present', nAbsent, nPresent, iTrial, runChecks);
 end
 
 if runChecks
@@ -52,11 +42,11 @@ if runChecks
 end
 
 phi = kappaTimesSumCosTerms(percept, allPropsl, kappa_x);
-assert(isequal(shape(phi), [nTrials, 1, nSamples])) 
+assert(isequal(find3Dsize(phi), [nTrials, 1, nSamples])) 
 
 catSamples = nan(nTrials, 1, nSamples);
 currentCat = nan(nTrials, 1);
-currentPhi = nan(nTrial, 1);
+currentPhi = nan(nTrials, 1);
 
 initalCat = proposeCat(:, 1, 1);
 catSamples(:, 1, 1) = initalCat;
@@ -67,7 +57,7 @@ for iPropsl = 2 : nSamples
     pAccept = exp(phi(:, 1, iPropsl) - currentPhi);
     
     if runChecks
-      assert(isequal(shape(pAccept), [nTrials, 1]))  
+      assert(isequal(size(pAccept), [nTrials, 1]))  
     end
         
     u = rand([nTrials, 1]);
@@ -79,6 +69,50 @@ for iPropsl = 2 : nSamples
 end
 
 d = log( (1 + sum(catSamples==1, 3)) ./ (1 + sum(catSamples==0, 3)) );
-assert(isequal(shape(d), [nTrials, 1]))  
+assert(isequal(size(d), [nTrials, 1]))  
 
 
+end
+
+function allPropsl = addProposals(allPropsl, proposeCat, percept, ...
+    kappa_s, targCase, nAbsent, nPresent, iTrial, runChecks)
+% Add proposals to the matrix containing all proposals, allPropsl. Either
+% add proposals for the case where the target is present, or proposals 
+% for the case where the target is absent, depending on targCase.
+
+% INPUT
+% targCase: str. 'present' or 'absent'. Which case to add proposals for.
+% nAbsent, nPresent: vectors. Long as the number of trials. Describing 
+% how many target absent, and target present proposals to draw for each
+% trial
+% iTrial: Which trial to add proposals for.
+
+assert(size(proposeCat, 2) == 1)
+
+if strcmp(targCase, 'present')
+    nSamples = nPresent(iTrial, 1);
+    sampleType = 'targPres';
+    relProposals = proposeCat(iTrial, 1, :) == 1;
+elseif strcmp(targCase, 'absent')
+    nSamples = nAbsent(iTrial, 1);
+    sampleType = 'targAbs';
+    relProposals = proposeCat(iTrial, 1, :) == 0;
+else
+    error('Bug')
+end
+
+if nSamples == 0
+    % Take a break Matlab
+else
+    thisPropsl = drawSamples(percept(iTrial, :), kappa_s(iTrial), ...
+        nSamples, sampleType);
+    
+    if runChecks
+        assert(isequal(find3Dsize(thisPropsl), ...
+            [1, size(percept, 2), nSamples]))
+    end
+    
+    allPropsl(iTrial, :, relProposals) = thisPropsl;
+end
+
+end
