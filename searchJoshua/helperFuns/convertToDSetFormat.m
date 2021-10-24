@@ -30,6 +30,7 @@ for iModel = 1 : length(Config.ModelList)
         numFits(iPtpnt) = numFits(iPtpnt) +1;
         
         DSet.P(iPtpnt).Models(iModel).Fits(numFits(iPtpnt)).LL = -f.nLogL;
+        error('Inputs to paramVec2Struct changed')
         DSet.P(iPtpnt).Models(iModel).Fits(numFits(iPtpnt)).Params ...
             = paramVec2Struct(f.pars, 'to struct');
     end

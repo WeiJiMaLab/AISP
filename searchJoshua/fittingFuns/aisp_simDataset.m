@@ -17,6 +17,7 @@ bestPars = aisp_collectBestFittingParams(f.nLogLs, f.pars);
 %% Simulate data
 for iP = 1 : Nptpnts
     PtpntData = SimDSet.P(iP).Data;
+    error('Inputs to paramVec2Struct changed')
     ParamStruct = paramVec2Struct(bestPars(iP, :), 'to struct');
     
     resp = aisp_simResponse(model, ParamStruct, PtpntData);

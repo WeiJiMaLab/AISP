@@ -4,8 +4,6 @@ function resp = aisp_simResponse(type, ParamStruct, Data)
 % INPUT
 % type: Which model to simulate with?
 
-% WORKING HERE -- make free param
-nSamples = 2;
 
 %% Simulate percepts
 
@@ -37,11 +35,11 @@ elseif strcmp(type, 'PE2')
     
 elseif strcmp(type, 'impSamp')
     d = aisp_computeImpSampDV(percepts, Data.SetSize, relKappaX, ...
-        Data.KappaS, 0, nSamples);
+        Data.KappaS, 0, round(ParamStruct.NumSamples)); % WORKING HERE -- get rid ouf round
     
 elseif strcmp(type, 'jointPostSamp')
     d = aisp_computeJointPostSampDV(percepts, Data.SetSize, relKappaX, ...
-        Data.KappaS, 0, nSamples, true);
+        Data.KappaS, 0, round(ParamStruct.NumSamples), true); % WORKING HERE -- get rid ouf round
 else
     error('Bug')
 end

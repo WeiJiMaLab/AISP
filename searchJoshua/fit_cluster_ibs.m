@@ -1,4 +1,4 @@
-function fit_cluster_ibs(iRep, iPtpnt, type, DSet, idx, varargin)
+function fit_cluster_ibs(iRep, iPtpnt, modelName, DSet, idx, varargin)
 
 % INPUT
 % idx: Index of the job. Used when saving the results
@@ -25,7 +25,7 @@ if ~exist('pars', 'dir')
 end
 
 % Has this fit been run previously?
-saveFile = sprintf('./pars/pars_%d_%s_%d_%d.mat',idx,type,iPtpnt,iRep);
+saveFile = sprintf('./pars/pars_%d_%s_%d_%d.mat',idx,modelName,iPtpnt,iRep);
 if exist(saveFile, 'file')
     warning('Skipping this fit as it has already been completed.')
     return
@@ -44,11 +44,18 @@ opt_ibs.Nreps = 1;
 opt_ibs.MaxIter = 2 * (10^4);
 % opt_ibs.Vectorized = 'on';
 
-RespFun = @(pars, data) aisp_simResponseWrapper(data, pars, type);
+RespFun = @(pars, data) aisp_simResponseWrapper(data, pars, modelName);
 fun_handle = @(pars) ibslike_var(RespFun, pars, DatSubj.Response, designMat, ...
     opt_ibs, opt_varLimit, debugMode);
 
-[X0,LB,UB,PLB,PUB] = get_bads_bounds();
+% Only models 5 and 6 require an additional parameter
+if any(strcmp(modelName, {'impSamp', 'jointPostSamp'}))
+    incSamplesParam = true;
+else
+    assert(any(strcmp(modelName, {'Bayes', 'PE', 'PE2', 'PE_imagineL'})))
+    incSamplesParam = false;
+end
+[X0,LB,UB,PLB,PUB] = get_bads_bounds(incSamplesParam); 
 
 [pars,nLogL] = bads(fun_handle,X0,LB,UB,PLB,PUB,opt_bads);
 save(saveFile,'pars','nLogL')

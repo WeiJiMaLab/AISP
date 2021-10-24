@@ -59,6 +59,8 @@ elseif ~strcmp(targPresent, 'targAbs')
     error('Incorrect use of inputs')
 end
 
+assert(isequal(find3Dsize(samples), [size(percept), nSamples]))
+
 end
 
 function absentSamples = drawAbsentSamples(percept, kappa_s, nSamples)

@@ -23,6 +23,5 @@ job_id = str2num(strjoin(regexp('$job','\d','match'), ''))
 rng(job_id)
 
 cluster_fcn_fancy("$dataDir", job_id, $index);
-# EACH TIME RUN: Make sure this function loads the correct config file
 
 EOF
