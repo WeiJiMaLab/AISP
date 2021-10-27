@@ -7,9 +7,6 @@
 [submodule "lautils-mat"]
 	path = lautils-mat
 	url = https://github.com/lacerbi/lautils-mat.git
-[submodule "searchJoshua/visualSearch"]
-	path = searchJoshua/visualSearch
-	url = https://github.com/jCalderTravis/visualSearch.git
 [submodule "searchJoshua/circstat-matlab"]
 	path = searchJoshua/circstat-matlab
 	url = https://github.com/circstat/circstat-matlab.git

@@ -16,7 +16,7 @@ index=$1
 job=$SLURM_JOB_ID
 
 module purge
-module load matlab/R2018b
+module load matlab/2018b
 
 cat<<EOF | matlab -nodisplay -nosplash
 job_id = str2num(strjoin(regexp('$job','\d','match'), ''))
