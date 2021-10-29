@@ -3,8 +3,10 @@
 # Submits all jobs which don't have an associated results file.
 
 # INPUT
-# $1 Which jobs should the function run (if they have not already been run)? This number should be the begining of the range.
-# $2 Which jobs should the function run (if they have not already been run)? This number should be the end of the range.
+# $1 Which jobs should the function run (if they have not already been 
+#   run)? This number should be the begining of the range.
+# $2 Which jobs should the function run (if they have not already been 
+#   run)? This number should be the end of the range.
 # $3 full file name (including directory) for the data file
 
 startJobs=$1

@@ -1,6 +1,6 @@
 function Config = produceConfig()
 
-% 5 models
+% 6 models
 Config.ModelLabel = {'Bayes', 'Point estimate (Dep. L)', ...
     'Opt. point estimate', 'Point estimate (Ind. L)', ...
     'Importance sampling', 'Joint posterior sampling'};

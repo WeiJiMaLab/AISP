@@ -44,10 +44,6 @@ opt_ibs.Nreps = 1;
 opt_ibs.MaxIter = 2 * (10^4);
 % opt_ibs.Vectorized = 'on';
 
-RespFun = @(pars, data) aisp_simResponseWrapper(data, pars, modelName);
-fun_handle = @(pars) ibslike_var(RespFun, pars, DatSubj.Response, designMat, ...
-    opt_ibs, opt_varLimit, debugMode);
-
 % Only models 5 and 6 require an additional parameter
 if any(strcmp(modelName, {'impSamp', 'jointPostSamp'}))
     incSamplesParam = true;
@@ -55,6 +51,21 @@ else
     assert(any(strcmp(modelName, {'Bayes', 'PE', 'PE2', 'PE_imagineL'})))
     incSamplesParam = false;
 end
+
+% If we have a num samples parameter, round it before evaluating the LL
+if incSamplesParam
+    [paramNames, paramOrder] = findParamOrder(incSamplesParam);
+    relParam = paramOrder{strcmp('NumSamples', paramNames)};
+    assert(length(relParam))
+    FunForParams = @(parVec) randRoundPars(parVec, relParam);
+else
+    FunForParams = [];
+end
+
+RespFun = @(pars, data) aisp_simResponseWrapper(data, pars, modelName);
+fun_handle = @(pars) ibslike_var(RespFun, pars, DatSubj.Response, designMat, ...
+    opt_ibs, opt_varLimit, debugMode, FunForParams);
+
 [X0,LB,UB,PLB,PUB] = get_bads_bounds(incSamplesParam); 
 
 [pars,nLogL] = bads(fun_handle,X0,LB,UB,PLB,PUB,opt_bads);

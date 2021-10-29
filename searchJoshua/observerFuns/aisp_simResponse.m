@@ -35,11 +35,11 @@ elseif strcmp(type, 'PE2')
     
 elseif strcmp(type, 'impSamp')
     d = aisp_computeImpSampDV(percepts, Data.SetSize, relKappaX, ...
-        Data.KappaS, 0, round(ParamStruct.NumSamples)); % WORKING HERE -- get rid ouf round
+        Data.KappaS, 0, ParamStruct.NumSamples);
     
 elseif strcmp(type, 'jointPostSamp')
     d = aisp_computeJointPostSampDV(percepts, Data.SetSize, relKappaX, ...
-        Data.KappaS, 0, round(ParamStruct.NumSamples), true); % WORKING HERE -- get rid ouf round
+        Data.KappaS, 0, ParamStruct.NumSamples, true);
 else
     error('Bug')
 end

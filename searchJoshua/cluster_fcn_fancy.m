@@ -4,7 +4,6 @@ function cluster_fcn_fancy(dataDir, job_id, idx)
 slack = 2;
 N_target = 5;
 
-
 fprintf('Job %d:\n', job_id)
 fprintf('Started Job #%d\n', idx)
 
@@ -46,7 +45,8 @@ while idx > size(runs, 1)
    %         disp(evals)
             best = min(evals);
             n_good = sum(evals < (best + slack));
-            disp(['***** Num good runs for participant ' num2str(iPtpnt) ' model ' num2str(iType) ': ' num2str(n_good)])
+            disp(['***** Num good runs for participant ' num2str(iPtpnt) ...
+                ' model ' num2str(iType) ': ' num2str(n_good)])
             if n_good < N_target
                 iRep = max(runs(runs(:,1)==iPtpnt & runs(:,3)==iType,2)) + 1;
                 runs = [runs; [iPtpnt, iRep, iType]];

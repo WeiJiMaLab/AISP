@@ -1,4 +1,5 @@
-function [val_out, var_out, n] = ibslike_var(FUN, PARAMS, RESPMAT, DESIGNMAT, options, var_limit, varargin)
+function [val_out, var_out, n] = ibslike_var(FUN, PARAMS, RESPMAT, ...
+    DESIGNMAT, options, var_limit, varargin)
 % function ibslike_var(FUN, PARAMS, RESPMAT, DESIGNMAT, options, var_limit)
 % This wrapper function runs ibslike with all parameters just passed
 % through until the variance of the estimate is smaller than var_limit
@@ -6,6 +7,9 @@ function [val_out, var_out, n] = ibslike_var(FUN, PARAMS, RESPMAT, DESIGNMAT, op
 % INPUT
 % varargin{1}: Boolean. Default false. Whether to display information helpful
 % for debuging.
+% varargin{2}: function. A function to call on PARAMS at the very 
+% begining of the evaluation. The output will be used as the parameter
+% vector instead of PARAMS
 
 persistent avDuration
 persistent numEvals
@@ -14,6 +18,11 @@ if length(varargin) >= 1
     debugMode = varargin{1};
 else
     debugMode = false;
+end
+
+if (length(varargin) >= 2) && (~isempty(varargin{2}))
+    FunForParams = varargin{2};
+    PARAMS = FunForParams(PARAMS);
 end
 
 if debugMode
