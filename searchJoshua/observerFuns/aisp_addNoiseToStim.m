@@ -25,4 +25,8 @@ if all(size(kappa_x) == [1, 1])
     kappa_x = repmat(kappa_x, size(stim, 1), 1);
 end
 
-percepts = addNoise(stim, kappa_x, passOn);
+if isempty(passOn)
+    percepts = addNoise(stim, kappa_x);
+else
+    percepts = addNoise(stim, kappa_x, passOn);
+end
