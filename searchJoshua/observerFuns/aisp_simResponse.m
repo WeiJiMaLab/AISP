@@ -11,7 +11,8 @@ function resp = aisp_simResponse(type, ParamStruct, Data)
 % simulated percepts
 kappaX = exp(ParamStruct.LnKappa_x);
 relKappaX = kappaX(Data.SetSizeCond);
-percepts = aisp_addNoiseToStim(relKappaX, Data.Orientation);
+percepts = aisp_addNoiseToStim(relKappaX, Data.Orientation, ...
+                                'efficientSamp');
 
 
 %% Simulate responses based on these percepts

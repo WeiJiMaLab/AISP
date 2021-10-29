@@ -1,4 +1,4 @@
-function percepts = aisp_addNoiseToStim(kappa_x, stim)
+function percepts = aisp_addNoiseToStim(kappa_x, stim, varargin)
 % Add noise to observed stimulus. The level of noise added depends on the 
 % set size (the number of stimuli in the display). The code treats all 
 % orieations with the same first index, ie,
@@ -9,8 +9,15 @@ function percepts = aisp_addNoiseToStim(kappa_x, stim)
 % trial, or single value
 % stim   [num trials X num locations] array describing the orientation of the
 %        Gabor patches
+% varargin{1}: Passed to addNoise as varargin{1} for that function
 
 % JCT
+
+if ~isempty(varargin)
+    passOn = varargin{1};
+else
+    passOn = [];
+end 
 
 % If kappa_x is a single value expland so it becomes a vector with one entry per
 % trial
@@ -18,4 +25,4 @@ if all(size(kappa_x) == [1, 1])
     kappa_x = repmat(kappa_x, size(stim, 1), 1);
 end
 
-percepts = addNoise(stim, kappa_x);
+percepts = addNoise(stim, kappa_x, passOn);

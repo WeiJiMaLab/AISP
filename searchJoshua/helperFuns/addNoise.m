@@ -8,7 +8,7 @@ function noisy = addNoise(noiseless, kappas, varargin)
 % kappas: vector as long as the first dimension of noiseless, and 
 %   determines the kappa of the noise used for each row, or for 3D 
 %   noiseless, determines the noise uses for [i, :, :] for each i. 
-% varargin: str. 'standard' to use qrandvm to add noise, 'efficientSamp'
+% varargin{1}: str. 'standard' to use qrandvm to add noise, 'efficientSamp'
 %   to use an approach based on sampling importance resampling. Several
 %   other options that do very random/nonsensical things.
 
