@@ -11,6 +11,7 @@ fprintf('Started Job #%d\n', idx)
 Config = produceConfig();
 NMinReps = Config.Nreps;
 Ntype = length(Config.ModelList);
+Nptpnts = round(Nptpnts * Config.FracPtpnts);
 
 mkdir('tmp')
 if ~exist('./tmp/runs.csv','file')
