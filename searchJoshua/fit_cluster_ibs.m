@@ -17,8 +17,6 @@ if debugMode
     clear ibslike_var.m
 end
 
-addReqPaths()
-
 % Create the directory we will use for saving the results
 if ~exist('pars', 'dir')
     mkdir('pars')

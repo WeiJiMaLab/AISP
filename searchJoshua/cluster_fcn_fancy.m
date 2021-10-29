@@ -4,6 +4,8 @@ function cluster_fcn_fancy(dataDir, job_id, idx)
 slack = 2;
 N_target = 5;
 
+addReqPaths()
+
 fprintf('Job %d:\n', job_id)
 fprintf('Started Job #%d\n', idx)
 
