@@ -54,7 +54,7 @@ end
 if incSamplesParam
     [paramNames, paramOrder] = findParamOrder(incSamplesParam);
     relParam = paramOrder{strcmp('NumSamples', paramNames)};
-    assert(length(relParam))
+    assert(length(relParam)==1)
     FunForParams = @(parVec) randRoundPars(parVec, relParam);
 else
     FunForParams = [];

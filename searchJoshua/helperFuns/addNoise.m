@@ -63,7 +63,9 @@ elseif strcmp(mode, 'efficientSamp')
         addedNoise(thisActive) = samples(:);
     end
 else
-    error('Uknknown setting')
+    disp('Setting is...')
+    disp(mode)
+    error('This setting is unknown')
 end
 
 noisy = addedNoise + noiseless;
