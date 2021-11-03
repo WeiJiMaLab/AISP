@@ -13,7 +13,7 @@ while (var_sum / n / n) > var_limit
     var_sum = var_sum + var;
     val_sum = val_sum + value;
     n = n + 1;
-    fprintf('%f\n', var_sum / n / n) 
+    % fprintf('%f\n', var_sum / n / n) 
 end
 
 val_out = val_sum / n;

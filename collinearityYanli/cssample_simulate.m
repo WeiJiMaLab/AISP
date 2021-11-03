@@ -11,10 +11,15 @@ beta0 = pars(5);
 beta = pars(6);
 lambda = pars(7);
 if length(pars) > 7
-    n_samples = floor(pars(8));
+    n_samples = pars(8);
+    % random averaging between n_samples values
     if n_samples > 10000
         n_samples = 10000;
         warning('n_samples reduced to 10000 to avoid extreme computation')
+    elseif rand > mod(n_samples, 1)
+        n_samples = floor(n_samples);
+    else
+        n_samples = ceil(n_samples);
     end
 else
     n_samples = 1;
@@ -33,43 +38,29 @@ sigmaNoise(stim(:,1)==840) = sigmas(4);
 
 x = s + repmat(sigmaNoise, [1,2]) .* randn(size(stim, 1), 2);
 
-lsn = log(sigmaNoise(:));
-ls0 = log(sigma0);
 % initialize sampling to prior samples
-s1_samp = sigma0 * repmat(randn(n_trials, 1), [1,2]);
-s2_samp = sigma0 * randn(n_trials, 2);
-% s_1 = nan(n_trials, n_samples);
-% s_2 = nan(n_trials, n_samples);
+s_samp = sigma0 * randn(n_trials, 2);
+C_samp = randi(2, n_trials, 1);
+s_samp(C_samp==1, 2) = s_samp(C_samp==1,1);
+% s = nan(n_trials, n_samples);
 C = nan(n_trials, n_samples);
 
-l1_samp = - sum((s1_samp-x).^2, 2) ./ 2 ./ sigmaNoise .^2 ...
-    - s1_samp(:,1).^2 ./ 2 ./ (sigma0 .^2) - ls0 - lsn;
-l2_samp = - sum((s2_samp-x).^2, 2) ./ 2 ./ sigmaNoise .^2 ...
-    - sum(s2_samp.^2 ./ 2 ./ (sigma0 .^2), 2) - 2*ls0 - lsn;
+
+l_samp = - sum((s_samp-x).^2, 2) ./ 2 ./ sigmaNoise .^2;
 % sampling
 for i = 1:n_samples
     % sample s1
-    s1_samp_new = sigma0 * repmat(randn(n_trials, 1), [1,2]);
-    l1_samp_new = - sum((s1_samp-x).^2, 2) ./ 2 ./ sigmaNoise .^2 ...
-        - s1_samp(:,1).^2 ./ 2 ./ (sigma0 .^2) - ls0 - lsn;
-    accept = rand(n_trials,1)< exp(l1_samp_new-l1_samp);
-    % s1_samp(accept) = s1_samp_new(accept);
-    l1_samp(accept) = l1_samp_new(accept);
-    % sample s2
-    s2_samp_new = sigma0 * randn(n_trials, 2);
-    l2_samp_new = - sum((s2_samp_new-x).^2, 2) ./ 2 ./ sigmaNoise .^2 ...
-        - sum(s2_samp_new.^2 ./ 2 ./ (sigma0 .^2), 2) - 2*ls0 - lsn;
-    accept = rand(n_trials, 1)< exp(l2_samp_new-l2_samp);
-    % s2_samp(accept) = s2_samp_new(accept);
-    l2_samp(accept) = l2_samp_new(accept);
-    % sample C
-    p_c = exp(l1_samp-l2_samp) ./ (exp(l1_samp-l2_samp) + 1);
-    p_c((l1_samp-l2_samp) > 25) = 1;
-    p_c((l1_samp-l2_samp) < -25) = 0;
-    C(:,i) = rand(n_trials, 1) < p_c;
-    % s_1(:,i) = s1_samp;
-    % s_2(:,i) = s2_samp;
+    s_samp_new = sigma0 * randn(n_trials, 2);
+    C_samp_new = randi(2, n_trials, 1);
+    s_samp_new(C_samp_new==1, 2) = s_samp_new(C_samp_new==1,1);
+    l_samp_new = - sum((s_samp_new-x).^2, 2) ./ 2 ./ sigmaNoise .^2;
+    accept = rand(n_trials,1)< exp(l_samp_new-l_samp);
+    % s_samp(accept) = s_samp_new(accept);
+    C_samp(accept) = C_samp_new(accept);
+    l_samp(accept) = l_samp_new(accept);
+    C(:,i) = C_samp;
+    % s(:,i) = s_samp;
 end
-d = log(sum(C, 2) + 1) - log(n_samples - sum(C, 2) + 1);
-p = lambda/2 + (1-lambda)./(1+exp(beta0+beta*d));
+d = log(sum(C==1, 2) + 1) - log(n_samples - sum(C==1, 2) + 1);
+p = lambda/2 + (1-lambda)./(1+exp(beta0-beta*d));
 responses = (rand(n_trials, 1) < p);

@@ -15,6 +15,10 @@ if length(pars) > 7
     if n_samples > 10000
         n_samples = 10000;
         warning('n_samples reduced to 10000 to avoid extreme computation')
+    elseif rand > mod(n_samples, 1)
+        n_samples = floor(n_samples);
+    else
+        n_samples = ceil(n_samples);
     end
 else
     n_samples = 1;
