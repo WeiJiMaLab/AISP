@@ -62,5 +62,5 @@ for i = 1:n_samples
     % s(:,i) = s_samp;
 end
 d = log(sum(C==1, 2) + 1) - log(n_samples - sum(C==1, 2) + 1);
-p = lambda/2 + (1-lambda)./(1+exp(beta0-beta*d));
+p = lambda/2 + (1-lambda)./(1+exp(-beta0-beta*d));
 responses = (rand(n_trials, 1) < p);
