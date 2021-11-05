@@ -10,15 +10,15 @@ for idx = randperm(size(runs,1))
     fprintf('Run %d: Subject #%d, repetition %d, Type %d\n', idx, iSubj, iRep, iType)
     switch iType
         case 1
-            file = sprintf('pars/pars_ibs_Bayes_%d_%d.mat', iSubj, iRep);
+            file = sprintf('pars/pars_Bayes_%d_%d.mat', iSubj, iRep);
         case 2
-            file = sprintf('pars/pars_ibs_Freq_%d_%d.mat', iSubj, iRep);
+            file = sprintf('pars/pars_Freq_%d_%d.mat', iSubj, iRep);
         case 3
-            file = sprintf('pars/pars_ibs_Freq2_%d_%d.mat', iSubj, iRep);
+            file = sprintf('pars/pars_Freq2_%d_%d.mat', iSubj, iRep);
         case 4
-            file = sprintf('pars/pars_ibs_Sample_%d_%d.mat', iSubj, iRep);
+            file = sprintf('pars/pars_Sample_%d_%d.mat', iSubj, iRep);
         case 5
-            file = sprintf('pars/pars_ibs_cssample_%d_%d.mat', iSubj, iRep);
+            file = sprintf('pars/pars_cssample_%d_%d.mat', iSubj, iRep);
     end
     if ~exist(file, 'file')
         fprintf('---started fitting---\n')
