@@ -1,5 +1,9 @@
-function cluster_fcn_fix(job_id)
+function cluster_fcn_fix(job_id, check)
 fprintf('Job %d:\n', job_id)
+
+if ~exist('check','var') || isempty(check)
+    check = false;
+end
 
 runs = csvread('runs.csv');
 
@@ -20,14 +24,16 @@ for idx = randperm(size(runs,1))
     end
     if ~exist(file, 'file')
         fprintf('---started fitting---\n')
-        if iType == 1
-            fit_cluster_ibs(iRep, iSubj, 'bayes')
-        elseif iType == 2
-            fit_cluster_ibs(iRep, iSubj, 'freq')
-        elseif iType == 3
-            fit_cluster_ibs(iRep, iSubj, 'sample')
-        elseif iType == 4
-            fit_cluster_ibs(iRep, iSubj, 'cssample')
+        if ~check
+            if iType == 1
+                fit_cluster_ibs(iRep, iSubj, 'bayes')
+            elseif iType == 2
+                fit_cluster_ibs(iRep, iSubj, 'freq')
+            elseif iType == 3
+                fit_cluster_ibs(iRep, iSubj, 'sample')
+            elseif iType == 4
+                fit_cluster_ibs(iRep, iSubj, 'cssample')
+            end
         end
     end
 end
