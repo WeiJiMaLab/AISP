@@ -7,6 +7,7 @@ end
 
 runs = csvread('runs.csv');
 
+count = 0;
 for idx = randperm(size(runs,1))
     iSubj = runs(idx, 1);
     iRep = runs(idx, 2);
@@ -39,6 +40,9 @@ for idx = randperm(size(runs,1))
                 fit_cluster_ibs(iRep, iSubj, 'cssample')
             end
         end
+        count = count + 1;
     end
 end
+fprintf('Done after fitting %d times', count)
+
 
