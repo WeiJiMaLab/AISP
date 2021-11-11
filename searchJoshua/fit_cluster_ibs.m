@@ -50,23 +50,21 @@ else
     incSamplesParam = false;
 end
 
-% If we have a num samples parameter, round it before evaluating the LL
-if incSamplesParam
-    [paramNames, paramOrder] = findParamOrder(incSamplesParam);
-    relParam = paramOrder{strcmp('NumSamples', paramNames)};
-    assert(length(relParam)==1)
-    FunForParams = @(parVec) randRoundPars(parVec, relParam);
-else
-    FunForParams = [];
-end
-
 RespFun = @(pars, data) aisp_simResponseWrapper(data, pars, modelName);
 fun_handle = @(pars) ibslike_var(RespFun, pars, DatSubj.Response, designMat, ...
-    opt_ibs, opt_varLimit, debugMode, FunForParams);
+    opt_ibs, opt_varLimit, debugMode);
 
 [X0,LB,UB,PLB,PUB] = get_bads_bounds(incSamplesParam); 
+
+disp(' ')
+disp('Beginning optimisation: ')
+disp(datetime('now'))
+disp(' ')
 
 [pars,nLogL] = bads(fun_handle,X0,LB,UB,PLB,PUB,opt_bads);
 save(saveFile,'pars','nLogL')
 
-
+disp(' ')
+disp('Optimisation complete: ')
+disp(datetime('now'))
+disp(' ')

@@ -1,8 +1,13 @@
-function resp = aisp_simResponse(type, ParamStruct, Data)
+function resp = aisp_simResponse(modelName, ParamStruct, Data)
 % Simulate a response
 
 % INPUT
 % type: Which model to simulate with?
+
+if any(strcmp(modelName, {'impSamp', 'jointPostSamp'}))
+    assert(isequal(size(ParamStruct.NumSamples), [1, 1]))
+    ParamStruct.NumSamples = randRound(ParamStruct.NumSamples);
+end
 
 
 %% Simulate percepts
@@ -18,27 +23,27 @@ percepts = aisp_addNoiseToStim(relKappaX, Data.Orientation, ...
 %% Simulate responses based on these percepts
 
 % What response is given in each case?
-if strcmp(type, 'Bayes')
+if strcmp(modelName, 'Bayes')
     d = aisp_computeBaysianDV(percepts, Data.SetSize, relKappaX, ...
         Data.KappaS, 0);
 
-elseif strcmp(type, 'PE')
+elseif strcmp(modelName, 'PE')
     d = aisp_computePointEstDV(percepts, Data.SetSize, relKappaX, ...
         Data.KappaS, 0, 'stimAndTarg');
     
-elseif strcmp(type, 'PE_imagineL')
+elseif strcmp(modelName, 'PE_imagineL')
     d = aisp_computePointEstDV(percepts, Data.SetSize, relKappaX, ...
         Data.KappaS, 0, 'stimAndTarg_incImagine');
         
-elseif strcmp(type, 'PE2')
+elseif strcmp(modelName, 'PE2')
     d = aisp_computeOptimalPointEstDV(percepts, Data.SetSize, relKappaX, ...
         Data.KappaS, 0);
     
-elseif strcmp(type, 'impSamp')
+elseif strcmp(modelName, 'impSamp')
     d = aisp_computeImpSampDV(percepts, Data.SetSize, relKappaX, ...
         Data.KappaS, 0, ParamStruct.NumSamples);
     
-elseif strcmp(type, 'jointPostSamp')
+elseif strcmp(modelName, 'jointPostSamp')
     d = aisp_computeJointPostSampDV(percepts, Data.SetSize, relKappaX, ...
         Data.KappaS, 0, ParamStruct.NumSamples, true);
 else
