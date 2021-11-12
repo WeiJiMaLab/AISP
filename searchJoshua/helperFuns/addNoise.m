@@ -59,7 +59,7 @@ elseif strcmp(mode, 'efficientSamp')
         thisActive = false(nlShape);
         thisActive(match, :, :) = active(match, :, :);
         numReq = sum(thisActive, 'all');
-        samples = imResampVm(0, thisKappa, numReq);
+        samples = sampVm(0, thisKappa, numReq);
         addedNoise(thisActive) = samples(:);
     end
 else

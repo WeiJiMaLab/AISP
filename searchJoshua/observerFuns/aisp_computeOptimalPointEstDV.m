@@ -1,6 +1,10 @@
 function d = aisp_computeOptimalPointEstDV(percept, nItems, kappa_x, kappa_s, mu_s)
 % Compute the decision variable for the optimal point estimate observer
 
+% INPUT
+% nItems    [numTrials x 1] vectors. Different numbers of items in 
+%           different trials is permitted.
+
 assert(length(size(percept)) == 2)
 
 % First compute the standard point estiamte

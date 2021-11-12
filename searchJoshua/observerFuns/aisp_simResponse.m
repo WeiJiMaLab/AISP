@@ -1,8 +1,17 @@
-function resp = aisp_simResponse(modelName, ParamStruct, Data)
+function resp = aisp_simResponse(modelName, ParamStruct, Data, varargin)
 % Simulate a response
 
 % INPUT
-% type: Which model to simulate with?
+% modelName: str. Which model to simulate with?
+% varargin{1}: bool. Run checks? If false, does not run some checks, 
+%   therefore potentially saving time, but with less chance to detect 
+%   bugs. Default is true.
+
+if length(varargin) >= 1
+    runChecks = varargin{1};
+else
+    runChecks = true;
+end
 
 if any(strcmp(modelName, {'impSamp', 'jointPostSamp'}))
     assert(isequal(size(ParamStruct.NumSamples), [1, 1]))
@@ -39,13 +48,32 @@ elseif strcmp(modelName, 'PE2')
     d = aisp_computeOptimalPointEstDV(percepts, Data.SetSize, relKappaX, ...
         Data.KappaS, 0);
     
-elseif strcmp(modelName, 'impSamp')
-    d = aisp_computeImpSampDV(percepts, Data.SetSize, relKappaX, ...
-        Data.KappaS, 0, ParamStruct.NumSamples);
+elseif any(strcmp(modelName, {'impSamp', 'jointPostSamp'}))
+    uniqSizes = unique(Data.SetSize);
+    assert(~any(isnan(uniqSizes)))
+    assert(length(size(percepts)) == 2)
+    d = nan(length(Data.SetSize), 1);
     
-elseif strcmp(modelName, 'jointPostSamp')
-    d = aisp_computeJointPostSampDV(percepts, Data.SetSize, relKappaX, ...
-        Data.KappaS, 0, ParamStruct.NumSamples, true);
+    for iU = 1 : length(uniqSizes)
+        relTs = Data.SetSize == uniqSizes(iU);
+        
+        if strcmp(modelName, 'impSamp')
+            d(relTs) = aisp_computeImpSampDV( ...
+                percepts(relTs, :), ...
+                uniqSizes(iU), ...
+                relKappaX(relTs), ...
+                Data.KappaS(relTs), ...
+                0, ParamStruct.NumSamples, runChecks);
+            
+        elseif strcmp(modelName, 'jointPostSamp')
+            d(relTs) = aisp_computeJointPostSampDV( ...
+                percepts(relTs, :), ...
+                uniqSizes(iU), ...
+                relKappaX(relTs), ...
+                Data.KappaS(relTs), ...
+                0, ParamStruct.NumSamples, runChecks);
+        end
+    end
 else
     error('Bug')
 end

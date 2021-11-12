@@ -12,12 +12,12 @@ function samples = sampVm(mu, kappa, nSamples, varargin)
 % kappa: scalar. Concentration parameter
 % nSamples: scalar. How many samples to draw?
 % varargin{1}: bool. If true, for the special case of mu = 0 and 
-%   kappa = 1.5 use approach (a) described above, otherwise use approach 
-%   (b). Default is true
+%   kappa = 1.5 use approach (a) described above, if false, use approach 
+%   (b) for this case. Default is true
 
 % JCT, 2021
 
-if len(varargin) >= 1
+if length(varargin) >= 1
     fromPool = varargin{1};
     assert(isboolean(fromPool))
 else
@@ -36,6 +36,7 @@ if isempty(evenSpaced)
     evenSpaced = -pi : 0.001 : pi;
 end
 
+
 if isSpecialCase
     if fromPool && isempty(kappaSpecialPool)
         kappaSpecialPool = qrandvm(mu, kappa, 50000);
@@ -47,13 +48,16 @@ end
 if kappa == 0
     samples = (rand(nSamples, 1) * 2 * pi) - pi;
 else
-    % WORKING HERE --- use the kappaSpecialPool
-    if isSpecialCase
-        assocProbs = kappaSpecialProbs;
+    if isSpecialCase && fromPool
+        samples = randsample(kappaSpecialPool, nSamples, true);
     else
-        assocProbs = circ_vmpdf(evenSpaced, mu, kappa);
+        if isSpecialCase
+            assocProbs = kappaSpecialProbs;
+        else
+            assocProbs = circ_vmpdf(evenSpaced, mu, kappa);
+        end
+        samples = randsample(evenSpaced, nSamples, true, assocProbs);
     end
-    samples = randsample(evenSpaced, nSamples, true, assocProbs);
 end
 
 

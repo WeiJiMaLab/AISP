@@ -2,14 +2,24 @@ function fit_cluster_ibs(iRep, iPtpnt, modelName, DSet, idx, varargin)
 
 % INPUT
 % idx: Index of the job. Used when saving the results
-% varargin{1}: Boolean. Default false. Whether to display information helpful
-% for debuging.
+% varargin{1}: bool. Default false. Whether to display information 
+% helpful for debuging.
+% varargin{2}: bool. Run checks? If false, does not run some checks, 
+%   therefore potentially saving time, but with less chance to detect 
+%   bugs. Default is true.
 
 if length(varargin) >= 1
     debugMode = varargin{1};
 else
     debugMode = false;
 end
+
+if length(varargin) >= 2
+    runChecks = varargin{2};
+else
+    runChecks = true;
+end
+
 
 % In debug model ibslike_var uses persistant variables. Clear these for a fresh
 % start
@@ -30,7 +40,7 @@ if exist(saveFile, 'file')
 end
 
 DatSubj = DSet.P(iPtpnt).Data;
-designMat = struct2DesignMat(DatSubj, 'to matrix');
+designMat = struct2DesignMat(DatSubj, 'to matrix', true);
 
 % Fitting settings
 opt_varLimit = 4; %4; can be higher if needed
@@ -50,7 +60,8 @@ else
     incSamplesParam = false;
 end
 
-RespFun = @(pars, data) aisp_simResponseWrapper(data, pars, modelName);
+RespFun = @(pars, data) aisp_simResponseWrapper(data, pars, modelName, ...
+    runChecks);
 fun_handle = @(pars) ibslike_var(RespFun, pars, DatSubj.Response, designMat, ...
     opt_ibs, opt_varLimit, debugMode);
 

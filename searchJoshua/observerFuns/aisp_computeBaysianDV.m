@@ -9,7 +9,8 @@ function d = aisp_computeBaysianDV(percept, nItems, kappa_x, kappa_s, ...
 
 % INPUT
 % percept   [numTrials x setSize] array of stimulus percepts
-% nItems
+% nItems    [numTrials x 1] vectors. Different numbers of items in 
+%           different trials is permitted.
 % kappa_x   Observer's belief about the concetration parameter of the 
 %           measurement noise
 % kappa_s   Overserver's belief about the concentration parameter of the 

@@ -16,5 +16,3 @@ for iInputVec = 1 : length(inputVectors)
         error('Bug')
     end
 end
-
-assert(length(nItems) == size(percept, 1))
