@@ -20,6 +20,13 @@ cat<<EOF | matlab -nodisplay
 cd ~/AISP/categorizationWill
 job_id = str2num(strjoin(regexp('$job','\d','match'), ''))
 rng(job_id)
+
+tmpfolder = sprintf('/state/partition1/job-%s/.matlab/', job_id)
+mkdir(tmpfolder)
+clust = parcluster();
+clust.JobStorageLocation = tmpfolder;
+parpool(clust, 6)
+
 cluster_fcn_fancy(job_id,$index);
 
 EOF
