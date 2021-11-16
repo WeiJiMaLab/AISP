@@ -2,7 +2,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=6
-#SBATCH --time=24:00:00
+#SBATCH --time=36:00:00
 #SBATCH --mem=4GB
 #SBATCH --job-name=fitWill
 #SBATCH --mail-type=END
