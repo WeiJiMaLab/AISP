@@ -17,7 +17,7 @@ opt_ibs.Nreps = 1;
 opt_ibs.MaxIter = 20000;
 opt_ibs.Vectorized = true;
 FUN = @(pars, stimulus) ibs_fun(stimulus,pars,type);
-fun_handle = @(pars) ibslike_var(FUN,pars,response,stimulus,opt_ibs, var_limit);
+fun_handle = @(pars) ibslike_var_par(FUN,pars,response,stimulus,opt_ibs, var_limit);
 
 [X0, LB, UB, PLB, PUB] = get_bads_bounds();
 
