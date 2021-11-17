@@ -1,15 +1,17 @@
-function samples = drawSamples(percept, kappa_s, nSamples, targPresent)
+function samples = drawSamples(kappa_s, nTrials, setSize, nSamples, ...
+    targPresent, runChecks)
 % Draw samples for the stimulus from p(s | C)
 
 % INPUT
-% percept: [numTrials x setSize] array of stimulus percepts. Only used 
-%   to determine how many trials to draw samples for, and which positions 
-%   should be set to nan
-% kappa_s: vector as long as the first dimension of percept, and 
-%   determines the kappa for drawing orientations
+% kappa_s: vector as long as nTrials, and determines the kappa for drawing 
+%   orientations
+% nTrials: scalar.
+% setSize: scalar. Will draw nSamples for nTrials trials in which this
+%   many stimuli were presented each trial.
 % nSamples: scalar. How many samples to draw?
 % targPresent: str. If 'targPres' draw from p(s | C ='target present'), 
 %   else if 'targAbs' draw from p(s | C ='target absent')
+% runChecks bool. If true check potentially costly assertions
 
 % OUTPUT
 % samples: [numTrials x setSize x numSamples] array
@@ -19,64 +21,62 @@ function samples = drawSamples(percept, kappa_s, nSamples, targPresent)
 if nSamples == 0
     error('No samples requested')
 end
+assert(size(kappa_s, 2)==1)
+assert(size(kappa_s, 1)== nTrials)
 
-samples = drawAbsentSamples(percept, kappa_s, nSamples);
+samples = drawAbsentSamples(kappa_s, nTrials, setSize, nSamples, runChecks);
 
 if strcmp(targPresent, 'targPres')
     % Just need to add target locations to samples drawn as if no 
     % target present
-
-    % Simulating target locations is a little tricky as not all positions in
-    % percept are occupied. Some are nan's representing that no stimulus was
-    % presented there at all. Create an array representing the
-    % probability that location at index i or lower is selected as the target. 
-    activeLocs = ~isnan(percept);
-    cumulatProb = cumsum(activeLocs, 2);
-    cumulatProb = cumulatProb ./ cumulatProb(:, end);
-
-    % Draw a value between 0 and 1, and then use to select a location
-    % acording to the above cumulative probabilities
-    uDraw = rand([size(samples, 1), 1, size(samples, 3)]);
-
-    lowerCut = [zeros(size(cumulatProb, 1), 1), cumulatProb(:, 1:end-1)];
-    upperCut = cumulatProb;
-
-    targMask = (uDraw > lowerCut) & (uDraw < upperCut);
-    assert(isequal(size(targMask), size(samples)))
-    numTargs = sum(targMask, 2);
-    if ~all(numTargs(:) == 1)
-       error('Bug') 
-    end
-
-    samples(targMask) = 0;
+    targLocs = randi(setSize, [nTrials, 1, nSamples]);
+    correspondTrial = nan(nTrials, 1);
+    correspondTrial(:) = 1:nTrials;
+    correspondTrial = repmat(correspondTrial, [1, 1, nSamples]);
+    correspondSample = nan(1, 1, nSamples);
+    correspondSample(:) = 1:nSamples;
+    correspondSample = repmat(correspondSample, [nTrials, 1, 1]);
+    targIdx = sub2ind([nTrials, setSize, nSamples], ...
+        correspondTrial(:), targLocs(:), correspondSample(:));
     
-    samplesSubsec = samples(:, :, randi(size(samples, 3), [1, 1]));
-    if ~isequal(isnan(samplesSubsec), isnan(percept))
-        error('Bug') 
+    samples(targIdx) = 0;
+    
+    if runChecks
+        numTargs = sum(samples == 0, 2);
+        assert(isequal(size(numTargs), [nTrials, 1, nSamples]))
+        assert(all(numTargs(:) == 1))
     end
     
 elseif ~strcmp(targPresent, 'targAbs')
     error('Incorrect use of inputs')
 end
 
-assert(isequal(find3Dsize(samples), [size(percept), nSamples]))
+if runChecks
+    assert(isequal(find3Dsize(samples), [nTrials, setSize, nSamples]))
+end
 
 end
 
-function absentSamples = drawAbsentSamples(percept, kappa_s, nSamples)
+function absentSamples = drawAbsentSamples(kappa_s, nTrials, setSize, ...
+    nSamples, runChecks)
 % Draw samples assuming target is absent. 
 
-assert(length(size(percept)) == 2)
+absentSamples = nan([nTrials, setSize, nSamples]);
 
-absentSamples = zeros(size(percept));
-absentSamples(isnan(percept)) = nan;
+uniKappas = unique(kappa_s);
+for iKappa = 1 : length(uniKappas)
+    thisKappa = uniKappas(iKappa);
+    match = thisKappa == kappa_s;
+    numReq = sum(match)*setSize*nSamples;
+    
+    absentSamples(match, :, :) = sampVm(0, thisKappa, numReq);
+end
 
-currentNDims = length(size(absentSamples));
-assert(currentNDims == 2);
-absentSamples = repmat(absentSamples, [ones(1, currentNDims), nSamples]);
-
-absentSamples = addNoise(absentSamples, kappa_s, 'efficientSamp');
-assert(isequal(find3Dsize(absentSamples), [size(percept), nSamples]))
+if runChecks
+    assert(isequal(find3Dsize(absentSamples), ...
+        [nTrials, setSize, nSamples]))
+    assert(~any(isnan(absentSamples(:))))
+end
 
 end
 
