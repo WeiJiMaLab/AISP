@@ -21,7 +21,7 @@ cd ~/AISP/searchShan
 job_id = str2num(strjoin(regexp('$job','\d','match'), ''))
 rng(job_id)
 
-tmpfolder = sprintf('/state/partition1/job-%s/.matlab/', job_id)
+tmpfolder = sprintf('/state/partition1/job-%d/.matlab/', job_id)
 mkdir(tmpfolder)
 clust = parcluster();
 clust.JobStorageLocation = tmpfolder;
