@@ -25,7 +25,7 @@ tmpfolder = sprintf('/state/partition1/job-%d/.matlab/', job_id)
 mkdir(tmpfolder)
 clust = parcluster();
 clust.JobStorageLocation = tmpfolder;
-parpool(clust, 6)
+parpool('threads')
 
 cluster_fcn_fancy(job_id,$index);
 
