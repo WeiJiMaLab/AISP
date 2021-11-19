@@ -24,7 +24,7 @@ while (var_sum / n / n) > var_limit
     val_sum = val_sum + sum(values);
     n = n + n_sample;
     % fprintf('%f\n', var_sum / n / n)
-    % fprintf('%d\n', n_sample);
+    fprintf('%d\n', n_sample);
 end
 
 val_out = val_sum / n;

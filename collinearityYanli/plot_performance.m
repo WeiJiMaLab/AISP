@@ -1,8 +1,11 @@
-function plot_performance(N, beta_1)
+function plot_performance(N, beta_1, n_sample)
 % plots the performance in % correct against the amount of observer noise
 
 if ~exist('N','var') || isempty(N)
     N = 1000;
+end
+if ~exist('n_sample','var') || isempty(n_sample)
+    n_sample = 10;
 end
 
 pars_B = load('pars/pars_Bayes.mat');
@@ -39,8 +42,8 @@ for i_sigma = sigmas_test
     response_bayes = bayes_simulate(data, [sigmas_t, beta, lambda]);
     response_freq = pe_simulate(data, [sigmas_t, beta, lambda]);
     response_freq2 = pe2_simulate(data, [sigmas_t, beta, lambda]);
-    response_samp = sample_simulate(data, [sigmas_t, beta, lambda, 10]);
-    response_cssamp = cssample_simulate(data, [sigmas_t, beta, lambda, 10]);
+    response_samp = sample_simulate(data, [sigmas_t, beta, lambda, n_sample]);
+    response_cssamp = cssample_simulate(data, [sigmas_t, beta, lambda, n_sample]);
     performances(k, :) = [ ...
         mean(cat_true == response_bayes),...
         mean(cat_true == response_freq),...
@@ -60,6 +63,7 @@ end
 set(gca, 'FontSize', 16, 'TickDir', 'out')
 xlabel('\sigma noise', 'FontSize', 20)
 ylabel('Proportion Correct', 'FontSize', 20)
-legend({'Bayes', 'point estimate', 'point estimate opt.', 'sample 10', 'joint sample 10'})
+legend({'Bayes', 'point estimate', 'point estimate opt.', ...
+    sprintf('sample %d', n_sample), sprintf('joint sample %d', n_sample)})
 legend boxoff
 box off
