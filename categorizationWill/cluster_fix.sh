@@ -16,9 +16,9 @@ module purge
 module load matlab/2020b
 export MATLABPATH=$HOME/matlab-output
 
-export MATLAB_PREFDIR=TMPDIR/.matlab/R2020b/
+export MATLAB_PREFDIR=$TMPDIR/.matlab/R2020b/
 mkdir $TMPDIR/.matlab
-cp $HOME/.matlab/R2020b $TMPDIR/.matlab/R2020b
+cp -r $HOME/.matlab/R2020b $TMPDIR/.matlab/R2020b
 mkdir $TMPDIR/.matlab/local_cluster_jobs
 mkdir $TMPDIR/.matlab/local_cluster_jobs/R2020b
 
