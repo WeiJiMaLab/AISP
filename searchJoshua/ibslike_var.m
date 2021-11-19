@@ -10,6 +10,8 @@ function [val_out, var_out, n] = ibslike_var(FUN, PARAMS, RESPMAT, ...
 % varargin{2}: function. A function to call on PARAMS at the very 
 % begining of the evaluation. The output will be used as the parameter
 % vector instead of PARAMS
+% varargin{3}: bool. If true, run a parfor loop, otherwise do not use
+%   parallel computation.
 
 persistent avDuration
 persistent numEvals
@@ -23,6 +25,12 @@ end
 if (length(varargin) >= 2) && (~isempty(varargin{2}))
     FunForParams = varargin{2};
     PARAMS = FunForParams(PARAMS);
+end
+
+if (length(varargin) >= 3) && (~isempty(varargin{3}))
+    runParallel = varargin{3};
+else
+    runParallel = false;
 end
 
 if debugMode
@@ -44,10 +52,31 @@ var_sum = var;
 n = 1;
 
 while (var_sum / n / n) > var_limit
-    [value, var] = ibslike(FUN, PARAMS, RESPMAT, DESIGNMAT, options);
-    var_sum = var_sum + var;
-    val_sum = val_sum + value;
-    n = n + 1;
+    if ~runParallel
+        [value, var] = ibslike(FUN, PARAMS, RESPMAT, DESIGNMAT, options);
+        var_sum = var_sum + var;
+        val_sum = val_sum + value;
+        n = n + 1;
+        
+    elseif runParallel
+        % go to 102% of the samples we expect to need 
+        nStep = 1.02 *(var_sum / n / var_limit - n);
+        % apply some limits
+       	nStep = round(max(min(nStep, 500),1));
+        theseVals = nan(nStep, 1);
+        theseVars = nan(nStep, 1);
+        
+        parfor iEval = 1 : nStep
+            [thisValue, thisVar] = ibslike(FUN, PARAMS, RESPMAT, ...
+                DESIGNMAT, options);
+            theseVals(iEval) = thisValue;
+            theseVars(iEval) = thisVar;
+        end
+        
+        val_sum = val_sum + sum(theseVals);
+        var_sum = var_sum + sum(theseVars);
+        n = n + nStep;
+    end
 end
 
 val_out = val_sum / n;

@@ -25,35 +25,40 @@ assert(length(nItems) == 1)
 
 % As specified in the description of the input, several columns in percept
 % just contain nans. We can get rid of them to improve efficiency.
-if runChecks
-    toDiscard = percept(:, nItems+1:end);
-end
-percept = percept(:, 1:nItems);
+percept = trimPercept(percept, nItems, runChecks);
 
-if runChecks
-    assert(~any(isnan(percept(:))))
-    assert(all(isnan(toDiscard(:))))
-end
-% WORKING HERE
 % Create [numTrials x setSize x numSamples] array
-absentSamples = drawSamples(percept, kappa_s, nSamples, 'targAbs');
-targetSamples = drawSamples(percept, kappa_s, nSamples, 'targPres');
+nTrials = size(percept, 1);
+absentSamples = drawSamples(kappa_s, nTrials, nItems, nSamples, ...
+    'targAbs', runChecks);
+targetSamples = drawSamples(kappa_s, nTrials, nItems, nSamples, ...
+    'targPres', runChecks);
 
-d = evalOneTermInD(percept, targetSamples, kappa_x) - ...
-        evalOneTermInD(percept, absentSamples, kappa_x);
+d = evalOneTermInD(percept, targetSamples, kappa_x, runChecks) - ...
+        evalOneTermInD(percept, absentSamples, kappa_x, runChecks);
 
-assert(all(size(d) == [size(percept, 1), 1]))
+if runChecks
+    assert(all(size(d) == [size(percept, 1), 1]))
+    assert(~any(isnan(d(:))))
+end
 
 end
 
-function term = evalOneTermInD(percept, stimSamples, kappa_x)
+function term = evalOneTermInD(percept, stimSamples, kappa_x, runChecks)
 % Evaluates one of the log-sum-exp terms in the expression derived for d
 % in the derivations
 
 exponent = kappaTimesSumCosTerms(percept, stimSamples, kappa_x);
+
+if runChecks
+    assert(~any(isnan(exponent(:))))
+end
+
 term = logsumexp(exponent, 3);
 
-assert(isequal(size(term), [size(percept, 1), 1]))
+if runChecks
+    assert(isequal(size(term), [size(percept, 1), 1]))
+end
 
 end
 

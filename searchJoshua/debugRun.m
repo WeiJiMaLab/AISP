@@ -8,13 +8,14 @@ Dirs = produceDirs(6);
 
 
 if strcmp(type, 'min')
+    DatSubj = DSet.P(1).Data;
+    designMat = struct2DesignMat(DatSubj, 'to matrix', true);
+    pars = [0, 0, 0, 0, 0, 2, 0.1, 100];
+    
     tic
-    for i = 1 : 1000
-        pars = [0, 0, 0, 0, 0, 2, 0.1, 10];
-        ParamStruct = paramVec2Struct(pars, Config.ModelList{modelNum}, ...
-            'to struct');
-        aisp_simResponse(Config.ModelList{modelNum}, ParamStruct, ...
-            DSet.P(1).Data, runChecks);
+    for i = 1 : 100
+        aisp_simResponseWrapper(designMat, pars, ...
+            Config.ModelList{modelNum}, runChecks);
     end
     toc
 

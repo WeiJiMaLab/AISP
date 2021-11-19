@@ -43,7 +43,7 @@ if strcmp(targPresent, 'targPres')
     
     if runChecks
         numTargs = sum(samples == 0, 2);
-        assert(isequal(size(numTargs), [nTrials, 1, nSamples]))
+        assert(isequal(find3Dsize(numTargs), [nTrials, 1, nSamples]))
         assert(all(numTargs(:) == 1))
     end
     
@@ -69,7 +69,9 @@ for iKappa = 1 : length(uniKappas)
     match = thisKappa == kappa_s;
     numReq = sum(match)*setSize*nSamples;
     
-    absentSamples(match, :, :) = sampVm(0, thisKappa, numReq);
+    unshaped = sampVm(0, thisKappa, numReq);
+    absentSamples(match, :, :) = reshape(unshaped, ...
+        [sum(match), setSize, nSamples]);
 end
 
 if runChecks

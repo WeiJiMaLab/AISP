@@ -41,8 +41,7 @@ if any(strcmp(mode, {'standard', 'useNormDist', 'randInt', 'impResamp'}))
     elseif strcmp(mode, 'randInt')
         addedNoise = randi(6000, nlShape);
     elseif strcmp(mode, 'impResamp')
-        addedNoise = imResampVm(0, 1, prod(nlShape));
-        addedNoise = reshape(addedNoise, nlShape);
+        error('Option removed')
     else
         error('Uknknown setting')
     end
