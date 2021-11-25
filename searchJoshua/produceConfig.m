@@ -7,7 +7,7 @@ Config.ModelLabel = {'Bayes', 'Point estimate (Dep. L)', ...
 Config.ModelList =  {'Bayes', 'PE', 'PE2', 'PE_imagineL', ...
     'impSamp', 'jointPostSamp'};
 Config.Nreps = 1;
-Config.FracPtpnts = 1/13; % Fraction of participants to run
+Config.FracPtpnts = 3/13; % Fraction of participants to run
 
 % 3 models
 % Config.ModelLabel = {'Bayes', 'Point estimate', 'Opt. point estimate'};

@@ -1,5 +1,9 @@
 function debugRun(modelNum, type, runChecks, runInParallel)
 
+% To use parallel, first setup a parallel pool
+% thisClst = parcluster();
+% parpool(thisClst, [1, 32])
+
 addReqPaths()
 Config = produceConfig();
 
@@ -20,14 +24,9 @@ if strcmp(type, 'min')
     toc
 
 elseif strcmp(type, 'full')
-    if runInParallel
-        thisClst = parcluster();
-        thisClst.JobStorageLocation = tempFolder;
-        parpool(thisClst, [1, 32])
-    end
     
     iRep = 1;
-    iPtpnt = 1;
+    iPtpnt = 10;
     idx = 1;
     fit_cluster_ibs(iRep, iPtpnt, Config.ModelList{modelNum}, DSet, ...
         idx, true, runChecks, runInParallel)
