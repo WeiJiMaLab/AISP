@@ -7,19 +7,36 @@ function fit_cluster_ibs(iRep, iPtpnt, modelName, DSet, idx, varargin)
 % varargin{2}: bool. Run checks? If false, does not run some checks, 
 %   therefore potentially saving time, but with less chance to detect 
 %   bugs. Default is true.
+% varargin{3}: bool. If true, run a parfor loop, otherwise do not use
+%   parallel computation.
 
-if length(varargin) >= 1
+if (length(varargin) >= 1) && (~isempty(varargin{1}))
     debugMode = varargin{1};
 else
     debugMode = false;
 end
 
-if length(varargin) >= 2
+if (length(varargin) >= 2) && (~isempty(varargin{2}))
     runChecks = varargin{2};
 else
     runChecks = true;
 end
 
+if (length(varargin) >= 3) && (~isempty(varargin{3}))
+    runParallel = varargin{3};
+else
+    runParallel = false;
+end
+
+if ~runChecks
+    disp('Running *without* checks for speed')
+end
+
+if runParallel
+    disp('Running with parallel processing')
+else
+    disp('Not running with parallel processing')
+end
 
 % In debug model ibslike_var uses persistant variables. Clear these for a fresh
 % start
@@ -63,7 +80,7 @@ end
 RespFun = @(pars, data) aisp_simResponseWrapper(data, pars, modelName, ...
     runChecks);
 fun_handle = @(pars) ibslike_var(RespFun, pars, DatSubj.Response, designMat, ...
-    opt_ibs, opt_varLimit, debugMode);
+    opt_ibs, opt_varLimit, debugMode, [], runParallel);
 
 [X0,LB,UB,PLB,PUB] = get_bads_bounds(incSamplesParam); 
 

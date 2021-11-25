@@ -65,5 +65,6 @@ iPtpnt = runs(idx, 1);
 iRep = runs(idx, 2);
 iType = runs(idx, 3);
 fprintf('Participant #%d, Repetition %d, Type %d\n', iPtpnt, iRep, iType)
-fit_cluster_ibs(iRep, iPtpnt, Config.ModelList{iType}, DSet, idx)
+fit_cluster_ibs(iRep, iPtpnt, Config.ModelList{iType}, DSet, idx, ...
+                false, false, true)
 

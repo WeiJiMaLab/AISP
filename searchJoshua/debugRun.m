@@ -1,4 +1,4 @@
-function debugRun(modelNum, type, runChecks)
+function debugRun(modelNum, type, runChecks, runInParallel)
 
 addReqPaths()
 Config = produceConfig();
@@ -20,11 +20,17 @@ if strcmp(type, 'min')
     toc
 
 elseif strcmp(type, 'full')
+    if runInParallel
+        thisClst = parcluster();
+        thisClst.JobStorageLocation = tempFolder;
+        parpool(thisClst, [1, 32])
+    end
+    
     iRep = 1;
     iPtpnt = 1;
     idx = 1;
     fit_cluster_ibs(iRep, iPtpnt, Config.ModelList{modelNum}, DSet, ...
-        idx, true, runChecks)
+        idx, true, runChecks, runInParallel)
 
 end
 

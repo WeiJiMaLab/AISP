@@ -28,6 +28,17 @@ cat<<EOF | matlab -nodisplay -nosplash
 job_id = str2num(strjoin(regexp('$job','\d','match'), ''))
 rng(job_id)
 
+tmpFolder = fullfile($RRZ_LOCAL_TMPDIR, 'clusterJobs', ...
+    num2str(job_id), num2str($index))
+disp('Folder in use for temporary storage of files...')
+disp(tempFolder)
+disp('')
+mkdir(tempFolder)
+
+thisClst = parcluster();
+thisClst.JobStorageLocation = tempFolder;
+parpool(thisClst, [1, 32])
+
 cluster_fcn_fancy("$dataDir", job_id, $index);
 
 EOF
