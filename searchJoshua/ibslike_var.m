@@ -66,7 +66,9 @@ while (var_sum / n / n) > var_limit
         theseVals = nan(nStep, 1);
         theseVars = nan(nStep, 1);
         
-        disp(['NUM STEPS: ' num2str(nStep)])
+        if debugMode
+            disp(['NUM STEPS: ' num2str(nStep)])
+        end
         
         parfor iEval = 1 : nStep
             [thisValue, thisVar] = ibslike(FUN, PARAMS, RESPMAT, ...

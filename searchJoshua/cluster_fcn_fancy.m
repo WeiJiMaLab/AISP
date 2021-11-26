@@ -7,7 +7,7 @@ N_target = 5;
 addReqPaths()
 
 fprintf('Job %d:\n', job_id)
-fprintf('Started Job #%d\n', idx)
+fprintf('Started Job with index #%d\n', idx)
 
 [DSet, Nptpnts] = getData(dataDir);
 Config = produceConfig();
