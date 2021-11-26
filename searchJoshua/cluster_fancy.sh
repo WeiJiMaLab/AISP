@@ -22,6 +22,11 @@ dataDir="$2"
 index=$1
 job=$SLURM_JOB_ID
 
+TMP="$TMPDIR"
+echo 'System temp dirs:'
+echo "$TMPDIR"
+echo "$TMP"
+
 module load matlab/2018b
 
 cat<<EOF | matlab -nodisplay -nosplash
