@@ -62,11 +62,11 @@ while (var_sum / n / n) > var_limit
         % go to 102% of the samples we expect to need 
         nStep = 1.02 *(var_sum / n / var_limit - n);
         % apply some limits
-       	nStep = round(max(min(nStep, 200),1));
+       	nStep = round(max(min(nStep, 150),1));
         theseVals = nan(nStep, 1);
         theseVars = nan(nStep, 1);
         
-        disp(['****NUM STEPS: ' num2str(nStep)])
+        disp(['NUM STEPS: ' num2str(nStep)])
         
         parfor iEval = 1 : nStep
             [thisValue, thisVar] = ibslike(FUN, PARAMS, RESPMAT, ...

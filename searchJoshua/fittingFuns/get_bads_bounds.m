@@ -8,8 +8,8 @@ params = {'LnKappa_x', 'LnKappa_x', 'LnKappa_x', 'LnKappa_x', ...
     'Beta0', 'Beta1', 'LapseRate', 'NumSamples'};
 LB = [repmat(-6, 1, 4), -10, 0.01, 0.005, 1];
 PLB= [repmat(-4, 1, 4),  -5,  0.1, 0.01, 1];
-PUB= [repmat(4, 1, 4),   5,    5, 0.2, 100];
-UB = [repmat(7, 1, 4),  10,   25, 1, 100];
+PUB= [repmat(4, 1, 4),   5,    5, 0.2, 1000];
+UB = [repmat(7, 1, 4),  10,   25, 1, 1000];
 
 if ~incSamplesParam
     params = params(1: end-1);

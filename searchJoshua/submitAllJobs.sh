@@ -9,6 +9,8 @@
 #   run)? This number should be the end of the range.
 # $3 full file name (including directory) for the data file
 
+set -e
+
 startJobs=$1
 endJobs=$2
 dataDir=$3
