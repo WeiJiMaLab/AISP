@@ -22,18 +22,22 @@ dataDir="$2"
 index=$1
 job=$SLURM_JOB_ID
 
+module load matlab/2018b
+
 TMP="$TMPDIR"
 echo 'System temp dirs:'
 echo "$TMPDIR"
 echo "$TMP"
 
-module load matlab/2018b
+export MATLAB_PREFDIR=$TMPDIR/.matlab/R2018b/
+mkdir $TMPDIR/.matlab
+cp -r $HOME/.matlab/R2018b $TMPDIR/.matlab
 
 cat<<EOF | matlab -nodisplay -nosplash
 job_id = str2num(strjoin(regexp('$job','\d','match'), ''))
 rng(job_id)
 
-tmpFolder = fullfile("$RRZ_LOCAL_TMPDIR", 'clusterJobs', ...
+tmpFolder = fullfile("$TMPDIR", 'clusterJobs', ...
     num2str(job_id), "$index")
 disp('Folder in use for temporary storage of files...')
 disp(tmpFolder)
@@ -43,7 +47,5 @@ mkdir(tmpFolder)
 thisClst = parcluster();
 thisClst.JobStorageLocation = tmpFolder;
 parpool(thisClst, [1, 32])
-
-# cluster_fcn_fancy("$dataDir", job_id, $index);
-
+#cluster_fcn_fancy("$dataDir", job_id, $index);
 EOF
