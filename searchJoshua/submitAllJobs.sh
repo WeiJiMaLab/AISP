@@ -7,13 +7,31 @@
 #   run)? This number should be the begining of the range.
 # $2 Which jobs should the function run (if they have not already been 
 #   run)? This number should be the end of the range.
-# $3 full file name (including directory) for the data file
+# $3 Current cluster ("main" or "nyu")
 
 set -e
 
 startJobs=$1
 endJobs=$2
-dataDir=$3
+currentCluster=$3
+
+# Check we are in the "searchJoshua" directory
+currentDir=$(basename $(pwd))
+if [[ $currentDir != searchJoshua ]]; then
+    echo "Must be run from the subdirectory searchJoshua"
+    exit 1
+fi
+
+dataDir="$(pwd)/Data/StandardFormat_participantExcluded.mat"
+
+if [[ $currentCluster == main ]]; then
+    launchScript="./cluster_fancy.sh"
+elif [[ $currentCluster == nyu ]]; then
+    launchScript="./cluster_fancy_nyu.sh"
+else
+    echo "Unrecognised cluster selected"
+    exit 1
+fi
 
 # Loop through all job files in the direcotry
 for idx in $(seq $startJobs $endJobs); do
@@ -28,8 +46,8 @@ for idx in $(seq $startJobs $endJobs); do
     done
     
     if [[ $resultExists == 0 ]]; then
-        sbatch ./cluster_fancy.sh "$idx" "$dataDir"
+        sbatch $launchScript "$idx" "$dataDir"
     else
-        echo "Job index $idx found"
+        echo "Results for job index $idx found, so skipping job submission"
     fi
 done

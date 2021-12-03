@@ -26,7 +26,7 @@ if strcmp(type, 'min')
 elseif strcmp(type, 'full')
     
     iRep = 1;
-    iPtpnt = 10;
+    iPtpnt = 7;
     idx = 1;
     fit_cluster_ibs(iRep, iPtpnt, Config.ModelList{modelNum}, DSet, ...
         idx, true, runChecks, runInParallel)
