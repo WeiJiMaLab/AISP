@@ -1,8 +1,14 @@
 pars
+pars_*/
 data
 *.m~
 .DS_Store
 Icon?
 figures
+ztmp*.*
+*.out
+tmp/
+Dirs_*models.mat
+*produceDirs.m
 *.asv
 *slurm*
