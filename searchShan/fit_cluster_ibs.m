@@ -17,7 +17,7 @@ opt_ibs.Nreps = 1;
 opt_ibs.MaxIter = 20000;
 opt_ibs.Vectorized = true;
 FUN = @(pars, stimulus) ibs_fun(stimulus,pars,type);
-fun_handle = @(pars) ibslike_var(FUN,pars,response,stimulus,opt_ibs, var_limit);
+fun_handle = @(pars) ibslike_var_par(FUN,pars,response,stimulus,opt_ibs, var_limit);
 
 [X0, LB, UB, PLB, PUB] = get_bads_bounds();
 
@@ -29,13 +29,10 @@ switch type
     case 'freq'
         [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/searchShan/pars/pars_ibs_Freq_%d_%d.mat',iSubj,iRep),'pars','likelihood')
-    case 'sample1'
-        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
-        save(sprintf('~/AISP/searchShan/pars/pars_ibs_Sample1_%d_%d.mat',iSubj,iRep),'pars','likelihood')
     case 'sample'
-        [pars,likelihood] = bads(fun_handle,[X0,10],[LB,1],[UB,10000],[PLB,1],[PUB,1000],options);
+        [pars,likelihood] = bads(fun_handle,[X0,10],[LB,1],[UB,1000],[PLB,1],[PUB,100],options);
         save(sprintf('~/AISP/searchShan/pars/pars_ibs_Sample_%d_%d.mat',iSubj,iRep),'pars','likelihood')
     case 'cssample'
-        [pars,likelihood] = bads(fun_handle,[X0,10],[LB,1],[UB,10000],[PLB,1],[PUB,1000],options);
+        [pars,likelihood] = bads(fun_handle,[X0,10],[LB,1],[UB,1000],[PLB,1],[PUB,100],options);
         save(sprintf('~/AISP/searchShan/pars/pars_ibs_cssample_%d_%d.mat',iSubj,iRep),'pars','likelihood')
 end

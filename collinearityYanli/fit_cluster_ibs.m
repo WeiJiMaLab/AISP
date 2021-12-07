@@ -15,7 +15,7 @@ opt_ibs = ibslike;
 opt_ibs.Nreps = 1;
 opt_ibs.MaxIter = 20000;
 FUN = @(pars,data) ibs_fun(data,pars,type);
-fun_handle = @(pars) ibslike_var(FUN,pars,datSubj(:,4),datSubj,opt_ibs, var_limit);
+fun_handle = @(pars) ibslike_var_par(FUN,pars,datSubj(:,4),datSubj,opt_ibs, var_limit);
 
 [X0,LB,UB,PLB,PUB] = get_bads_bounds();
 
@@ -35,17 +35,17 @@ switch type
     case 'sample'
         X0 = [X0, 10];
         LB = [LB, 1];
-        UB = [UB, 10000];
+        UB = [UB, 1000];
         PLB = [PLB, 1];
-        PUB = [PUB, 1000];
+        PUB = [PUB, 100];
         [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/collinearityYanli/pars/pars_sample_%d_%d.mat',iSubj,iRep),'pars','likelihood')
     case 'cssample'
         X0 = [X0, 10];
         LB = [LB, 1];
-        UB = [UB, 10000];
+        UB = [UB, 1000];
         PLB = [PLB, 1];
-        PUB = [PUB, 1000];
+        PUB = [PUB, 100];
         [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
         save(sprintf('~/AISP/collinearityYanli/pars/pars_cssample_%d_%d.mat',iSubj,iRep),'pars','likelihood')
 end

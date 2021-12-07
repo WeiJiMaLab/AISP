@@ -17,13 +17,16 @@ bias = pars(3);
 lapse = pars(4);
 if length(pars) > 4
     n_samples = floor(pars(5));
+    if n_samples > 10000
+        n_samples = 10000;
+        warning('n_samples reduced to 10000 to avoid extreme computation')
+    elseif rand > mod(n_samples, 1)
+        n_samples = floor(n_samples);
+    else
+        n_samples = ceil(n_samples);
+    end
 else
     n_samples = 1;
-end
-
-if n_samples > 10000
-    n_samples = 10000;
-    warning('n_samples reduced to 10000 to avoid extreme computation')
 end
 
 sigma = 9.06;

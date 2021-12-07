@@ -1,17 +1,25 @@
 function accumulate_pars
 
 Nsubjs = 8;
-Nreps = 20;
-Npars = 7;
 
-for itype = 1:3
+for itype = 1:5
+    Nreps = 1;
     switch itype
         case 1
             fname = 'pars/pars_Bayes';
+            Npars = 7;
         case 2
             fname = 'pars/pars_Freq';
+            Npars = 7;
         case 3
             fname = 'pars/pars_Freq2';
+            Npars = 7;
+        case 4
+            fname = 'pars/pars_sample';
+            Npars = 8;
+        case 5
+            fname = 'pars/pars_cssample';
+            Npars = 8;
     end
     files = dir([fname,'_*']);
     for iFile = 1:length(files)
