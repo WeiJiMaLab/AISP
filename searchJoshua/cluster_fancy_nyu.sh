@@ -4,6 +4,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=16
+#SBATCH --mem=32GB
 #SBATCH --time=24:00:00
 #SBATCH --output=slurmOut/slurm_%j.out
 #SBATCH --export=NONE
@@ -20,16 +21,16 @@ index=$1
 job=$SLURM_JOB_ID
 
 module purge
-module load matlab/2018b
+module load matlab/2020b
 
 TMP="$TMPDIR"
 echo 'System temp dirs:'
 echo "$TMPDIR"
 echo "$TMP"
 
-export MATLAB_PREFDIR=$TMPDIR/.matlab/R2018b/
+export MATLAB_PREFDIR=$TMPDIR/.matlab/R2020b/
 mkdir $TMPDIR/.matlab
-cp -r $HOME/.matlab/R2018b $TMPDIR/.matlab
+cp -r $HOME/.matlab/R2020b $TMPDIR/.matlab
 
 cat<<EOF | matlab -nodisplay -nosplash
 job_id = str2num(strjoin(regexp('$job','\d','match'), ''));
