@@ -4,3 +4,12 @@
 [submodule "bads"]
 	path = bads
 	url = https://github.com/lacerbi/bads.git
+[submodule "lautils-mat"]
+	path = lautils-mat
+	url = https://github.com/lacerbi/lautils-mat.git
+[submodule "searchJoshua/circstat-matlab"]
+	path = searchJoshua/circstat-matlab
+	url = https://github.com/circstat/circstat-matlab.git
+[submodule "searchJoshua/distractor-stats-analysis"]
+	path = searchJoshua/distractor-stats-analysis
+	url = https://github.com/jCalderTravis/distractor-stats-analysis.git
