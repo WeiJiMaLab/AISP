@@ -1,5 +1,5 @@
-function resp = simulate_responses(x,model,dMat,logflag)
-%function RESP = simulate_responses(X,MODEL,DMAT,LOGFLAG) simulates responses of
+function resp = sample_simulate(x,dMat,logflag)
+%function RESP = sample_simulate(X,MODEL,DMAT,LOGFLAG) simulates responses of
 %bayesian observer
 %
 % ============ INPUT VARIABLES ============
@@ -54,8 +54,16 @@ Jbar_low = x(2);        % mean precision of low rel ellipse
 tau = x(3);             % scale parameter of ellipse
 beta = x(4);            % softmax temperature parameter (deciison noise)
 beta0 = x(5);           % bias 
-lambda = x(end);        % lapse rate
+lambda = x(6);          % lapse rate
+nSamples = x(7);       % n_samples
 
+% random averaging between n_samples values
+if rand > mod(nSamples, 1)
+    nSamples = floor(nSamples);
+else
+    nSamples = ceil(nSamples);
+end
+    
 % ====== CALCULATE P(\HAT{C}==1|\Theta) FOR nSamples SAMPLES =====
 
 % make CDF for interpolating J to Kappa
@@ -73,6 +81,16 @@ Jbar_mat = Rels;
 Jbar_mat(Rels==1) = Jbar_low;
 Jbar_mat(Rels==2) = Jbar_high;
 
+% replicate noise matrices based on number of samples
+Jbar_mat = repmat(Jbar_mat,[1 1 nSamples]); %ntrials, nitems, nsamples
+
+% sample first display and second display stimuli for each C
+s1_DeltaMat = zeros(nItems,nTrials,nSamples);
+DeltaVec = (rand(nTrials,1,nSamples).*2*pi)-pi; % all Deltas
+idx = randi(4,[1 nTrials*nSamples])+(0:4:(nItems*nTrials*nSamples-nItems));
+s1_DeltaMat(idx) = DeltaVec;
+s1_DeltaMat = permute(s1_DeltaMat,[2 1 3]);
+
 J_x_mat = gamrnd(Jbar_mat./tau,tau);
 J_y_mat = gamrnd(Jbar_mat./tau,tau);
 
@@ -83,52 +101,38 @@ J_y_mat(J_y_mat > highest_J) = highest_J;
 
 % convert J to kappa
 xi = 1/diff(J_lin(1:2))*J_x_mat+1;
-kappa_x_i = k_range(round(xi));
+kappa_x = k_range(round(xi));
 xi = 1/diff(J_lin(1:2))*J_y_mat+1;
-kappa_y_i = k_range(round(xi));
+kappa_y = k_range(round(xi));
 
-if size(kappa_x_i,2) ~= nItems
-    kappa_x_i = kappa_x_i';
-    kappa_y_i = kappa_y_i';
-end
+% if size(kappa_x,2) ~= nItems
+%     kappa_x = kappa_x';
+%     kappa_y = kappa_y';
+% end
 
-% generate measurement noise
-noise_x = circ_vmrnd(0,kappa_x_i);
-noise_y = circ_vmrnd(0,kappa_y_i);
+% measurement noise
+x = circ_vmrnd(0,kappa_x);
+y_0 = circ_vmrnd(0,kappa_y);
+y_1 = bsxfun(@plus,y_0,Delta);
 
-% get difference between noise
-delta_noise = noise_x-noise_y;
+% terms for multiplication of von mises, for both sampled category conditions
+mu_0 = x + atan2(sin(y_0-x),kappa_x./kappa_y + cos(y_0-x));
+mu_1 = x + atan2(sin(y_1-x),kappa_x./kappa_y + cos(x-(y_1-s1_DeltaMat)));
 
-% the term inside denominator bessel function for d_i
+kappa_0 = sqrt(kappa_x.^2 + kappa_y.^2 + (2*kappa_x.*kappa_y.*cos(x-y_0)));
+kappa_1 = sqrt(kappa_x.^2 + kappa_y.^2 + (2*kappa_x.*kappa_y.*cos(x-(y_1-s1_DeltaMat))));
 
-Kc = bsxfun(@times,2.*kappa_x_i.*kappa_y_i,cos(bsxfun(@plus,Delta,delta_noise))); % note: it is okay to simply add the noise bc it goes through a cos!!
-Kc = sqrt(bsxfun(@plus,kappa_x_i.^2+kappa_y_i.^2,Kc)); % dims: mat_dims
+% inside_0 = besseli(0,kappa_0,1)./(2*pi*besseli(0,kappa_x,1).*besseli(0,kappa_x,1)).*circ_vmpdf(mu_0,0,kappa_0);
+% inside_1 = besseli(0,kappa_1,1)./(2*pi*besseli(0,kappa_x_1,1).*besseli(0,kappa_x_1,1)).*circ_vmpdf(mu_1,0,kappa_1);
 
-switch model
-    case 'bayes'
-        d = bsxfun(@minus,log(besseli(0,kappa_x_i,1).*besseli(0,kappa_y_i,1))+...
-            (kappa_x_i+kappa_y_i),log(besseli(0,Kc,1))+Kc); % actually log d_i_Mat
-        d = log(sum(exp(d),2))-log(nItems); % +log(beta0)-log(1-beta0);  % these values are actually log(d), not p_C_hat
-        %             p_C_hat = log(sum(exp(d_i_Mat),2))-log(nItems);  % these values are actually log(d), not p_C_hat
-        %             p_C_hat = p_C_hat + randn(size(p_C_hat)).*sigma_d;    % global dec noise
-        %             p_C_hat = p_C_hat > 0; %k     % respond 1 if log(d) > log(1)
-    case 'freq' % point estimate model
-        d = squeeze(max(kappa_x_i + kappa_y_i - Kc,[],2));
-%         p_C_hat = d_Mat > beta0; % respond 1 if bias term
-    case 'freq2' % optimal point estimate model
-        dec_rule = calculate_optimaldecisioncriteria(x(1:3));
-        oc = nan(nTrials,1);
-        for irel = 1:5
-            nrel = irel-1;
-            idx = nRelsVec == nrel;
-            oc(idx) = dec_rule(irel);
-        end
-        d = squeeze(max(kappa_x_i + kappa_y_i - Kc,[],2)) - oc;
-end
+insideexp_0 = log((4*pi^2)^(-4))+sum(-log(besseli(0,kappa_x,1).*besseli(0,kappa_y,1)),2)+sum(kappa_0.*cos(mu_0),2);
+insideexp_1 = log((4*pi^2)^(-4))+sum(-log(besseli(0,kappa_x,1).*besseli(0,kappa_y,1)),2)+sum(kappa_1.*cos(mu_1),2);
+
+numerator = logsumexp(insideexp_1,3)-log(4);
+denom = logsumexp(insideexp_0,3)-log(4);
+
+d = numerator - denom;
 
 p = lambda/2 + (1-lambda)./(1+exp(beta0+beta.*d));
 resp = (rand(nTrials, 1) < p);
 
-end
-
-% end
