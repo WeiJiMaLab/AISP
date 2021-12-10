@@ -96,7 +96,8 @@ kappa_y = k_range(round(xi));
 
 % measurement noise
 x = circ_vmrnd(0,kappa_x);
-y = circ_vmrnd(Delta,kappa_y);
+y = circ_vmrnd(0,kappa_y);
+y = y + Delta;
 
 % first sample of s and C
 s1_DeltaMat = zeros(nItems,nTrials);
