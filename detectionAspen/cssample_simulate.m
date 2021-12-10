@@ -1,6 +1,6 @@
-function resp = sample_simulate(x,dMat,logflag)
-%function RESP = sample_simulate(X,MODEL,DMAT,LOGFLAG) simulates responses of
-%sampling observer
+function resp = cssample_simulate(x,dMat,logflag)
+%function RESP = cssample_simulate(X,MODEL,DMAT,LOGFLAG) simulates responses of
+%joint posterior sampling observer
 %
 % ============ INPUT VARIABLES ============
 % X: parameter values. vector of length seven
@@ -75,16 +75,6 @@ Jbar_mat = Rels;
 Jbar_mat(Rels==1) = Jbar_low;
 Jbar_mat(Rels==2) = Jbar_high;
 
-% replicate noise matrices based on number of samples
-Jbar_mat = repmat(Jbar_mat,[1 1 nSamples]); %ntrials, nitems, nsamples
-
-% sample first display and second display stimuli for each C
-s1_DeltaMat = zeros(nItems,nTrials,nSamples);
-DeltaVec = (rand(nTrials,1,nSamples).*2*pi)-pi; % all Deltas
-idx = randi(4,[1 nTrials*nSamples])+(0:4:(nItems*nTrials*nSamples-nItems));
-s1_DeltaMat(idx) = DeltaVec;
-s1_DeltaMat = permute(s1_DeltaMat,[2 1 3]);
-
 J_x_mat = gamrnd(Jbar_mat./tau,tau);
 J_y_mat = gamrnd(Jbar_mat./tau,tau);
 
@@ -106,26 +96,40 @@ kappa_y = k_range(round(xi));
 
 % measurement noise
 x = circ_vmrnd(0,kappa_x);
-y_0 = circ_vmrnd(0,kappa_y);
-y_1 = bsxfun(@plus,y_0,Delta);
+y = circ_vmrnd(Delta,kappa_y);
 
-% terms for multiplication of von mises, for both sampled category conditions
-mu_0 = x + atan2(sin(y_0-x),kappa_x./kappa_y + cos(y_0-x));
-mu_1 = x + atan2(sin(y_1-x),kappa_x./kappa_y + cos(x-(y_1-s1_DeltaMat)));
+% first sample of s and C
+s1_DeltaMat = zeros(nItems,nTrials);
+DeltaVec = (rand(nTrials,1).*2*pi)-pi; % all Deltas
+C_samp = rand(nTrials,1)<0.5;
+DeltaVec(C_samp)=0;
+idx = randi(4,[1 nTrials])+(0:4:(nItems*nTrials-nItems));
+s1_DeltaMat(idx) = DeltaVec;
+s1_DeltaMat = s1_DeltaMat';
+C = nan(nTrials,nSamples);
 
-kappa_0 = sqrt(kappa_x.^2 + kappa_y.^2 + (2*kappa_x.*kappa_y.*cos(x-y_0)));
-kappa_1 = sqrt(kappa_x.^2 + kappa_y.^2 + (2*kappa_x.*kappa_y.*cos(x-(y_1-s1_DeltaMat))));
+for isamp = 1:nSamples
+    
+    % proposal sample
+    s1_DeltaMat_new = zeros(nItems,nTrials);
+    DeltaVec = (rand(nTrials,1).*2*pi)-pi; % all Deltas
+    C_samp_new = rand(nTrials,1)<0.5;
+    DeltaVec(C_samp_new)=0;
+    idx = randi(4,[1 nTrials])+(0:4:(nItems*nTrials-nItems));
+    s1_DeltaMat_new(idx) = DeltaVec;
+    s1_DeltaMat_new = s1_DeltaMat_new';
+    
+    % calculate p(x,y|s1_DeltaMat_new)/p(x,y|s1_DeltaMat)
+    pp = prod(exp(kappa_y.*(cos(y-s1_DeltaMat_new)-cos(y-s1_DeltaMat))),2);
+    accept = rand(nTrials,1) < pp;
+    
+    % update relevant trial samples
+    C_samp(accept) = C_samp_new(accept);
+    C(:,isamp) = C_samp;
+    
+end
 
-% inside_0 = besseli(0,kappa_0,1)./(2*pi*besseli(0,kappa_x,1).*besseli(0,kappa_x,1)).*circ_vmpdf(mu_0,0,kappa_0);
-% inside_1 = besseli(0,kappa_1,1)./(2*pi*besseli(0,kappa_x_1,1).*besseli(0,kappa_x_1,1)).*circ_vmpdf(mu_1,0,kappa_1);
-
-insideexp_0 = log((4*pi^2)^(-4))+sum(-log(besseli(0,kappa_x,1).*besseli(0,kappa_y,1)),2)+sum(kappa_0.*cos(mu_0),2);
-insideexp_1 = log((4*pi^2)^(-4))+sum(-log(besseli(0,kappa_x,1).*besseli(0,kappa_y,1)),2)+sum(kappa_1.*cos(mu_1),2);
-
-numerator = logsumexp(insideexp_1,3)-log(4);
-denom = logsumexp(insideexp_0,3)-log(4);
-
-d = numerator - denom;
+d = log(sum(C, 2) + 1) - log(nSamples - sum(C, 2) + 1);
 
 p = lambda/2 + (1-lambda)./(1+exp(beta0+beta.*d));
 resp = (rand(nTrials, 1) < p);
