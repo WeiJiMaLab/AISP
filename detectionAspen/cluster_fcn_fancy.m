@@ -44,10 +44,10 @@ while idx > size(runs, 1)
             bestLL = min(LLVec);
             nGood = sum(LLVec < bestLL+slackLL);
             if nGood < nTargets
+                try
                 irep = max(runs(runs(:,1)==isubj & runs(:,3)==imodel,2)) + 1;
+                else
                 runs = [runs; [isubj, irep, imodel]];
-            else
-                sprintf('satisfied!')
             end
         end
     end
