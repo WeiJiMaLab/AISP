@@ -30,7 +30,7 @@ tmpfolder = sprintf('$TMPDIR/.matlab/local_cluster_jobs/R2020b')
 mkdir(tmpfolder)
 clust = parcluster();
 clust.JobStorageLocation = tmpfolder;
-parpool('threads')
+parpool(clust)
 
 cluster_fcn_fancy($index)
 
