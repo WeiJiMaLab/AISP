@@ -10,7 +10,7 @@ subjid = subjidVec{isubj};
 model = modelVec{imodel};
 
 % load data
-load(sprintf('fitting_data/%s_Ellipse_simple.mat',subjid))
+load(sprintf('data/%s_Ellipse_simple.mat',subjid))
 % load(sprintf('../../changedetection/multi_item/data/fitting_data/%s_Ellipse_simple.mat',subjid))
 %load(sprintf('/Volumes/GoogleDrive/My Drive/Research/VSTM/Aspen Luigi - Reliability in VWM/Exp 5 - Keshvari replication and extension/data/fitting_data/%s_Ellipse_simple.mat', subjid))
 % load(sprintf('../data/fitting_data/%s_Ellipse_simple.mat',subjid))
@@ -62,7 +62,7 @@ switch model
     otherwise
         fun = @(x,dMat) simulate_responses(x,model,dMat,logflag);
 end
-fun_handle = @(x) ibslike_var(fun,x,data.resp,dMat,options_ibs,var_limit);
+fun_handle = @(x) ibslike_var_par(fun,x,data.resp,dMat,options_ibs,var_limit);
 [xbest,LL] = bads(fun_handle,x0,LB,UB,PLB,PUB,[],options)
 
 

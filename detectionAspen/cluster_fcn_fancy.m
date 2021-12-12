@@ -1,4 +1,5 @@
 function cluster_fcn_fancy(idx)
+addpath(genpath('helper_functions'))
 fprintf('Started job idx %d\n', idx)
 
 % fitting settings
@@ -28,7 +29,7 @@ runs = csvread('runs.csv');
 while idx > size(runs, 1)
     f = fopen('block_runs', 'w');
     for isubj = 1:nSubjs
-        subjid = subjidVec{isubj}
+        subjid = subjidVec{isubj};
         
         for imodel = 1:nModels
             model = modelVec{imodel};
@@ -44,9 +45,8 @@ while idx > size(runs, 1)
             bestLL = min(LLVec);
             nGood = sum(LLVec < bestLL+slackLL);
             if nGood < nTargets
-                try
                 irep = max(runs(runs(:,1)==isubj & runs(:,3)==imodel,2)) + 1;
-                else
+            else
                 runs = [runs; [isubj, irep, imodel]];
             end
         end

@@ -18,16 +18,15 @@ export MATLABPATH=$HOME/matlab-output
 
 export MATLAB_PREFDIR=$TMPDIR/.matlab/R2020b/
 mkdir $TMPDIR/.matlab
-cp -r $HOME/.matlab/R2020b $TMPDIR/.matlab/R2020b
+cp -r $HOME/.matlab/R2020b $TMPDIR/.matlab
 mkdir $TMPDIR/.matlab/local_cluster_jobs
 mkdir $TMPDIR/.matlab/local_cluster_jobs/R2020b
 
 cat<<EOF | matlab -nodisplay
 cd ~/AISP/detectionAspen
-addpath(genpath('/home/ay963/matlab-scripts'))
-addpath(genpath('/home/ay963/bigAISP/detectionAspen'))
 
-tmpfolder = sprintf('$TMPDIR/.matlab/local_cluster_jobs/R2020b', job_id)
+tic;
+tmpfolder = sprintf('$TMPDIR/.matlab/local_cluster_jobs/R2020b')
 mkdir(tmpfolder)
 clust = parcluster();
 clust.JobStorageLocation = tmpfolder;
@@ -35,6 +34,7 @@ parpool('threads')
 
 cluster_fcn_fancy($index)
 
-fprintf('job complete in %f minutes \n',toc(ttime)/60)
+ttime = toc;
+fprintf('job complete in %f minutes \n',toc(ttime)/60);
 
 EOF
