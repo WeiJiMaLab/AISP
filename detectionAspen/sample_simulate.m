@@ -99,10 +99,10 @@ kappa_x = k_range(round(xi));
 xi = 1/diff(J_lin(1:2))*J_y_mat+1;
 kappa_y = k_range(round(xi));
 
-% if size(kappa_x,2) ~= nItems
-%     kappa_x = kappa_x';
-%     kappa_y = kappa_y';
-% end
+if size(kappa_x,2) ~= nItems
+    kappa_x = kappa_x';
+    kappa_y = kappa_y';
+end
 
 % measurement noise
 x = circ_vmrnd(0,kappa_x);

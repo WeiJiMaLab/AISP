@@ -45,8 +45,9 @@ while idx > size(runs, 1)
             nGood = sum(LLVec < bestLL+slackLL);
             if nGood < nTargets
                 try
-                irep = max(runs(runs(:,1)==isubj & runs(:,3)==imodel,2)) + 1;
-                else
+                    irep = max(runs(runs(:,1)==isubj & runs(:,3)==imodel,2)) + 1;
+                end
+            else
                 runs = [runs; [isubj, irep, imodel]];
             end
         end
