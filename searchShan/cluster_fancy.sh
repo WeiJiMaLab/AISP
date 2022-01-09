@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=1
-#SBATCH --time=3:00:00
-#SBATCH --mem=4GB
+#SBATCH --cpus-per-task=6
+#SBATCH --time=24:00:00
+#SBATCH --mem=20GB
 #SBATCH --job-name=fitShan
 #SBATCH --mail-type=END
 #SBATCH --mail-user=hhs4@nyu.edu
@@ -16,10 +16,23 @@ module purge
 module load matlab/2020b
 export MATLABPATH=$HOME/matlab-output
 
+export MATLAB_PREFDIR=$TMPDIR/.matlab/R2020b/
+mkdir $TMPDIR/.matlab
+cp -r $HOME/.matlab/R2020b $TMPDIR/.matlab/R2020b
+mkdir $TMPDIR/.matlab/local_cluster_jobs
+mkdir $TMPDIR/.matlab/local_cluster_jobs/R2020b
+
 cat<<EOF | matlab -nodisplay
 cd ~/AISP/searchShan
 job_id = str2num(strjoin(regexp('$job','\d','match'), ''))
 rng(job_id)
+
+tmpfolder = sprintf('$TMPDIR/.matlab/local_cluster_jobs/R2020b', job_id)
+mkdir(tmpfolder)
+clust = parcluster();
+clust.JobStorageLocation = tmpfolder;
+parpool('threads')
+
 cluster_fcn_fancy(job_id,$index);
 
 EOF

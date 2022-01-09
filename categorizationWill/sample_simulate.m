@@ -13,12 +13,16 @@ if ~exist('lambda','var') || isempty(lambda)
 end
 if ~exist('n_samples','var') || isempty(n_samples)
     n_samples = 1;
-else
-    n_samples = floor(n_samples);
-end
-if n_samples > 10000
+elseif n_samples > 10000
     n_samples = 10000;
     warning('n_samples reduced to 10000 to avoid extreme computation')
+else
+    % random averaging between n_samples values
+    if rand > mod(n_samples, 1)
+        n_samples = floor(n_samples);
+    else
+        n_samples = ceil(n_samples);
+    end
 end
 
 sigma1 = 3;
