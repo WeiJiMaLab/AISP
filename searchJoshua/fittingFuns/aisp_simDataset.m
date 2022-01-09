@@ -17,8 +17,13 @@ bestPars = aisp_collectBestFittingParams(f.nLogLs, f.pars);
 %% Simulate data
 for iP = 1 : Nptpnts
     PtpntData = SimDSet.P(iP).Data;
-    error('Inputs to paramVec2Struct changed')
-    ParamStruct = paramVec2Struct(bestPars(iP, :), 'to struct');
+    
+    % Send all the nan's in PtpntData.Orientation to the end of each row
+    % as expected by the sim response functions
+    designMat = struct2DesignMat(PtpntData, 'to matrix', true);
+    PtpntData = struct2DesignMat(designMat, 'to struct');
+    
+    ParamStruct = paramVec2Struct(bestPars(iP, :), model, 'to struct');
     
     resp = aisp_simResponse(model, ParamStruct, PtpntData);
     SimDSet.P(iP).Data.Response = resp;

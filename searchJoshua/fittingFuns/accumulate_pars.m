@@ -1,4 +1,4 @@
-function accumulate_pars(dataDir, parsDir, firstOrAll, configFile, varargin)
+function accumulate_pars(dataDir, parsDir, firstOrAll, Config, varargin)
 
 % INPUT
 % dataDir: Directory containing the original unfitted dataset
@@ -7,7 +7,12 @@ function accumulate_pars(dataDir, parsDir, firstOrAll, configFile, varargin)
 % firstOrAll: 'first' or 'all'. Collect the parameters associated with the first
 % round of fitting only (up to Config.Nreps), or collect all parameters
 % including any that were later scheduled using cluster_fcn_fancy
-% configFile: string. File path to matlab file to be loaded.
+% Config: struct. Has the following fields...
+%   ModelLabel: Cell array of labels to use for each model
+%   ModelList: Cell array of names of the models, as they were named during
+%       fitting
+%   Nreps: The minimim number of repitions for each model that was 
+%       used during fitting.
 % varargin: Boolean. Override error if there appear to be duplicate fits? Use with
 % caution, probably indicates a bug.
 
@@ -18,7 +23,6 @@ else
 end
 
 [~, Nptpnts] = getData(dataDir);
-Config = load(configFile);
 Nreps = Config.Nreps;
 
 for itype = 1 : length(Config.ModelList)

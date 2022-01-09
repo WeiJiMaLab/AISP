@@ -13,3 +13,6 @@
 [submodule "searchJoshua/distractor-stats-analysis"]
 	path = searchJoshua/distractor-stats-analysis
 	url = https://github.com/jCalderTravis/distractor-stats-analysis.git
+[submodule "searchJoshua/mat-comp-model-tools"]
+	path = searchJoshua/mat-comp-model-tools
+	url = https://github.com/jCalderTravis/mat-comp-model-tools.git

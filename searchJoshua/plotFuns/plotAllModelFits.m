@@ -1,13 +1,16 @@
 function [bigPlot, indiviudalPlots] = plotAllModelFits(dataDir, parsDir, ...
-    configFile)
+    Config)
 % Makes plots using plotHitAndFaAllStats, one for each model, comparing the
 % model and data, and then combines them all into one big plot. Also returns the
 % individual plots.
 
 % INPUT
-% configFile: string. File path to matlab file to be loaded.
-
-Config = load(configFile);
+% Config: struct. Has the following fields...
+%   ModelLabel: Cell array of labels to use for each model
+%   ModelList: Cell array of names of the models, as they were named during
+%       fitting
+%   Nreps: The minimim number of repitions for each model that was 
+%       used during fitting.
 
 
 %% Make the individual plots
@@ -27,14 +30,13 @@ indiviudalPlots = smallPlots;
 %% Combine the plots
 
 numPlotsInEachSmall = 3;
+numModels = length(Config.ModelList);
 bigPlot = figure;
 
 % Each row/column will have a different offset 
-% TODO this is hard coded -- the number of rows and columns. Change
-xOffset = [0, -0.015, -0.03, -0.045];
-% yOffset = [0, 0.03, 0.06, 0.09];
-yOffset = [0, 0, 0, 0];
-yStretch = [0.9, 0.9, 0.9, 0.9];
+xOffset = 0 : -0.015 : -(numModels-1)*0.015;
+yOffset = repmat([0], [1, numModels]);
+yStretch = repmat([0.9], [1, numModels]);
 
 for iM = 1 : length(Config.ModelList)
     for iPlotCol = 1 : numPlotsInEachSmall

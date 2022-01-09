@@ -17,7 +17,7 @@ files = dir([fname,'_*']);
 % With all the candidate files, run a stricter test to ensure we have
 % located only those files we really want. This became necessary when I
 % unfortunately started using a model called 'PE_imagineL', with the
-% underscore messing the previous syste up.
+% underscore messing the previous system up.
 remove = zeros(length(files), 1);
 for iFile = 1:length(files)
     
