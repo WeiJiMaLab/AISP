@@ -4,7 +4,6 @@ function [DSet, SimDSet] = aisp_simDataset(dataDir, parsDir, model)
 % is simulated and SimDSet is in all other respects identical to DSet.
 
 [DSet, Nptpnts] = getData(dataDir);
-SimDSet = DSet;
 
 %% Find the best fitting parameters
 
@@ -13,24 +12,15 @@ f = load(fname);
 
 bestPars = aisp_collectBestFittingParams(f.nLogLs, f.pars);
 
-
-%% Simulate data
+allParamStructs = cell(Nptpnts, 1);
 for iP = 1 : Nptpnts
-    PtpntData = SimDSet.P(iP).Data;
-    
-    % Send all the nan's in PtpntData.Orientation to the end of each row
-    % as expected by the sim response functions
-    designMat = struct2DesignMat(PtpntData, 'to matrix', true);
-    PtpntData = struct2DesignMat(designMat, 'to struct');
-    
-    ParamStruct = paramVec2Struct(bestPars(iP, :), model, 'to struct');
-    
-    resp = aisp_simResponse(model, ParamStruct, PtpntData);
-    SimDSet.P(iP).Data.Response = resp;
-    SimDSet.P(iP).Data.Accuracy = SimDSet.P(iP).Data.Response == SimDSet.P(iP).Data.Target;
+    allParamStructs{iP} = paramVec2Struct(bestPars(iP, :), model, ...
+        'to struct');
 end
 
-%% Add summary statitics 
+%% Simulate data
+
+SimDSet = aisp_simRespAndAcc(DSet, model, allParamStructs);
 
 % TODO remove the duplication here
 for iPtpnt = 1 : length(SimDSet.P)  

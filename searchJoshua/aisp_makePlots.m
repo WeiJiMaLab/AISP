@@ -26,25 +26,25 @@ if ~isempty(varargin)
 else
     overrideDupError = false;
 end
-% 
-% accumulate_pars(dataDir, parsDir, firstOrAll, Config, overrideDupError)
-% 
-% %% Comparison between models
-% Figures = plot_likelihoods(dataDir, parsDir, Config);
-% figure(Figures.Likelihoods);
-% mT_exportNicePdf(8, 6.5, figDir, 'modelComparison')
-% 
-% figure(Figures.Stds);
-% mT_exportNicePdf(8, 6.5, figDir, 'modelStandardDeviations')
-% 
-% 
-% %% Look at how close different runs of the same fit ended
-% 
-% [DSet, ~] = getData(dataDir);
-% DSet = convertToDSetFormat(DSet, parsDir, Config);
-% 
-% mT_plotFitEndPoints(DSet, false, 2)
-% 
+
+accumulate_pars(dataDir, parsDir, firstOrAll, Config, overrideDupError)
+
+%% Comparison between models
+Figures = plot_likelihoods(dataDir, parsDir, Config);
+figure(Figures.Likelihoods);
+mT_exportNicePdf(8, 6.5, figDir, 'modelComparison')
+
+figure(Figures.Stds);
+mT_exportNicePdf(8, 6.5, figDir, 'modelStandardDeviations')
+
+
+%% Look at how close different runs of the same fit ended
+
+[DSet, ~] = getData(dataDir);
+DSet = convertToDSetFormat(DSet, parsDir, Config);
+
+mT_plotFitEndPoints(DSet, false, 2)
+
 
 %% Comparison between models and data
 
