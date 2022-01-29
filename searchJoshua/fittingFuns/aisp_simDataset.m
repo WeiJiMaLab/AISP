@@ -3,20 +3,8 @@ function [DSet, SimDSet] = aisp_simDataset(dataDir, parsDir, model)
 % the best fitting parameters. Note that nothing except responses and accuracy 
 % is simulated and SimDSet is in all other respects identical to DSet.
 
-[DSet, Nptpnts] = getData(dataDir);
-
-%% Find the best fitting parameters
-
-fname = [parsDir '/pars_' model '.mat'];
-f = load(fname);
-
-bestPars = aisp_collectBestFittingParams(f.nLogLs, f.pars);
-
-allParamStructs = cell(Nptpnts, 1);
-for iP = 1 : Nptpnts
-    allParamStructs{iP} = paramVec2Struct(bestPars(iP, :), model, ...
-        'to struct');
-end
+[DSet, ~] = getData(dataDir);
+allParamStructs = aisp_loadBestFits(parsDir, model);
 
 %% Simulate data
 

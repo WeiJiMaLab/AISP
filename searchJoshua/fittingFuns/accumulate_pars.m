@@ -40,6 +40,7 @@ for itype = 1 : length(Config.ModelList)
         fparts = split(files(iFile).name,{'_','.'});
         iPtpnt = str2double(fparts{end-2});
         iRep = str2double(fparts{end-1});
+        iClusterRun = str2double(fparts{2});
         
         if strcmp(firstOrAll, 'first') && (iRep > Config.Nreps)
             continue % We only want to process the first fits
@@ -59,6 +60,7 @@ for itype = 1 : length(Config.ModelList)
                 error('There already seems to be data here.')
             elseif overrideDupError
                 warning(['Duplicates found. Overwriting rep number.', ...
+                    ' Cluster run: ', num2str(iClusterRun), ...
                     ' Model num: ', num2str(itype), ...
                     ' Ptpnt: ', num2str(iPtpnt), ...
                     ' Rep: ', num2str(iRep)])

@@ -15,11 +15,12 @@ function DSet = aisp_makePlots(dataDir, parsDir, figDir, firstOrAll, ...
 %   Nreps: The minimim number of repitions for each model that was 
 %       used during fitting.
 % varargin: Boolean. Override error if there appear to be duplicate fits? Use with
-% caution, probably indicates a bug.
+% caution, could indicate a bug.
 
 addReqPaths()
 addpath('./plotFuns')
 addpath('./mat-comp-model-tools')
+addpath('./simFuns')
 
 if ~isempty(varargin)
     overrideDupError = varargin{1};
@@ -36,15 +37,33 @@ mT_exportNicePdf(8, 6.5, figDir, 'modelComparison')
 
 figure(Figures.Stds);
 mT_exportNicePdf(8, 6.5, figDir, 'modelStandardDeviations')
+close all
 
-
-%% Look at how close different runs of the same fit ended
+%% Get data in helpful format
 
 [DSet, ~] = getData(dataDir);
 DSet = convertToDSetFormat(DSet, parsDir, Config);
+DSet = mT_findBestFit(DSet, true);
+
+% Checks only
+for iM = 1 : length(Config.ModelList)
+    allParamStructs = aisp_loadBestFits(dataDir, parsDir, ...
+        Config.ModelList{iM});
+    
+    for iP = 1 : length(DSet.P)
+        assert(isequal(DSet.P(iP).Models(iM).BestFit.Params, ...
+            allParamStructs{iP}))
+    end
+end
+
+%% Plot hypothetical performance as noise varies
+
+aisp_plotSimPerformance(dataDir, parsDir, Config.ModelList, ...
+    Config.ModelLabel)
+
+%% Look at how close different runs of the same fit ended
 
 mT_plotFitEndPoints(DSet, false, 2)
-
 
 %% Comparison between models and data
 
