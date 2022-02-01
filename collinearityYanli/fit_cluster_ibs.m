@@ -21,31 +21,49 @@ fun_handle = @(pars) ibslike_var_par(FUN,pars,datSubj(:,4),datSubj,opt_ibs, var_
 
 switch type
     case 'bayes'
-        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
-        save(sprintf('~/AISP/collinearityYanli/pars/pars_Bayes_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        fname = sprintf('~/AISP/collinearityYanli/pars/pars_Bayes_%d_%d.mat',iSubj,iRep);
+        if ~exist(fname, 'file')
+            [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+            save(fname,'pars','likelihood')
+        end
     case 'PE'
-        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
-        save(sprintf('~/AISP/collinearityYanli/pars/pars_Freq_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        fname = sprintf('~/AISP/collinearityYanli/pars/pars_Freq_%d_%d.mat',iSubj,iRep);
+        if ~exist(fname, 'file')
+            [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+            save(fname,'pars','likelihood')
+        end
     case 'PE2'
-        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
-        save(sprintf('~/AISP/collinearityYanli/pars/pars_Freq2_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        fname = sprintf('~/AISP/collinearityYanli/pars/pars_Freq2_%d_%d.mat',iSubj,iRep);
+        if ~exist(fname, 'file')
+            [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+            save(fname,'pars','likelihood')
+        end
     case 'sample1'
-        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
-        save(sprintf('~/AISP/collinearityYanli/pars/pars_sample1_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        fname = sprintf('~/AISP/collinearityYanli/pars/pars_sample1_%d_%d.mat',iSubj,iRep);
+        if ~exist(fname, 'file')
+            [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+            save(fname,'pars','likelihood')
+        end
     case 'sample'
-        X0 = [X0, 10];
-        LB = [LB, 1];
-        UB = [UB, 1000];
-        PLB = [PLB, 1];
-        PUB = [PUB, 100];
-        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
-        save(sprintf('~/AISP/collinearityYanli/pars/pars_sample_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        fname = sprintf('~/AISP/collinearityYanli/pars/pars_sample_%d_%d.mat',iSubj,iRep);
+        if ~exist(fname, 'file')
+            X0 = [X0, 10];
+            LB = [LB, 1];
+            UB = [UB, 1000];
+            PLB = [PLB, 1];
+            PUB = [PUB, 100];
+            [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+            save(fname,'pars','likelihood')
+        end
     case 'cssample'
-        X0 = [X0, 10];
-        LB = [LB, 1];
-        UB = [UB, 1000];
-        PLB = [PLB, 1];
-        PUB = [PUB, 100];
-        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
-        save(sprintf('~/AISP/collinearityYanli/pars/pars_cssample_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        fname = sprintf('~/AISP/collinearityYanli/pars/pars_cssample_%d_%d.mat',iSubj,iRep);
+        if ~exist(fname, 'file')
+            X0 = [X0, 10];
+            LB = [LB, 1];
+            UB = [UB, 1000];
+            PLB = [PLB, 1];
+            PUB = [PUB, 100];
+            [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+            save(fname,'pars','likelihood')
+        end
 end
