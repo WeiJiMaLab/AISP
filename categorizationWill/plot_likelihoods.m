@@ -21,11 +21,11 @@ for itype = 1:10
         case 7
             fname = 'pars/pars_ibs_Freq.mat';
         case 8
-            fname = 'pars/pars_ibs_Freq2.mat';
-        case 9
-            fname = 'pars/pars_ibs_Freq3.mat';
-        case 10
             fname = 'pars/pars_ibs_Var.mat';
+        case 9
+            fname = 'pars/pars_ibs_sample.mat';
+        case 10
+            fname = 'pars/pars_ibs_cssample.mat';
     end
     f = load(fname);
     if itype>5

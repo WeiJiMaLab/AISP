@@ -21,24 +21,45 @@ fun_handle = @(pars) ibslike_var_par(FUN,pars,datSubj(:,4),datSubj,opt_ibs, var_
 
 switch type
     case 'bayes'
-        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
-        save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_Bayes_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        fname = sprintf('~/AISP/categorizationWill/pars/pars_ibs_Bayes_%d_%d.mat',iSubj,iRep);
+        if ~exist(fname, 'file')
+            [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+            save(fname,'pars','likelihood')
+        end
     case 'freq'
-        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
-        save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_Freq_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        fname = sprintf('~/AISP/categorizationWill/pars/pars_ibs_Freq_%d_%d.mat',iSubj,iRep);
+        if ~exist(fname, 'file')
+            [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+            save(fname,'pars','likelihood')
+        end
     case 'freq2'
-        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
-        save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_Freq2_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        fname = sprintf('~/AISP/categorizationWill/pars/pars_ibs_Freq2_%d_%d.mat',iSubj,iRep);
+        if ~exist(fname, 'file')
+            [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+            save(fname,'pars','likelihood')
+        end
     case 'freq3'
-        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
-        save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_Freq3_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        fname = sprintf('~/AISP/categorizationWill/pars/pars_ibs_Freq3_%d_%d.mat',iSubj,iRep);
+        if ~exist(fname, 'file')
+            [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+            save(fname ,'pars','likelihood')
+        end
     case 'var'
-        [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
-        save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_Var_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        fname = sprintf('~/AISP/categorizationWill/pars/pars_ibs_Var_%d_%d.mat',iSubj,iRep);
+        if ~exist(fname, 'file')
+            [pars,likelihood] = bads(fun_handle,X0,LB,UB,PLB,PUB,options);
+            save(fname,'pars','likelihood')
+        end
     case 'sample'
-        [pars,likelihood] = bads(fun_handle,[X0,10],[LB,1],[UB,1000],[PLB,1],[PUB, 100],options);
-        save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_sample_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        fname = sprintf('~/AISP/categorizationWill/pars/pars_ibs_sample_%d_%d.mat',iSubj,iRep);
+        if ~exist(fname, 'file')
+            [pars,likelihood] = bads(fun_handle,[X0,10],[LB,1],[UB,1000],[PLB,1],[PUB, 100],options);
+            save(fname, 'pars','likelihood')
+        end
     case 'cssample'
-        [pars,likelihood] = bads(fun_handle,[X0,10],[LB,1],[UB,1000],[PLB,1],[PUB, 100],options);
-        save(sprintf('~/AISP/categorizationWill/pars/pars_ibs_cssample_%d_%d.mat',iSubj,iRep),'pars','likelihood')
+        fname = sprintf('~/AISP/categorizationWill/pars/pars_ibs_cssample_%d_%d.mat',iSubj,iRep);
+        if ~exist(fname, 'file')
+            [pars,likelihood] = bads(fun_handle,[X0,10],[LB,1],[UB,1000],[PLB,1],[PUB, 100],options);
+            save(fname,'pars','likelihood')
+        end
 end
