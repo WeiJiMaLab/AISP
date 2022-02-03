@@ -14,3 +14,4 @@ Dirs_*models.mat
 *.asv
 *slurm*
 detectionAspen/fits/*
+Data/
