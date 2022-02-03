@@ -1,5 +1,5 @@
 function fig = aisp_plotSimPerformance(dataDir, parsDir, ModelList, ...
-    ModelLabels)
+    ModelLabels, varargin)
 % Simulate performance of observers using the various models, under 
 % handpicked param values, while the average noise level varies. Note, 
 % simulates a new dataset in which, for all trials, the stimulus has the
@@ -13,6 +13,36 @@ function fig = aisp_plotSimPerformance(dataDir, parsDir, ModelList, ...
 % ModelList: Cell array of names of the models, as they were named during
 %       fitting
 % ModelLabels: Cell array of labels to use for each model
+% varargin{1}: scalar. Sets number of items to use in the simulated 
+%   stimuli. Determines which one of four options to use, does not directly
+%   determine the number of stimuli.
+% varargin{2}: scalar. Sets the concentration parameter of the distractors 
+%   in the simulated stimuli. Determines which one of two options to use, 
+%   does not directly determine the number of stimuli.
+% varargin{3}: scalar. Determines how many trials to use for simulating
+%   each indiviudal point in the resulting plots.
+
+
+if (length(varargin) > 0) && (~isempty(varargin{1}))
+    iSetSize = varargin{1};
+else
+    iSetSize = 2;
+end
+
+if (length(varargin) > 1) && (~isempty(varargin{2}))
+    iBlockType = varargin{2};
+else
+    iBlockType = 1;
+end
+
+if (length(varargin) > 2) && (~isempty(varargin{3}))
+    nTrialPerSim = varargin{3};
+else
+    nTrialPerSim = 100000;
+end
+
+numSamples = 10;
+lnKappaRange = -4 : 0.2 : 7;
 
 
 %% Choose params to simulate with
@@ -22,14 +52,6 @@ bestParams = aisp_loadBestFits(dataDir, parsDir, templateModel, 'array');
 [~, Nptpnts] = getData(dataDir);
 assert(size(bestParams, 1) == Nptpnts)
 meanParams = mean(bestParams, 1);
-ParamStruct = paramVec2Struct(meanParams, templateModel, 'to struct');
-
-% For this plot we fix some params to specific values
-ParamStruct.Beta0 = 0;
-ParamStruct.LapseRate = 0;
-numSamples = 10;
-lnKappaRange = -4 : 0.2 : 4;
-kappaRange = exp(lnKappaRange);
 
 
 %% Run simulation
@@ -39,12 +61,21 @@ accAcrossLnKappa = nan(length(lnKappaRange), length(ModelList));
 for iM = 1 : length(ModelList)
     modelName = ModelList{iM};
     
+    % For this plot we fix some params to specific values
+    ParamStruct = paramVec2Struct(meanParams, templateModel, 'to struct');
+    ParamStruct.Beta0 = 0;
+    ParamStruct.LapseRate = 0;
+    
     if any(strcmp(modelName, {'impSamp'  'jointPostSamp'}))
         ParamStruct.NumSamples = numSamples;
     else
         assert(sum(strcmp(modelName, ...
             {'Bayes', 'PE', 'PE2', 'PE_imagineL'}))==1)
     end
+    
+    disp('Using the following param struct...')
+    disp('Apart from LnKappa_x which will be varied')
+    disp(ParamStruct)
     
     for iK = 1 : length(lnKappaRange)
         ParamStruct.LnKappa_x(:) = lnKappaRange(iK);
@@ -56,14 +87,12 @@ for iM = 1 : length(ModelList)
         blockType = [1, 2];
         distStats.mu_s = 0;
         
-        iSetSize = 2;
-        iBlockType = 1;
         thisNItems = nItems(iSetSize);
         thisSetSizeCond = setSizeCond(iSetSize);
         distStats.kappa_s = kappa_s(iBlockType);
         thisBlockType = blockType(iBlockType);
         
-        Data = aisp_simSingleCondStimulus(100000, thisNItems, ...
+        Data = aisp_simSingleCondStimulus(nTrialPerSim, thisNItems, ...
             thisSetSizeCond, distStats, thisBlockType);
         Data.Response = nan(size(Data.Target));
         SimDSet = struct();
@@ -75,16 +104,19 @@ for iM = 1 : length(ModelList)
         assert(all(ismember(SimDSet.P(1).Data.Accuracy, [0, 1])))
         accAcrossLnKappa(iK, iM) = mean(SimDSet.P(1).Data.Accuracy);
     end
+    
+    disp(['Model ', num2str(iM), ' simulation complete.'])
 end
 
 fig = figure;
+kappaRange = exp(lnKappaRange);
 lines = semilogx(kappaRange, accAcrossLnKappa);
 set(gca, 'xdir', 'reverse')
 ylabel('Proportion correct')
-xlabel('Sensory precision (log concentration parameter)')
+xlabel('Sensory precision (concentration parameter, \kappa)')
 yline(0.5, '--')
 legendLabels = ModelLabels;
 legend(lines, legendLabels)
 legend box off
-
-disp('here')
+set(gca, 'TickDir', 'out');
+set(gca, 'box', 'off');

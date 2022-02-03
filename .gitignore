@@ -12,3 +12,4 @@ Dirs_*models.mat
 *produceDirs.m
 *.asv
 *slurm*
+Data/

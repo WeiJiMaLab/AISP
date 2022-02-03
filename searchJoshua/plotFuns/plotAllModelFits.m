@@ -22,6 +22,10 @@ for iM = 1 : length(Config.ModelList)
     smallPlots{iM} = figure;
     smallPlots{iM} = plotHitAndFaAllStats(DSet, smallPlots{iM}, 'scatter');
     smallPlots{iM} = plotHitAndFaAllStats(SimDSet, smallPlots{iM}, 'errorShading');
+    
+    fig = figure;
+    fig = aisp_plotOverallPerformance(DSet, fig, 'scatter');
+    aisp_plotOverallPerformance(SimDSet, fig, 'errorShading');
 end
 
 indiviudalPlots = smallPlots;

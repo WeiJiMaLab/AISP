@@ -82,18 +82,18 @@ if termBShortcut
     calcTrials = kappa_s ~= 0;
     
     % Set the termC for all activeLocs to the value at kappa_s==0
-    trialTermC = log(besseli(0, kappa_x(~calcTrials)));
+    trialTermC = logBesseliWithNoOverflow(kappa_x(~calcTrials));
     
     termC(~calcTrials, :, :) = repmat(trialTermC, ...
         1, size(termC, 2), size(termC, 3));
     
     
     if sum(calcTrials) > 0
-        
-        termC(calcTrials, :, :) = log(besseli(0, ( (kappa_x(calcTrials).^2) + ...
+        arg = ( (kappa_x(calcTrials).^2) + ...
             (kappa_s(calcTrials).^2) + ...
             (2*kappa_x(calcTrials).*kappa_s(calcTrials).* ...
-            termB(calcTrials, :, :)) ).^0.5 ) );
+            termB(calcTrials, :, :)) ).^0.5;
+        termC(calcTrials, :, :) = logBesseliWithNoOverflow(arg);
         
     end
     
@@ -107,6 +107,18 @@ end
 
 % Compute overal loglikelihood ratio that target is present vs. absent, d
 d = log( (1./nItems) .* nansum(exp(d_loc), 2) );
+
+end
+
+
+function result = logBesseliWithNoOverflow(z)
+% Compute log(besseli(0, z)) even for very large values of z using the 
+% scaling option on besseli provided by matlab
+
+result = log(besseli(0, z, 1)) + abs(real(z));
+
+
+end
 
 
 

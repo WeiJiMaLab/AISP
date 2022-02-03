@@ -37,7 +37,7 @@ mT_exportNicePdf(8, 6.5, figDir, 'modelComparison')
 
 figure(Figures.Stds);
 mT_exportNicePdf(8, 6.5, figDir, 'modelStandardDeviations')
-close all
+
 
 %% Get data in helpful format
 
@@ -58,8 +58,19 @@ end
 
 %% Plot hypothetical performance as noise varies
 
-aisp_plotSimPerformance(dataDir, parsDir, Config.ModelList, ...
-    Config.ModelLabel)
+% Sim with defaults
+fig = aisp_plotSimPerformance(dataDir, parsDir, Config.ModelList, ...
+    Config.ModelLabel);
+mT_exportNicePdf(8, 10, figDir, 'simPerformance')
+
+% Smaller simulations of all block type / num item combinations to see
+% what they look like
+for iSetSizeCond = 1 : 4
+    for iBlockType = 1 : 2
+        aisp_plotSimPerformance(dataDir, parsDir, Config.ModelList, ...
+            Config.ModelLabel, iSetSizeCond, iBlockType, 10000)
+    end
+end
 
 %% Look at how close different runs of the same fit ended
 

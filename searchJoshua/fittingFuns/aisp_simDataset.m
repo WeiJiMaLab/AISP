@@ -4,7 +4,7 @@ function [DSet, SimDSet] = aisp_simDataset(dataDir, parsDir, model)
 % is simulated and SimDSet is in all other respects identical to DSet.
 
 [DSet, ~] = getData(dataDir);
-allParamStructs = aisp_loadBestFits(parsDir, model);
+allParamStructs = aisp_loadBestFits(dataDir, parsDir, model);
 
 %% Simulate data
 
