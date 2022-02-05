@@ -100,7 +100,7 @@ y = circ_vmrnd(0,kappa_y);
 y = y + Delta;
 
 % first sample of s and C
-s1_DeltaMat_xi = zeros(nTrials,nItems);
+% s1_DeltaMat_xi = zeros(nTrials,nItems);
 s1_DeltaMat_phi = zeros(nItems,nTrials);
 DeltaVec = (rand(nTrials,1).*2*pi)-pi; % all Deltas
 C_samp = rand(nTrials,1)<0.5;
@@ -113,7 +113,7 @@ C = nan(nTrials,nSamples);
 for isamp = 1:nSamples
     
     % proposal sample
-    s1_DeltaMat_new_xi = zeros(nTrials,nItems);
+%     s1_DeltaMat_new_xi = zeros(nTrials,nItems);
     s1_DeltaMat_new_phi = zeros(nItems,nTrials);
     DeltaVec = (rand(nTrials,1).*2*pi)-pi; % all Deltas
     C_samp_new = rand(nTrials,1)<0.5;
@@ -123,14 +123,16 @@ for isamp = 1:nSamples
     s1_DeltaMat_new_phi = s1_DeltaMat_new_phi';
     
     % calculate p(x,y|s1_DeltaMat_new)/p(x,y|s1_DeltaMat)
-    pp = prod(exp(cos(x-s1_DeltaMat_new_xi)-cos(x-s1_DeltaMat_xi)+cos(y-s1_DeltaMat_new_phi)-cos(y-s1_DeltaMat_phi)),2);
+%     pp = prod(exp(cos(x-s1_DeltaMat_new_xi)-cos(x-s1_DeltaMat_xi)+cos(y-s1_DeltaMat_new_phi)-cos(y-s1_DeltaMat_phi)),2);
+    pp = prod(exp(cos(y-s1_DeltaMat_new_phi)-cos(y-s1_DeltaMat_phi)),2);
     accept = rand(nTrials,1) < pp;
     
     % update relevant trial samples
     C_samp(accept) = C_samp_new(accept);
+%     s1_DeltaMat_xi(accept) = s1_DeltaMat_new_xi(accept);
+    s1_DeltaMat_phi(accept,:) = s1_DeltaMat_new_phi(accept,:);
 
     C(:,isamp) = C_samp;
-    
 end
 
 d = log(sum(C, 2) + 1) - log(nSamples - sum(C, 2) + 1);
