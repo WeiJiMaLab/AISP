@@ -38,7 +38,7 @@ numModels = length(Config.ModelList);
 bigPlot = figure;
 
 % Each row/column will have a different offset 
-xOffset = 0 : -0.015 : -(numModels-1)*0.015;
+xOffset = 0 : -0.015 : -numPlotsInEachSmall*0.015;
 yOffset = repmat([0], [1, numModels]);
 yStretch = repmat([0.9], [1, numModels]);
 
