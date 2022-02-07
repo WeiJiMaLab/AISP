@@ -45,7 +45,7 @@ switch model
         PLB = [PLB 1];
         PUB = [PUB 10];
         LB = [LB 1];
-        UB = [UB 100];%000];
+        UB = [UB 10000];
 end
 
 nvars = numel(PLB);
