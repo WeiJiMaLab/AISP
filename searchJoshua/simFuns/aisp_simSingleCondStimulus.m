@@ -46,7 +46,10 @@ Data.Orientation = ...
     [Data.Orientation, ...
     NaN(orientationDataSize(1), 6-orientationDataSize(2))];
 
-numTargs = sum(Data.Orientation == 0, 2);
+% Checks
+isTarg = zeros(size(Data.Orientation));
+isTarg(targetIndex) = 1;
+numTargs = sum(isTarg, 2);
 assert(all(numTargs(Data.Target)==1))
 assert(all(numTargs(~Data.Target)==0))
 

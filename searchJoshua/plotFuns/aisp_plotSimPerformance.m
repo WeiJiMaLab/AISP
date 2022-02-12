@@ -49,7 +49,7 @@ lnKappaRange = -4 : 0.2 : 7;
 
 templateModel = 'Bayes';
 bestParams = aisp_loadBestFits(dataDir, parsDir, templateModel, 'array');
-[~, Nptpnts] = getData(dataDir);
+[DSet, Nptpnts] = getData(dataDir);
 assert(size(bestParams, 1) == Nptpnts)
 meanParams = mean(bestParams, 1);
 
@@ -63,6 +63,7 @@ for iM = 1 : length(ModelList)
     
     % For this plot we fix some params to specific values
     ParamStruct = paramVec2Struct(meanParams, templateModel, 'to struct');
+    OrigParamStruct = ParamStruct;
     ParamStruct.Beta0 = 0;
     ParamStruct.LapseRate = 0;
     
@@ -87,6 +88,14 @@ for iM = 1 : length(ModelList)
         blockType = [1, 2];
         distStats.mu_s = 0;
         
+        % Checks
+        SomeData = DSet.P(1).Data;
+        realItemCondCombos = unique([SomeData.SetSize , ...
+            SomeData.SetSizeCond], 'rows');
+        assert(size(realItemCondCombos, 2) == 2)
+        assert(isequal([nItems', setSizeCond'], ...
+            sortrows(realItemCondCombos)))
+        
         thisNItems = nItems(iSetSize);
         thisSetSizeCond = setSizeCond(iSetSize);
         distStats.kappa_s = kappa_s(iBlockType);
@@ -108,6 +117,10 @@ for iM = 1 : length(ModelList)
     disp(['Model ', num2str(iM), ' simulation complete.'])
 end
 
+% Find the fitted value for ln kappa_x for this experimental
+% setting
+fittedLnKappa_x = OrigParamStruct.LnKappa_x(thisSetSizeCond);
+
 fig = figure;
 kappaRange = exp(lnKappaRange);
 lines = semilogx(kappaRange, accAcrossLnKappa);
@@ -115,6 +128,8 @@ set(gca, 'xdir', 'reverse')
 ylabel('Proportion correct')
 xlabel('Sensory precision (concentration parameter, \kappa)')
 yline(0.5, '--')
+hold on
+semilogx(exp([fittedLnKappa_x, fittedLnKappa_x]), [0.5, 0.45], 'k')
 legendLabels = ModelLabels;
 legend(lines, legendLabels)
 legend box off

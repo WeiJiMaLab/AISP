@@ -61,7 +61,7 @@ end
 % Sim with defaults
 fig = aisp_plotSimPerformance(dataDir, parsDir, Config.ModelList, ...
     Config.ModelLabel);
-mT_exportNicePdf(8, 10, figDir, 'simPerformance')
+mT_exportNicePdf(8*0.8, 10*0.8, figDir, 'simPerformance')
 
 % Smaller simulations of all block type / num item combinations to see
 % what they look like
