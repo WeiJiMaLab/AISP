@@ -84,53 +84,66 @@ J_x_mat(J_x_mat > highest_J) = highest_J;
 J_y_mat(J_y_mat > highest_J) = highest_J;
 
 % convert J to kappa
-xi = 1/diff(J_lin(1:2))*J_x_mat+1;
-kappa_x = k_range(round(xi));
-xi = 1/diff(J_lin(1:2))*J_y_mat+1;
-kappa_y = k_range(round(xi));
+tempvar = 1/diff(J_lin(1:2))*J_x_mat+1;
+kappa_x = k_range(round(tempvar));
+tempvar = 1/diff(J_lin(1:2))*J_y_mat+1;
+kappa_y = k_range(round(tempvar));
 
 if size(kappa_x,2) ~= nItems
     kappa_x = kappa_x';
     kappa_y = kappa_y';
 end
 
+% stimuli
+xi = rand(nTrials,nItems)*2*pi;
+
 % measurement noise
 x = circ_vmrnd(0,kappa_x);
 y = circ_vmrnd(0,kappa_y);
-y = y + Delta;
+x = x + xi;
+y = y + xi + Delta;
 
 % first sample of s and C
 % s1_DeltaMat_xi = zeros(nTrials,nItems);
-s1_DeltaMat_phi = zeros(nItems,nTrials);
+xi = rand(nTrials,nItems)*2*pi;
+DeltaMat = zeros(nItems,nTrials);
 DeltaVec = (rand(nTrials,1).*2*pi)-pi; % all Deltas
 C_samp = rand(nTrials,1)<0.5;
 DeltaVec(C_samp)=0;
 idx = randi(4,[1 nTrials])+(0:4:(nItems*nTrials-nItems));
-s1_DeltaMat_phi(idx) = DeltaVec;
-s1_DeltaMat_phi = s1_DeltaMat_phi';
+DeltaMat(idx) = DeltaVec;
+DeltaMat = DeltaMat';
 C = nan(nTrials,nSamples);
+
+mu_1 = x + atan2(sin(y-x),kappa_x./kappa_y + cos(x-(y-DeltaMat)));
+kappa_1 = sqrt(kappa_x.^2 + kappa_y.^2 + (2*kappa_x.*kappa_y.*cos(x-(y-DeltaMat))));
 
 for isamp = 1:nSamples
     
     % proposal sample
-%     s1_DeltaMat_new_xi = zeros(nTrials,nItems);
-    s1_DeltaMat_new_phi = zeros(nItems,nTrials);
+    prop_xi = rand(nTrials,nItems)*2*pi;
+    
+    prop_DeltaMat = zeros(nItems,nTrials);
     DeltaVec = (rand(nTrials,1).*2*pi)-pi; % all Deltas
     C_samp_new = rand(nTrials,1)<0.5;
-    DeltaVec(C_samp_new)=0;
+    DeltaVec(C_samp_new)=0; % set with 0.5 some trials to 0 delta
     idx = randi(4,[1 nTrials])+(0:4:(nItems*nTrials-nItems));
-    s1_DeltaMat_new_phi(idx) = DeltaVec;
-    s1_DeltaMat_new_phi = s1_DeltaMat_new_phi';
+    prop_DeltaMat(idx) = DeltaVec;
+    prop_DeltaMat = prop_DeltaMat';
     
-    % calculate p(x,y|s1_DeltaMat_new)/p(x,y|s1_DeltaMat)
-%     pp = prod(exp(cos(x-s1_DeltaMat_new_xi)-cos(x-s1_DeltaMat_xi)+cos(y-s1_DeltaMat_new_phi)-cos(y-s1_DeltaMat_phi)),2);
-    pp = prod(exp(cos(y-s1_DeltaMat_new_phi)-cos(y-s1_DeltaMat_phi)),2);
+    % calculate acceptance p
+    prop_mu_1 = x + atan2(sin(y-x),kappa_x./kappa_y + cos(x-(y-prop_DeltaMat)));
+    prop_kappa_1 = sqrt(kappa_x.^2 + kappa_y.^2 + (2*kappa_x.*kappa_y.*cos(x-(y-prop_DeltaMat))));
+   
+    pp = exp(sum(prop_kappa_1.*cos(prop_xi-prop_mu_1),2)-sum(kappa_1.*cos(xi-mu_1),2));
     accept = rand(nTrials,1) < pp;
     
     % update relevant trial samples
     C_samp(accept) = C_samp_new(accept);
-%     s1_DeltaMat_xi(accept) = s1_DeltaMat_new_xi(accept);
-    s1_DeltaMat_phi(accept,:) = s1_DeltaMat_new_phi(accept,:);
+    DeltaMat(accept,:) = prop_DeltaMat(accept,:);
+    xi(accept,:) = prop_xi(accept,:);
+    mu_1(accept,:) = prop_mu_1(accept,:);
+    kappa_1(accept,:) = prop_kappa_1(accept,:);
 
     C(:,isamp) = C_samp;
 end
