@@ -95,7 +95,8 @@ if size(kappa_x,2) ~= nItems
 end
 
 % stimuli
-xi = rand(nTrials,nItems)*2*pi;
+xi = 0;
+% xi = rand(nTrials,nItems)*2*pi;
 
 % measurement noise
 x = circ_vmrnd(0,kappa_x);
@@ -104,8 +105,7 @@ x = x + xi;
 y = y + xi + Delta;
 
 % first sample of s and C
-% s1_DeltaMat_xi = zeros(nTrials,nItems);
-xi = rand(nTrials,nItems)*2*pi;
+% xi = rand(nTrials,nItems)*2*pi;
 DeltaMat = zeros(nItems,nTrials);
 DeltaVec = (rand(nTrials,1).*2*pi)-pi; % all Deltas
 C_samp = rand(nTrials,1)<0.5;
@@ -121,7 +121,8 @@ kappa_1 = sqrt(kappa_x.^2 + kappa_y.^2 + (2*kappa_x.*kappa_y.*cos(x-(y-DeltaMat)
 for isamp = 1:nSamples
     
     % proposal sample
-    prop_xi = rand(nTrials,nItems)*2*pi;
+    prop_xi = 0;
+%     prop_xi = rand(nTrials,nItems)*2*pi;
     
     prop_DeltaMat = zeros(nItems,nTrials);
     DeltaVec = (rand(nTrials,1).*2*pi)-pi; % all Deltas
@@ -141,7 +142,7 @@ for isamp = 1:nSamples
     % update relevant trial samples
     C_samp(accept) = C_samp_new(accept);
     DeltaMat(accept,:) = prop_DeltaMat(accept,:);
-    xi(accept,:) = prop_xi(accept,:);
+%     xi(accept,:) = prop_xi(accept,:);
     mu_1(accept,:) = prop_mu_1(accept,:);
     kappa_1(accept,:) = prop_kappa_1(accept,:);
 
