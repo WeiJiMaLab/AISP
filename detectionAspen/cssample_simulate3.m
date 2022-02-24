@@ -1,5 +1,5 @@
-function resp = cssample_simulate3(x,dMat,logflag)
-%function RESP = cssample_simulate(X,MODEL,DMAT,LOGFLAG) simulates responses of
+function resp = cssample_simulate3(theta,dMat,logflag)
+%function RESP = cssample_simulate(THETA,MODEL,DMAT,LOGFLAG) simulates responses of
 %joint posterior sampling observer
 %
 % ============ INPUT VARIABLES ============
@@ -20,7 +20,7 @@ persistent highest_J
 
 if nargin < 3; logflag = []; end
 
-x(logflag) = exp(x(logflag));
+theta(logflag) = exp(theta(logflag));
 
 % start off with lapse
 % lapserate = x(end);
@@ -43,13 +43,13 @@ Rels = dMat(:,(nItems+1):end);      % reliabilities for each item (1: low, 2: hi
 nRelsVec = sum(Rels==2,2);
 
 % ===== GET PARAMETER VALUES ======
-Jbar_high = x(1);       % mean precision of high rel ellipse
-Jbar_low = x(2);        % mean precision of low rel ellipse
-tau = x(3);             % scale parameter of ellipse
-beta = x(4);            % softmax temperature parameter (deciison noise)
-beta0 = x(5);           % bias 
-lambda = x(6);          % lapse rate
-nSamples = x(7);       % n_samples
+Jbar_high = theta(1);       % mean precision of high rel ellipse
+Jbar_low = theta(2);        % mean precision of low rel ellipse
+tau = theta(3);             % scale parameter of ellipse
+beta = theta(4);            % softmax temperature parameter (deciison noise)
+beta0 = theta(5);           % bias 
+lambda = theta(6);          % lapse rate
+nSamples = theta(7);       % n_samples
 
 % random averaging between n_samples values
 if rand > mod(nSamples, 1)
