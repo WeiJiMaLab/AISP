@@ -58,7 +58,7 @@ switch model
     case 'sample'
         fun = @(x,dMat) sample_simulate(x,dMat,logflag);
     case 'cssample'
-        fun = @(x,dMat) cssample_simulate(x,dMat,logflag);
+        fun = @(x,dMat) cssample_simulate3(x,dMat,logflag);
     otherwise
         fun = @(x,dMat) simulate_responses(x,model,dMat,logflag);
 end
