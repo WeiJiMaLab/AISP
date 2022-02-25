@@ -3,7 +3,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=6
 #SBATCH --time=36:00:00
-#SBATCH --mem=20GB
+#SBATCH --mem=40GB
 #SBATCH --job-name=fitAspen
 #SBATCH --mail-type=END
 #SBATCH --mail-user=hhs4@nyu.edu
