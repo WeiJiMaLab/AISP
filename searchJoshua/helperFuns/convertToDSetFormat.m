@@ -11,8 +11,6 @@ function DSet = convertToDSetFormat(DSet, parsDir, Config)
 %   Nreps: The minimim number of repitions for each model that was 
 %       used during fitting.
 
-warning('Check this function')
-
 if isfield(DSet.P, 'Models')
     error('DSet should not yet include fitting results.')
 end

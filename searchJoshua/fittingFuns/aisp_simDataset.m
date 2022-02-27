@@ -10,7 +10,6 @@ allParamStructs = aisp_loadBestFits(dataDir, parsDir, model);
 
 SimDSet = aisp_simRespAndAcc(DSet, model, allParamStructs);
 
-% TODO remove the duplication here
 for iPtpnt = 1 : length(SimDSet.P)  
     SimDSet.P(iPtpnt).Data ...
         = computeStimStats(SimDSet.P(iPtpnt).Data, 'circ', false);

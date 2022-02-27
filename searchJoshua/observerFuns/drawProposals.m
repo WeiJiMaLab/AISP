@@ -6,13 +6,13 @@ function [proposeCat, allPropsl] = drawProposals(kappa_s, nTrials, ...
 % kappa_s: vector as long as number of trials. Overserver's belief about 
 %   the concentration parameter of the distractor distribution
 % nItems: scalar. All trials passed must have the name number of 
-%           stimuli items, the number given here.
+%   stimuli items, the number given here.
 % nPropsls: How many proposals to generate for each trial
 
 % OUTPUT
-% proposeCat: [nTrials, 1, nSamples] array, describing the cateogry of 
+% proposeCat: [nTrials, 1, nPropsls] array, describing the cateogry of 
 %  each proposal
-% allPropsl: [nTrials, nItems, nSamples] array of stimulus orientations
+% allPropsl: [nTrials, nItems, nPropsls] array of stimulus orientations
 %   for each proposal
 
 % JCT, 2021
@@ -62,15 +62,13 @@ proposeCat = randi(2, [nTrials*nPropsls, 1]) -1;
 unshapedPropsls = nan(nTrials*nPropsls, nItems);
 
 numAbsent = sum(proposeCat == 0);
-thisKappa_s = repmat(kappa_s, [numAbsent, 1]); % TODO this could be made 
-% more efficient
+thisKappa_s = repmat(kappa_s, [numAbsent, 1]); % Could be more efficient
 absentSamples = drawSamples(thisKappa_s, numAbsent, nItems, ...
     1, 'targAbs', runChecks);
 unshapedPropsls(proposeCat == 0, :) = absentSamples;
 
 numPresent = sum(proposeCat == 1);
-thisKappa_s = repmat(kappa_s, [numPresent, 1]); % TODO this could be made 
-% more efficient
+thisKappa_s = repmat(kappa_s, [numPresent, 1]); % Could be more efficient
 targetSamples = drawSamples(thisKappa_s, numPresent, nItems, ...
     1, 'targPres', runChecks);
 unshapedPropsls(proposeCat == 1, :) = targetSamples;
@@ -94,5 +92,11 @@ for iPropsl = 1 : nPropsls
     allPropsl(:, :, iPropsl) = unshapedPropsls(startRow:endRow, :);
 end
 assert(endRow == size(unshapedPropsls, 1))
+
+if runChecks
+    hasTarg = sum(allPropsl == 0, 2);
+    assert(all( (hasTarg == 1) | (hasTarg == 0)))
+    assert(isequal(hasTarg, proposeCat))
+end
 
 end

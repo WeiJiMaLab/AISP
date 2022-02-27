@@ -34,15 +34,15 @@ percepts = aisp_addNoiseToStim(relKappaX, Data.Orientation, ...
 % What response is given in each case?
 if strcmp(modelName, 'Bayes')
     d = aisp_computeBaysianDV(percepts, Data.SetSize, relKappaX, ...
-        Data.KappaS, 0);
+        Data.KappaS, 0, runChecks);
 
 elseif strcmp(modelName, 'PE')
     d = aisp_computePointEstDV(percepts, Data.SetSize, relKappaX, ...
-        Data.KappaS, 0, 'stimAndTarg');
+        Data.KappaS, 0, 'stimAndTarg', runChecks);
     
 elseif strcmp(modelName, 'PE_imagineL')
     d = aisp_computePointEstDV(percepts, Data.SetSize, relKappaX, ...
-        Data.KappaS, 0, 'stimAndTarg_incImagine');
+        Data.KappaS, 0, 'stimAndTarg_incImagine', runChecks);
         
 elseif strcmp(modelName, 'PE2')
     d = aisp_computeOptimalPointEstDV(percepts, Data.SetSize, relKappaX, ...

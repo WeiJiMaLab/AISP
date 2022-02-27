@@ -1,6 +1,26 @@
-function jaisp_runTests()
+function jaisp_runTests(dataDir)
 
-% JCT, 2020 - 2021
+% INPUT
+% dataDir: Directory containing the original unfitted dataset
+
+% JCT, 2020 - 2022
+
+%% Fitting with checks on
+
+[DSet, ~] = getData(dataDir);
+Config = produceConfig();
+
+repNum = 1;
+for iModel = 1 : length(Config.ModelList)
+    thisModel = Config.ModelList{iModel};
+    
+    for thisPtpnt = [3, 9]
+        fit_cluster_ibs(repNum, thisPtpnt, thisModel, DSet, repNum, ...
+            false, true)
+        repNum = repNum +1;
+    end
+end
+
 
 %% imResampVm
 mu = pi/8;
@@ -13,6 +33,7 @@ standardSamples = qrandvm(mu, kappa, nSamples);
 figure; hold on
 histogram(imResampSamples)
 histogram(standardSamples)
+
 
 %% vmpdf
 x = -pi : 0.01 : pi;

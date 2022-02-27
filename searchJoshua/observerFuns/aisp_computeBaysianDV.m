@@ -1,5 +1,5 @@
 function d = aisp_computeBaysianDV(percept, nItems, kappa_x, kappa_s, ...
-    mu_s)
+    mu_s, runChecks)
 % Compute the decision variable of a Bayesian observer
 
 % NOTE
@@ -16,11 +16,9 @@ function d = aisp_computeBaysianDV(percept, nItems, kappa_x, kappa_s, ...
 % kappa_s   Overserver's belief about the concentration parameter of the 
 %           distractor distribution
 % mu_s      Center of the distractor distribution
+% runChecks bool. If true check potentially costly assertions.
 
-% Joshua Calder-Travis 
-% j.calder.travis@gmail.com
-% GitHub: jCalderTravis
-
+% JCT, 2020
 
 % Check input
 if size(percept, 2) > 8; error('Bug'); end
@@ -55,18 +53,18 @@ end
 % and over again. Lets call it termA.
 termA = aisp_computeLogBesseliForDuplicatedValues(kappa_s);
 
+if runChecks
+    assert(isequal(size(termA), size(kappa_s)))
+end
 
 % If mu_s aways equals zero, then the formula for the local loglikelihood 
 % ratio requires us to compute cos(percept) twice. Lets just do it once
 if length(mu_s) == 1 && mu_s == 0
     termB = cos(percept);
-    termBShortcut = true;
-    
+    termBShortcut = true; 
 else
     error('Case not coded up.')
-    
 end
-
 
 % Compute local loglikelkihood ratio. The shortcuts we use (described
 % above) depend on the situation. Note instead of using repmat to make
@@ -87,26 +85,27 @@ if termBShortcut
     termC(~calcTrials, :, :) = repmat(trialTermC, ...
         1, size(termC, 2), size(termC, 3));
     
-    
     if sum(calcTrials) > 0
         arg = ( (kappa_x(calcTrials).^2) + ...
             (kappa_s(calcTrials).^2) + ...
             (2*kappa_x(calcTrials).*kappa_s(calcTrials).* ...
             termB(calcTrials, :, :)) ).^0.5;
-        termC(calcTrials, :, :) = logBesseliWithNoOverflow(arg);
-        
+        termC(calcTrials, :, :) = logBesseliWithNoOverflow(arg);    
     end
-    
-    % TODO
-    % Add in checks here that all the terms are of the expected shape
     
     d_loc = (kappa_x .* termB) + termA - termC;
     
+    if runChecks
+        assert(isequal(size(d_loc), size(percept)))
+    end
 end
-
 
 % Compute overal loglikelihood ratio that target is present vs. absent, d
 d = log( (1./nItems) .* nansum(exp(d_loc), 2) );
+
+if runChecks
+    assert(isequal(size(d), [size(percept, 1), 1]))
+end
 
 end
 

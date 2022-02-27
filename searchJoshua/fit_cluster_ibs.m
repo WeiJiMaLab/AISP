@@ -8,7 +8,7 @@ function fit_cluster_ibs(iRep, iPtpnt, modelName, DSet, idx, varargin)
 %   therefore potentially saving time, but with less chance to detect 
 %   bugs. Default is true.
 % varargin{3}: bool. If true, run a parfor loop, otherwise do not use
-%   parallel computation.
+%   parallel computation. Default is false.
 
 if (length(varargin) >= 1) && (~isempty(varargin{1}))
     debugMode = varargin{1};
@@ -30,6 +30,8 @@ end
 
 if ~runChecks
     disp('Running *without* checks for speed')
+else
+    disp('Running with checks. There may be a performance cost.')
 end
 
 if runParallel
