@@ -1,4 +1,4 @@
-function resp = sample_simulate(x,dMat,logflag)
+function resp = sample_simulate(x,dMat,logflag,tempp)
 %function RESP = sample_simulate(X,MODEL,DMAT,LOGFLAG) simulates responses of
 %sampling observer
 %
@@ -10,13 +10,15 @@ function resp = sample_simulate(x,dMat,logflag)
 %       each item.
 % LOGFLAG: log flag. binary vector of length six
 %       indicates which parameters are in log scaling
+% tempp: struct of a look-up table for sampling precisions
+%       needs to be passed to avoid persistent variables
 %
 % ============ OUTPUT VARIABLES ============
 % RESP: length nTrials vector of simulated responses
 
-persistent k_range
-persistent J_lin
-persistent highest_J
+%persistent k_range
+%persistent J_lin
+%persistent highest_J
 
 if nargin < 3; logflag = []; end
 
@@ -61,14 +63,14 @@ end
 % ====== CALCULATE P(\HAT{C}==1|\Theta) FOR nSamples SAMPLES =====
 
 % make CDF for interpolating J to Kappa
-if isempty(k_range)
-    tempp = load('cdf_table.mat');
+%if isempty(k_range)
+%    tempp = load('cdf_table.mat');
     % K_interp = tempp.K_interp;
     % cdf = tempp.cdf;
-    k_range = tempp.k_range;
-    J_lin = tempp.J_lin;
-    highest_J = tempp.highest_J;
-end
+k_range = tempp.k_range;
+J_lin = tempp.J_lin;
+highest_J = tempp.highest_J;
+%end
 
 % calculate actual kappa and noisy representations
 Jbar_mat = Rels;
@@ -119,11 +121,11 @@ kappa_1 = sqrt(kappa_x.^2 + kappa_y.^2 + (2*kappa_x.*kappa_y.*cos(x-(y_1-s1_Delt
 % inside_0 = besseli(0,kappa_0,1)./(2*pi*besseli(0,kappa_x,1).*besseli(0,kappa_x,1)).*circ_vmpdf(mu_0,0,kappa_0);
 % inside_1 = besseli(0,kappa_1,1)./(2*pi*besseli(0,kappa_x_1,1).*besseli(0,kappa_x_1,1)).*circ_vmpdf(mu_1,0,kappa_1);
 
-insideexp_0 = log((4*pi^2)^(-4))+sum(-log(besseli(0,kappa_x,1).*besseli(0,kappa_y,1)),2)+sum(kappa_0.*cos(mu_0),2);
-insideexp_1 = log((4*pi^2)^(-4))+sum(-log(besseli(0,kappa_x,1).*besseli(0,kappa_y,1)),2)+sum(kappa_1.*cos(mu_1),2);
+insideexp_0 = sum(-log(besseli(0,kappa_x,1).*besseli(0,kappa_y,1)),2)+sum(kappa_0.*cos(mu_0),2);
+insideexp_1 = sum(-log(besseli(0,kappa_x,1).*besseli(0,kappa_y,1)),2)+sum(kappa_1.*cos(mu_1),2);
 
-numerator = logsumexp(insideexp_1,3)-log(4);
-denom = logsumexp(insideexp_0,3)-log(4);
+numerator = logsumexp(insideexp_1,3);
+denom = logsumexp(insideexp_0,3);
 
 d = numerator - denom;
 
