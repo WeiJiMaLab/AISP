@@ -18,6 +18,6 @@ sigmaNoise = sigmas(floor(data(:,1)))';
 s = data(:,2);
 x = s + sigmaNoise.*randn(length(s),1);
 d = 1/2*log((sigma2.^2+sigmaNoise.^2)./(sigma1.^2+sigmaNoise.^2))- ...
-    x.^2/2 * (sigma2.^2 - sigma1.^2)./(sigma1.^2+sigmaNoise.^2)./(sigma2^2+sigmaNoise.^2);
+    x.^2/2 * (sigma2.^2 - sigma1.^2)./(sigma1.^2+sigmaNoise.^2)./(sigma2.^2+sigmaNoise.^2);
 p = lambda/2 + (1-lambda)./(1+exp(beta(1)+beta(2).*d));
 responses = (rand(length(p),1)<p);
