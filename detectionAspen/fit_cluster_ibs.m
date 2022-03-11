@@ -3,6 +3,8 @@ function [xbest, LL] = fit_cluster_ibs(imodel,isubj,irep)
 % load subject, model, fitting options and bounds
 load('fittingsettings.mat')
 
+% load cdf table
+tempp = load('cdf_table.mat');
 % ========= DATA/MODEL INFO ========
 
 % fitting settings (determined by index)
@@ -12,7 +14,7 @@ model = modelVec{imodel};
 % load data
 load(sprintf('data/%s_Ellipse_simple.mat',subjid))
 % load(sprintf('../../changedetection/multi_item/data/fitting_data/%s_Ellipse_simple.mat',subjid))
-%load(sprintf('/Volumes/GoogleDrive/My Drive/Research/VSTM/Aspen Luigi - Reliability in VWM/Exp 5 - Keshvari replication and extension/data/fitting_data/%s_Ellipse_simple.mat', subjid))
+% load(sprintf('/Volumes/GoogleDrive/My Drive/Research/VSTM/Aspen Luigi - Reliability in VWM/Exp 5 - Keshvari replication and extension/data/fitting_data/%s_Ellipse_simple.mat', subjid))
 % load(sprintf('../data/fitting_data/%s_Ellipse_simple.mat',subjid))
 
 % data in ibs format
@@ -56,11 +58,11 @@ x0 = (PUB-PLB).*rand(1,nvars)+PLB
 % var_limit = 40;
 switch model
     case 'sample'
-        fun = @(x,dMat) sample_simulate(x,dMat,logflag);
+        fun = @(x,dMat) sample_simulate(x,dMat,logflag,tempp);
     case 'cssample'
-        fun = @(x,dMat) cssample_simulate3(x,dMat,logflag);
+        fun = @(x,dMat) cssample_simulate3(x,dMat,logflag,tempp);
     otherwise
-        fun = @(x,dMat) simulate_responses(x,model,dMat,logflag);
+        fun = @(x,dMat) simulate_responses(x,model,dMat,logflag,tempp);
 end
 fun_handle = @(x) ibslike_var_par(fun,x,data.resp,dMat,options_ibs,var_limit);
 [xbest,LL] = bads(fun_handle,x0,LB,UB,PLB,PUB,[],options)

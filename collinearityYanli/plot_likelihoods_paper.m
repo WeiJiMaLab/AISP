@@ -48,9 +48,9 @@ plot((1:5) +0.05*randn(size(pdata)),pdata,'.','Color',[0.4,0.4,0.4],'MarkerSize'
 box off
 set(gca,'TickDir','out')
 ylabel('LL - LLBayes','FontSize',18)
-set(gca,'FontSize',14)
+set(gca,'FontSize',14, 'LineWidth', 2)
 xticklabels({'Bayes','PE1','PE2'})
-
+xlim([0.5,5.5])
 
 pdata2 = stds;
 

@@ -1,4 +1,4 @@
-function resp = cssample_simulate3(theta,dMat,logflag)
+function resp = cssample_simulate3(theta,dMat,logflag,tempp)
 %function RESP = cssample_simulate(THETA,MODEL,DMAT,LOGFLAG) simulates responses of
 %joint posterior sampling observer
 %
@@ -10,13 +10,15 @@ function resp = cssample_simulate3(theta,dMat,logflag)
 %       each item.
 % LOGFLAG: log flag. binary vector of length six
 %       indicates which parameters are in log scaling
+% tempp: struct of a look-up table for sampling precisions
+%       needs to be passed to avoid persistent variables
 %
 % ============ OUTPUT VARIABLES ============
 % RESP: length nTrials vector of simulated responses
 
-persistent k_range
-persistent J_lin
-persistent highest_J
+%persistent k_range
+%persistent J_lin
+%persistent highest_J
 
 if nargin < 3; logflag = []; end
 
@@ -61,14 +63,14 @@ end
 % ====== CALCULATE P(\HAT{C}==1|\Theta) FOR nSamples SAMPLES =====
 
 % make CDF for interpolating J to Kappa
-if isempty(k_range)
-    tempp = load('cdf_table.mat');
+%if isempty(k_range)
+    % tempp = load('cdf_table.mat');
     % K_interp = tempp.K_interp;
     % cdf = tempp.cdf;
-    k_range = tempp.k_range;
-    J_lin = tempp.J_lin;
-    highest_J = tempp.highest_J;
-end
+k_range = tempp.k_range;
+J_lin = tempp.J_lin;
+highest_J = tempp.highest_J;
+%end
 
 % calculate actual kappa and noisy representations
 Jbar_mat = Rels;
