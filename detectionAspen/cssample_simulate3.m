@@ -84,7 +84,7 @@ J_x_mat(J_x_mat > highest_J) = highest_J;
 J_y_mat(J_y_mat > highest_J) = highest_J;
 
 % convert J to kappa
-tempvar = 1/diff(J_lin(1:2))*J_x_mat+1;
+tempvar = 1/diff(J_lin(1:2))*J_x_mat+1; 
 kappa_x = k_range(round(tempvar));
 tempvar = 1/diff(J_lin(1:2))*J_y_mat+1;
 kappa_y = k_range(round(tempvar));

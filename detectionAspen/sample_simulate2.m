@@ -1,4 +1,4 @@
-function resp = sample_simulate(theta,dMat,logflag)
+function resp = sample_simulate2(theta,dMat,logflag)
 %function RESP = sample_simulate(X,MODEL,DMAT,LOGFLAG) simulates responses of
 %sampling observer
 %
@@ -20,7 +20,7 @@ persistent highest_J
 
 if nargin < 3; logflag = []; end
 
-x(logflag) = exp(x(logflag));
+theta(logflag) = exp(theta(logflag));
 
 % start off with lapse
 % lapserate = x(end);
@@ -78,13 +78,6 @@ Jbar_mat(Rels==2) = Jbar_high;
 % replicate noise matrices based on number of samples
 Jbar_mat = repmat(Jbar_mat,[1 1 nSamples]); %ntrials, nitems, nsamples
 
-% sample first display and second display stimuli for each C
-s1_DeltaMat = zeros(nItems,nTrials,nSamples);
-DeltaVec = (rand(nTrials,1,nSamples).*2*pi)-pi; % all Deltas
-idx = randi(4,[1 nTrials*nSamples])+(0:4:(nItems*nTrials*nSamples-nItems));
-s1_DeltaMat(idx) = DeltaVec;
-s1_DeltaMat = permute(s1_DeltaMat,[2 1 3]);
-
 J_x_mat = gamrnd(Jbar_mat./tau,tau);
 J_y_mat = gamrnd(Jbar_mat./tau,tau);
 
@@ -104,28 +97,21 @@ if size(kappa_x,2) ~= nItems
     kappa_y = kappa_y';
 end
 
-% measurement noise
-x = circ_vmrnd(0,kappa_x);
-y_0 = circ_vmrnd(0,kappa_y);
-y_1 = bsxfun(@plus,y_0,Delta);
+% actual variables x, y
+% xi = rand(nTrials,nItems)*2*pi-pi;
+% x = circ_vmrnd(xi,kappa_x);
+y = circ_vmrnd(Delta,kappa_y);
 
-% terms for multiplication of von mises, for both sampled category conditions
-mu_0 = x + atan2(sin(y_0-x),kappa_x./kappa_y + cos(y_0-x));
-mu_1 = x + atan2(sin(y_1-x),kappa_x./kappa_y + cos(x-(y_1-s1_DeltaMat)));
 
-kappa_0 = sqrt(kappa_x.^2 + kappa_y.^2 + (2*kappa_x.*kappa_y.*cos(x-y_0)));
-kappa_1 = sqrt(kappa_x.^2 + kappa_y.^2 + (2*kappa_x.*kappa_y.*cos(x-(y_1-s1_DeltaMat))));
+% sample first display and second display stimuli for each C
+s1_DeltaMat = zeros(nItems,nTrials,nSamples);
+DeltaVec = (rand(nTrials,1,nSamples).*2*pi)-pi; % all Deltas
+idx = randi(4,[1 nTrials*nSamples])+(0:4:(nItems*nTrials*nSamples-nItems));
+s1_DeltaMat(idx) = DeltaVec;
+s1_DeltaMat = permute(s1_DeltaMat,[2 1 3]);
 
-% inside_0 = besseli(0,kappa_0,1)./(2*pi*besseli(0,kappa_x,1).*besseli(0,kappa_x,1)).*circ_vmpdf(mu_0,0,kappa_0);
-% inside_1 = besseli(0,kappa_1,1)./(2*pi*besseli(0,kappa_x_1,1).*besseli(0,kappa_x_1,1)).*circ_vmpdf(mu_1,0,kappa_1);
 
-insideexp_0 = log((4*pi^2)^(-4))+sum(-log(besseli(0,kappa_x,1).*besseli(0,kappa_y,1)),2)+sum(kappa_0.*cos(mu_0),2);
-insideexp_1 = log((4*pi^2)^(-4))+sum(-log(besseli(0,kappa_x,1).*besseli(0,kappa_y,1)),2)+sum(kappa_1.*cos(mu_1),2);
-
-numerator = logsumexp(insideexp_1,3)-log(4);
-denom = logsumexp(insideexp_0,3)-log(4);
-
-d = numerator - denom;
+d = mean(exp((kappa_y*cos(y-s1_DeltaMat))-(kappa_y*cos(y))),3);
 
 p = lambda/2 + (1-lambda)./(1+exp(beta0+beta.*d));
 resp = (rand(nTrials, 1) < p);
