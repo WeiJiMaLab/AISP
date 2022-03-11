@@ -1,5 +1,4 @@
-function resp = sample_simulate(theta,dMat,logflag)
-% function resp = sample_simulate(x,dMat,logflag,tempp)
+function resp = sample_simulate(x,dMat,logflag,tempp)
 %function RESP = sample_simulate(X,MODEL,DMAT,LOGFLAG) simulates responses of
 %sampling observer
 %

@@ -58,7 +58,7 @@ x0 = (PUB-PLB).*rand(1,nvars)+PLB
 % var_limit = 40;
 switch model
     case 'sample'
-        fun = @(x,dMat) sample_simulate(x,dMat,logflag,tempp);
+        fun = @(x,dMat) sample_simulate2(x,dMat,logflag,tempp);
     case 'cssample'
         fun = @(x,dMat) cssample_simulate3(x,dMat,logflag,tempp);
     otherwise
