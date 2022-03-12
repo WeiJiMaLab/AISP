@@ -78,9 +78,6 @@ Jbar_mat = Rels;
 Jbar_mat(Rels==1) = Jbar_low;
 Jbar_mat(Rels==2) = Jbar_high;
 
-% replicate noise matrices based on number of samples
-Jbar_mat = repmat(Jbar_mat,[1 1 nSamples]); %ntrials, nitems, nsamples
-
 J_x_mat = gamrnd(Jbar_mat./tau,tau);
 J_y_mat = gamrnd(Jbar_mat./tau,tau);
 
@@ -100,22 +97,31 @@ if size(kappa_x,2) ~= nItems
     kappa_y = kappa_y';
 end
 
-% actual variables x, y
-% xi = rand(nTrials,nItems)*2*pi-pi;
-% x = circ_vmrnd(xi,kappa_x);
-y = circ_vmrnd(Delta,kappa_y);
 
+% observed variables x, y
+% instead of sampling the true orientations randomly
+% we always set them to 1
+xi = rand(nTrials, nItems) * 2 * pi - pi;
+x = circ_vmrnd(xi, kappa_x);
+y = circ_vmrnd(xi + Delta, kappa_y);
+
+% replicate noise matrices based on number of samples
+kappa_x = repmat(kappa_x, 1, 1, nSamples);
+kappa_y = repmat(kappa_y, 1, 1, nSamples);
 
 % sample first display and second display stimuli for each C
-s1_DeltaMat = zeros(nItems,nTrials,nSamples);
-DeltaVec = (rand(nTrials,1,nSamples).*2*pi)-pi; % all Deltas
-idx = randi(4,[1 nTrials*nSamples])+(0:4:(nItems*nTrials*nSamples-nItems));
-s1_DeltaMat(idx) = DeltaVec;
+x_sample = circ_vmrnd(repmat(x, 1, 1, nSamples), kappa_x);
+s1_DeltaMat = zeros(nItems, nTrials, nSamples);
+DeltaVec = (rand(nTrials, 1, nSamples) .* 2 .* pi) - pi; % all Deltas
+idx = randi(4, [nTrials * nSamples, 1]) ...
+    + (0:4:(nItems * nTrials * nSamples - nItems))';
+s1_DeltaMat(idx) = s1_DeltaMat(idx) + DeltaVec(:);
 s1_DeltaMat = permute(s1_DeltaMat,[2 1 3]);
+s1_DeltaMat = s1_DeltaMat + circ_vmrnd(repmat(x, 1, 1, nSamples), kappa_x);
 
+d = logsumexp(sum(kappa_y .* cos(y - s1_DeltaMat), 2), 3)...
+    -logsumexp(sum(kappa_y .* cos(y - x_sample), 2), 3);
 
-d = mean(exp((kappa_y*cos(y-s1_DeltaMat))-(kappa_y*cos(y))),3);
-
-p = lambda/2 + (1-lambda)./(1+exp(beta0+beta.*d));
+p = lambda/2 + (1 - lambda)./(1 + exp(beta0 + beta .* d));
 resp = (rand(nTrials, 1) < p);
 
