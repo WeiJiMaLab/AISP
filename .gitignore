@@ -1,3 +1,4 @@
+fits
 pars
 pars_*/
 data
@@ -12,4 +13,5 @@ Dirs_*models.mat
 *produceDirs.m
 *.asv
 *slurm*
+detectionAspen/fits/*
 Data/

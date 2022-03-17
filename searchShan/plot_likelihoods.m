@@ -2,14 +2,18 @@ function plot_likelihoods(Naverage)
 
 Nsubs = 9;
 
-likelihoods = zeros(Nsubs,2);
-stds = zeros(Nsubs,2);
-for itype = 1:2
+likelihoods = zeros(Nsubs,4);
+stds = zeros(Nsubs,4);
+for itype = 1:4
     switch itype
         case 1
             fname = 'pars/pars_ibs_Bayes.mat';
         case 2
             fname = 'pars/pars_ibs_Freq.mat';
+        case 3
+            fname = 'pars/pars_ibs_Sample.mat';
+        case 4
+            fname = 'pars/pars_ibs_cssample.mat';
     end
     f = load(fname);
     if itype>5
@@ -38,12 +42,12 @@ pdata = likelihoods(:,1)-likelihoods;
 figure 
 bar(mean(pdata),'FaceColor','k')
 hold on
-plot((1:2) +0.05*randn(size(pdata)),pdata,'.','Color',[0.4,0.4,0.4],'MarkerSize',20)
+plot((1:4) +0.05*randn(size(pdata)),pdata,'.','Color',[0.4,0.4,0.4],'MarkerSize',20)
 box off
 set(gca,'TickDir','out', 'LineWidth', 2)
 ylabel('LL - LLBayes','FontSize',20)
 set(gca,'FontSize', 18, 'XColor', 'k', 'YColor', 'k')
-xticklabels({'Bayes', 'Point Estimate'})
+xticklabels({'Bayes', 'Point Estimate', 'Sampling', 'joint Sampling'})
 set(gcf, 'Position', [550   750   560   250])
 
 
@@ -52,9 +56,9 @@ pdata2 = stds;
 figure 
 bar(mean(pdata2),'FaceColor','k')
 hold on
-plot((1:2) +0.05*randn(size(pdata2)),pdata2,'.','Color',[0.4,0.4,0.4],'MarkerSize',20)
+plot((1:4) +0.05*randn(size(pdata2)),pdata2,'.','Color',[0.4,0.4,0.4],'MarkerSize',20)
 box off
 set(gca,'TickDir','out')
 ylabel('std of estimates','FontSize',20)
 set(gca,'FontSize',14)
-xticklabels({'Bayes','Point Estimate'})
+xticklabels({'Bayes','Point Estimate', 'Sampling', 'joint Sampling'})
