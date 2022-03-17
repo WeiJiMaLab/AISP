@@ -4,8 +4,6 @@ Loaded = load(dataDir);
 DSet = Loaded.DSet;
 
 % Throughout we assume that the target is at the orientation of 0. Check this.
-% TODO in some places it is not made clear that this is built into the code and
-% not simply an option -- change
 for iP = 1 : length(DSet.P)
     targetTrials = logical(DSet.P(iP).Data.Target);
     targetLoc = DSet.P(iP).Data.TargetLoc(targetTrials);

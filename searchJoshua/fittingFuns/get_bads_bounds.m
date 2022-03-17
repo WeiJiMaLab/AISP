@@ -21,25 +21,5 @@ end
 
 X0 = PLB + ((PUB - PLB) .* rand(size(PUB)));
 
-% Check that the order the params are specified here matches the ordering used
-% for the param vector in the rest of the code
-[assumedParamNames, assumedParamOrder] = findParamOrder(incSamplesParam);
-
-for iParam = 1 : length(params)
-    
-    found = 0;
-    for iName = 1 : length(assumedParamNames)
-        if ismember(iParam, assumedParamOrder{iName})
-            
-            found = found +1;
-            if ~strcmp(params{iParam}, assumedParamNames{iName})
-                error('Bug')
-            end
-        end
-    end
-    
-    if found ~= 1; error('Bug'); end
-end
-        
-            
+aisp_checkParamOrder(params, incSamplesParam)
     

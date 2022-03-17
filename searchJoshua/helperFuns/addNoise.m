@@ -1,7 +1,7 @@
 function noisy = addNoise(noiseless, kappas, varargin)
 % Add VM noise to the values in the matrix noiseless. Values in
 % noiseless that are nan remain as nan. Values are mapped back into the 
-% range -2pi to pi
+% range -pi to pi
 
 % INPUT
 % noiseless: matrix (may be 3D)

@@ -9,15 +9,13 @@ function files = findModelAssocFitFiles(parsDir, modelName)
 % OUTPUT
 % files: Struct. Same format as produced by MATLAB function 'dir'.
 
-
 fname = [parsDir '\pars_*_' modelName];
 files = dir([fname,'_*']);
-
 
 % With all the candidate files, run a stricter test to ensure we have
 % located only those files we really want. This became necessary when I
 % unfortunately started using a model called 'PE_imagineL', with the
-% underscore messing the previous syste up.
+% underscore messing the previous system up.
 remove = zeros(length(files), 1);
 for iFile = 1:length(files)
     
@@ -28,3 +26,18 @@ end
 files(logical(remove))=[];
 disp(['Model ' modelName ...
     ' files found: ' num2str(length(files))])
+
+% Check
+for iFile = 1 : length(files)
+    thisFileName = files(iFile).name;
+    fparts = split(thisFileName, {'_','.'});
+    
+    modelPart1 = fparts{3};
+    modelPart2 = fparts{4}; 
+    if isnan(str2double(modelPart2))
+        derivModelName = [modelPart1 '_' modelPart2];
+    else
+        derivModelName = modelPart1;
+    end
+    assert(strcmp(modelName, derivModelName))
+end
