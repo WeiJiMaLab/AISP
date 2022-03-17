@@ -1,5 +1,6 @@
 function [ofset, finalAssocNItems, finalAssocKappa_x, finalAssocKappa_s] ...
-    = aisp_computeOptimalPointEstOfset(nItems, kappa_x, kappa_s, mu_s, varargin)
+    = aisp_computeOptimalPointEstOfset(nItems, kappa_x, kappa_s, mu_s, ...
+    runChecks, varargin)
 % Compute the offset required to optimally compensate for changes in kappa_x and
 % kappa_s
 
@@ -8,6 +9,7 @@ function [ofset, finalAssocNItems, finalAssocKappa_x, finalAssocKappa_s] ...
 % kappa_x: Vector same length as nItems. Values of kappa_x for each value of
 % nItems
 % kappa_s: Vector of unique values of kappa_s to use
+% runChecks bool. If true check potentially costly assertions.
 % varargin{1}: If set to true, recompute the ofset regardless of whether the imput
 % options have changed or not. (Normally does not recompute if inputs are the
 % same.)
@@ -91,11 +93,11 @@ if strcmp(calc, 'new')
         % estimate observer
         x0 = aisp_addNoiseToStim(thisKappa_x, s0);
         d0 = aisp_computePointEstDV(x0, thisNItems, thisKappa_x, ...
-            thisKappa_s, mu_s, 'stimAndTarg');
+            thisKappa_s, mu_s, 'stimAndTarg', runChecks);
         
         x1 = aisp_addNoiseToStim(thisKappa_x, s1);
         d1 = aisp_computePointEstDV(x1, thisNItems, thisKappa_x, ...
-            thisKappa_s, mu_s, 'stimAndTarg');
+            thisKappa_s, mu_s, 'stimAndTarg', runChecks);
         
         if (length(size(d0))~=2) || (size(d0, 2)~=1); error('Bug'); end
         if (length(size(d1))~=2) || (size(d1, 2)~=1); error('Bug'); end

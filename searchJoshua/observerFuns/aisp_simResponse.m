@@ -46,7 +46,7 @@ elseif strcmp(modelName, 'PE_imagineL')
         
 elseif strcmp(modelName, 'PE2')
     d = aisp_computeOptimalPointEstDV(percepts, Data.SetSize, relKappaX, ...
-        Data.KappaS, 0);
+        Data.KappaS, 0, runChecks);
     
 elseif any(strcmp(modelName, {'impSamp', 'jointPostSamp'}))
     uniqSizes = unique(Data.SetSize);

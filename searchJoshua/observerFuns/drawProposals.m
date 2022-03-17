@@ -95,7 +95,7 @@ assert(endRow == size(unshapedPropsls, 1))
 
 if runChecks
     hasTarg = sum(allPropsl == 0, 2);
-    assert(all( (hasTarg == 1) | (hasTarg == 0)))
+    assert(all(all( (hasTarg == 1) | (hasTarg == 0))))
     assert(isequal(hasTarg, proposeCat))
 end
 

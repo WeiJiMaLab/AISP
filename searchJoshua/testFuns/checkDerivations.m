@@ -116,7 +116,7 @@ for iRep = 1 : nReps(3)
     
     % Also evaluate the DV using the derived expressions
     dv_byDeriv(iRep) = aisp_computePointEstDV(X, nStim, kappa_x, ...
-        kappa_s, 0, 'stimAndTarg');
+        kappa_s, 0, 'stimAndTarg', true);
     
     if mod(iRep, 100) == 0
         disp('100 done')
