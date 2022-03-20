@@ -56,6 +56,18 @@ for iM = 1 : length(Config.ModelList)
     end
 end
 
+
+%% Parameters in detail...
+compareParamsAndGoodnessOfFit(DSet, 2, 1)
+mT_exportNicePdf(20*0.8, 10*0.8, figDir, 'paramsVsGoodness_combo1')
+compareParamsAndGoodnessOfFit(DSet, 2, 2)
+mT_exportNicePdf(20*0.8, 10*0.8, figDir, 'paramsVsGoodness_combo2')
+compareParamsAndGoodnessOfFit(DSet, 3, 1)
+mT_exportNicePdf(20*0.8, 10*0.8, figDir, 'paramsVsGoodness_combo3')
+compareParamsAndGoodnessOfFit(DSet, 3, 3)
+mT_exportNicePdf(20*0.8, 10*0.8, figDir, 'paramsVsGoodness_combo4')
+
+
 %% Plot hypothetical performance as noise varies
 
 % Sim with defaults
