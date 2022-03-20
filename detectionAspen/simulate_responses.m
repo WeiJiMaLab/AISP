@@ -1,4 +1,4 @@
-function resp = simulate_responses(x,model,dMat,logflag)
+function resp = simulate_responses(x,model,dMat,logflag,tempp)
 %function RESP = simulate_responses(X,MODEL,DMAT,LOGFLAG) simulates responses of
 %bayesian observer
 %
@@ -16,13 +16,14 @@ function resp = simulate_responses(x,model,dMat,logflag)
 %       each item.
 % LOGFLAG: log flag. binary vector of length six
 %       indicates which parameters are in log scaling
-%
+% tempp: struct of a look-up table for sampling precisions
+%       needs to be passed to avoid persistent variables
 % ============ OUTPUT VARIABLES ============
 % RESP: 1xnTrials vector of simulated responses
 
-persistent k_range
-persistent J_lin
-persistent highest_J
+% persistent k_range
+% persistent J_lin
+% persistent highest_J
 
 if nargin < 4; logflag = []; end
 
@@ -59,14 +60,14 @@ lambda = x(end);        % lapse rate
 % ====== CALCULATE P(\HAT{C}==1|\Theta) FOR nSamples SAMPLES =====
 
 % make CDF for interpolating J to Kappa
-if isempty(k_range)
-    tempp = load('cdf_table.mat');
+% if isempty(k_range)
+%    tempp = load('cdf_table.mat');
     % K_interp = tempp.K_interp;
     % cdf = tempp.cdf;
-    k_range = tempp.k_range;
-    J_lin = tempp.J_lin;
-    highest_J = tempp.highest_J;
-end
+k_range = tempp.k_range;
+J_lin = tempp.J_lin;
+highest_J = tempp.highest_J;
+% end
 
 % calculate actual kappa and noisy representations
 Jbar_mat = Rels;
@@ -100,6 +101,7 @@ noise_y = circ_vmrnd(0,kappa_y_i);
 delta_noise = noise_x-noise_y;
 
 % the term inside denominator bessel function for d_i
+
 Kc = bsxfun(@times,2.*kappa_x_i.*kappa_y_i,cos(bsxfun(@plus,Delta,delta_noise))); % note: it is okay to simply add the noise bc it goes through a cos!!
 Kc = sqrt(bsxfun(@plus,kappa_x_i.^2+kappa_y_i.^2,Kc)); % dims: mat_dims
 
@@ -117,7 +119,7 @@ switch model
     case 'freq2' % optimal point estimate model
         dec_rule = calculate_optimaldecisioncriteria(x(1:3));
         oc = nan(nTrials,1);
-        for irel = 1:5;
+        for irel = 1:5
             nrel = irel-1;
             idx = nRelsVec == nrel;
             oc(idx) = dec_rule(irel);

@@ -39,8 +39,7 @@ if nargin < 2
     thetahat = 0;
 end
 
-alpha = alpha(:);
-
+% alpha = alpha(:);
 % evaluate pdf
 C = 1/(2*pi*besseli(0,kappa));
-p = C * exp(kappa*cos(alpha-thetahat));
+p = C .* exp(kappa.*cos(alpha-thetahat));

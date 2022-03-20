@@ -32,6 +32,10 @@ if ~strcmp(model, 'None')
         p_data = load('pars/pars_Freq.mat');
     elseif strcmp(model, 'PE2')
         p_data = load('pars/pars_Freq2.mat');
+    elseif strcmp(model, 'sample')
+        p_data = load('pars/pars_sample.mat');
+    elseif strcmp(model, 'cssample')
+        p_data = load('pars/pars_cssample.mat');
     end
     pars = p_data.pars;
     lik = p_data.likelihoods;
@@ -40,6 +44,7 @@ if ~strcmp(model, 'None')
         [val, idx] = min(lik(i_sub,:));
         responses = zeros(sum(data_model(:,1)==i_sub), n_repeat);
         dat_sub = data_model(data_model(:,1)==i_sub, :);
+        disp(pars(i_sub,:,idx))
         for i_rep = 1:n_repeat
             if strcmp(model, 'bayes')
                 responses(:,i_rep) = bayes_simulate( ...
@@ -49,6 +54,12 @@ if ~strcmp(model, 'None')
                     dat_sub(:,[2, 5, 6]), pars(i_sub,:,idx));
             elseif strcmp(model, 'PE2')
                 responses(:,i_rep) = pe2_simulate( ...
+                    dat_sub(:,[2, 5, 6]), pars(i_sub,:,idx));
+            elseif strcmp(model, 'sample')
+                responses(:,i_rep) = sample_simulate( ...
+                    dat_sub(:,[2, 5, 6]), pars(i_sub,:,idx));
+            elseif strcmp(model, 'cssample')
+                responses(:,i_rep) = cssample_simulate( ...
                     dat_sub(:,[2, 5, 6]), pars(i_sub,:,idx));
             end
         end
@@ -109,6 +120,7 @@ end
 hleg = legend({'0','','240','','480','','840',''}, 'box','off', 'FontSize', 16);
 title(hleg,'Eccentricity[pix]', 'FontSize', 14);
 ylim([0,1])
+xlim([-80,80])
 yax = get(gca, 'YAxis');
 set(yax, 'TickLength', [0.02,0.05])
 set(yax, 'TickValues', [0,0.5,1])
@@ -127,3 +139,5 @@ set(gca, 'FontSize', 16)
 set(gca, 'LineWidth', 2)
 xlabel('Offset [pixel]', 'FontSize',20)
 ylabel('Proportion same reports', 'FontSize',20)
+set(gcf, 'Position', [560, 530, 430, 420])
+
