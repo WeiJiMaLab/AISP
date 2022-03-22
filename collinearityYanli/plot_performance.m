@@ -54,15 +54,24 @@ for i_sigma = sigmas_test
 end
 
 figure
-semilogx(sigmas_test, performances, 'LineWidth', 2)
 hold on
-plot([0.1, 100], [0.5,0.5], 'k--', 'LineWidth', 2)
-for s = sigmas
-    plot([s,s], [0.475,0.5], 'k-', 'LineWidth', 1)
+colors = [0  ,0  ,0;...
+     0.7,0.7,1;...
+     0  ,0  ,1;...
+     1  ,0  ,0;...
+     1  ,0.7,0.7];
+for i = 1:5
+    plot(sigmas_test, performances(:,i), 'LineWidth', 3, 'Color', colors(i,:))
 end
-set(gca, 'FontSize', 16, 'TickDir', 'out')
-xlabel('\sigma noise', 'FontSize', 20)
-ylabel('Proportion Correct', 'FontSize', 20)
+set(gca,'xscale' , 'log')
+yline(0.5, '--', 'LineWidth', 2)
+for s = sigmas
+    plot([s,s], [0.45,0.5], 'k-', 'LineWidth', 2)
+end
+ylim([0.4,1])
+set(gca, 'FontSize', 16, 'TickDir', 'out', 'LineWidth', 2, 'GridColor', 'k')
+xlabel('\sigma noise', 'FontSize', 18)
+ylabel('Proportion Correct', 'FontSize', 18)
 legend({'Bayes', 'point estimate', 'point estimate opt.', ...
     sprintf('sample %d', n_sample), sprintf('joint sample %d', n_sample)})
 legend boxoff

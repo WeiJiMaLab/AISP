@@ -9,12 +9,12 @@ addpath('./plotFuns')
 addpath('./mat-comp-model-tools')
 addpath('./simFuns')
 
-dataDir = '.\Data\StandardFormat_participantExcluded.mat';
-parsDir = '.\Data\Fits\10_nyuRun_6thModel';
-figDir = '.\figures';
+dataDir = fullfile('Data','StandardFormat_participantExcluded.mat');
+parsDir = fullfile('Data','Fits','10_nyuRun_6thModel');
+figDir = 'figures';
 
 Config = produceConfig(true);
 
 aisp_plotSimPerformance(dataDir, parsDir, Config.ModelList, ...
     Config.ModelLabel);
-mT_exportNicePdf(8*0.8, 10*0.8, figDir, 'simPerformance')
+%mT_exportNicePdf(8*0.8, 10*0.8, figDir, 'simPerformance')
