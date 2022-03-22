@@ -48,7 +48,7 @@ nRelsVec = sum(Rels==2,2);
 Jbar_high = theta(1);       % mean precision of high rel ellipse
 Jbar_low = theta(2);        % mean precision of low rel ellipse
 tau = theta(3);             % scale parameter of ellipse
-beta = theta(4);            % softmax temperature parameter (deciison noise)
+beta = theta(4);            % softmax temperature parameter (decisison noise)
 beta0 = theta(5);           % bias 
 lambda = theta(6);          % lapse rate
 nSamples = theta(7);       % n_samples
@@ -146,7 +146,7 @@ for isamp = 1:nSamples
     p_accept(isamp) = mean(accept);
 end
 
-d = log(sum(C, 2) + 1) - log(nSamples - sum(C, 2) + 1);
+d = log(nSamples - sum(C, 2) + 1) - log(sum(C, 2) + 1);
 
 p = lambda/2 + (1-lambda)./(1+exp(beta0+beta.*d));
 resp = (rand(nTrials, 1) < p);

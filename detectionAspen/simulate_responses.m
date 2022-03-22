@@ -55,7 +55,7 @@ Jbar_low = x(2);        % mean precision of low rel ellipse
 tau = x(3);             % scale parameter of ellipse
 beta = x(4);            % softmax temperature parameter (deciison noise)
 beta0 = x(5);           % bias 
-lambda = x(end);        % lapse rate
+lambda = x(6);        % lapse rate
 
 % ====== CALCULATE P(\HAT{C}==1|\Theta) FOR nSamples SAMPLES =====
 
