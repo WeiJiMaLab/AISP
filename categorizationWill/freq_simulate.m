@@ -18,9 +18,9 @@ responses = zeros(size(data,1),1);
 for iTrial = 1:size(data,1)
     sigmaNoise = sigmas(floor(data(iTrial,1)));
     s = data(iTrial,2);
-    x = s + sigmaNoise*randn;
+    x = s + sigmaNoise .* randn;
     d = 1/2*log((sigma2.^2)./(sigma1.^2))- ...
-        x.^2/2 * (sigma2.^2 - sigma1.^2)./(sigma1.^2+sigmaNoise.^2)./(sigma2^2+sigmaNoise^2);
+        x.^2/2 .* (sigma2.^2 - sigma1.^2)./(sigma1.^2+sigmaNoise.^2)./(sigma2.^2+sigmaNoise.^2);
     p = lambda/2 + (1-lambda)/(1+exp(beta(1)+beta(2)*d));
     responses(iTrial) = (rand<p);
 end
