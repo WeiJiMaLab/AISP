@@ -1,4 +1,4 @@
-function dec_rule = calculate_optimaldecisioncriteria(pars)
+function dec_rule = calculate_optimaldecisioncriteria(pars, tempp)
 
 persistent optimal_criterion
 persistent saved_pars
@@ -17,8 +17,10 @@ nRelConds = length(nLowVec);
 if isempty(saved_pars) || any(saved_pars ~=pars)
     
     % make CDF for interpolating J to Kappa
-    if isempty(k_range)
-        tempp = load('cdf_table.mat');
+    if isempty(k_range) 
+        if ~exist('tempp', 'var')
+            tempp = load('cdf_table.mat');
+        end
         % K_interp = tempp.K_interp;
         % cdf = tempp.cdf;
         k_range = tempp.k_range;

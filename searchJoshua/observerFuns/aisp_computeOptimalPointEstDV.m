@@ -1,15 +1,17 @@
-function d = aisp_computeOptimalPointEstDV(percept, nItems, kappa_x, kappa_s, mu_s)
+function d = aisp_computeOptimalPointEstDV(percept, nItems, kappa_x, ...
+    kappa_s, mu_s, runChecks)
 % Compute the decision variable for the optimal point estimate observer
 
 % INPUT
 % nItems    [numTrials x 1] vectors. Different numbers of items in 
 %           different trials is permitted.
+% runChecks bool. If true check potentially costly assertions.
 
 assert(length(size(percept)) == 2)
 
 % First compute the standard point estiamte
 d = aisp_computePointEstDV(percept, nItems, kappa_x, kappa_s, mu_s, ...
-    'stimAndTarg');
+    'stimAndTarg', runChecks);
 
 
 % Then calculate the optimal offset
@@ -21,7 +23,7 @@ uniqueKappa_s = unique(kappa_s);
 
 [ofset, assocNItems, assocKappa_x, assocKappa_s] = ...
     aisp_computeOptimalPointEstOfset(uniqueCases(:, 1), uniqueCases(:, 2), ...
-    uniqueKappa_s, mu_s);
+    uniqueKappa_s, mu_s, runChecks);
 
 % %%% Debugging 
 % samples = 20;

@@ -6,9 +6,9 @@ function percepts = aisp_addNoiseToStim(kappa_x, stim, varargin)
 
 % INPUT
 % kappa_x: [num trials X 1] vector describing the value of kappa_x in each
-% trial, or single value
-% stim   [num trials X num locations] array describing the orientation of the
-%        Gabor patches
+%   trial, or single value
+% stim: [num trials X num locations] array describing the orientation of the
+%   Gabor patches
 % varargin{1}: Passed to addNoise as varargin{1} for that function
 
 % JCT

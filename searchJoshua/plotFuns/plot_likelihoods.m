@@ -1,10 +1,14 @@
-function Figures = plot_likelihoods(dataDir, parsDir, configFile)
+function Figures = plot_likelihoods(dataDir, parsDir, Config)
 
 % INPUT
-% configFile: string. File path to matlab file to be loaded.
+% Config: struct. Has the following fields...
+%   ModelLabel: Cell array of labels to use for each model
+%   ModelList: Cell array of names of the models, as they were named during
+%       fitting
+%   Nreps: The minimim number of repitions for each model that was 
+%       used during fitting.
 
 [~, Nptpnts] = getData(dataDir);
-Config = load(configFile);
 Nmodels = length(Config.ModelList);
 
 nLogLs = nan(Nptpnts,Nmodels);
@@ -36,6 +40,7 @@ xticks(xLocs)
 
 % Set labels, although replace some to make more interpretable
 xticklabels(Config.ModelLabel);
+xtickangle(90)
 
 set(findall(gcf,'-property','FontSize'),'FontSize',10)
 set(findall(gcf,'Type','Line'), 'LineWidth', 1)
@@ -47,7 +52,7 @@ set(gca, 'LineWidth', 1)
 % Second plot
 pdata2 = stds;
 
-figure 
+Figures.Stds = figure 
 bar(mean(pdata2),'FaceColor','k')
 hold on
 plot((1:Nmodels) +0.05*randn(size(pdata2)),pdata2,'.','Color',[0.4,0.4,0.4],'MarkerSize',20)

@@ -28,7 +28,7 @@ assert(length(nItems) == 1)
 % just contain nans. We can get rid of them to improve efficiency.
 percept = trimPercept(percept, nItems, runChecks);
 
-% Because proposal samples are independent can draw them all now
+% Because proposal samples are independent we can draw them all now
 nTrials = size(percept, 1);
 [proposeCat, allPropsl] = drawProposals(kappa_s, nTrials, ...
     nItems, nSamples, runChecks);
@@ -67,6 +67,8 @@ d = log( (1 + sum(catSamples==1, 3)) ./ (1 + sum(catSamples==0, 3)) );
 
 if runChecks
     assert(isequal(size(d), [nTrials, 1]))  
+    sumBothCats = sum(catSamples==1, 3) + sum(catSamples==0, 3);
+    assert(all(sumBothCats == nSamples))
 end
 
 end

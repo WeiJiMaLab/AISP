@@ -25,7 +25,7 @@ for iTrial = 1:size(data,1)
     w2n = w2./(w1+w2);
     shat = w1n .* sigma1./(sigma1+sigmaNoise).*x+w2n .* sigma2./(sigma2+sigmaNoise).*x;
     d = 1/2*log((sigma2.^2)./(sigma1.^2))- ...
-        shat.^2/2 * (sigma2.^2 - sigma1.^2)./(sigma1.^2)./(sigma2^2);
+        shat.^2/2 * (sigma2.^2 - sigma1.^2)./(sigma1.^2)./(sigma2.^2);
     p = lambda/2 + (1-lambda)/(1+exp(beta(1)+beta(2)*d));
     responses(iTrial) = (rand<p);
 end

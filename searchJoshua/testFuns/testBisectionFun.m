@@ -12,6 +12,6 @@ for i = 1 : 3
     
     % Run the bisection
     aisp_computeOptimalPointEstOfset(nItems, kappa_x, kappa_s, 0, ...
-        false, true);
+        true, false, true);
     
 end

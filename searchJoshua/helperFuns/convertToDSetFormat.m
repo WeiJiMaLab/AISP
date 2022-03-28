@@ -1,19 +1,19 @@
-function DSet = convertToDSetFormat(DSet, parsDir, configFile)
+function DSet = convertToDSetFormat(DSet, parsDir, Config)
 % Takes the dataset DSet, and the fitting results in parsDir, and combines them
 % to produce a single DSet which contains key fitting results in the format used
 % by the modellingTools repository
 
 % INPUT
-% configFile: string. File path to matlab file to be loaded.
-
-warning('Check this function')
+% Config: struct. Has the following fields...
+%   ModelLabel: Cell array of labels to use for each model
+%   ModelList: Cell array of names of the models, as they were named during
+%       fitting
+%   Nreps: The minimim number of repitions for each model that was 
+%       used during fitting.
 
 if isfield(DSet.P, 'Models')
     error('DSet should not yet include fitting results.')
 end
-
-
-Config = load(configFile);
 
 for iModel = 1 : length(Config.ModelList)
     for iPtpnt = 1 : length(DSet.P)
@@ -27,11 +27,12 @@ for iModel = 1 : length(Config.ModelList)
         f = load(fullfile(files(iFile).folder,files(iFile).name));
         fparts = split(files(iFile).name,{'_','.'});
         iPtpnt = str2double(fparts{end-2});
+        assert(iPtpnt <= length(DSet.P))
         numFits(iPtpnt) = numFits(iPtpnt) +1;
         
         DSet.P(iPtpnt).Models(iModel).Fits(numFits(iPtpnt)).LL = -f.nLogL;
-        error('Inputs to paramVec2Struct changed')
         DSet.P(iPtpnt).Models(iModel).Fits(numFits(iPtpnt)).Params ...
-            = paramVec2Struct(f.pars, 'to struct');
+            = paramVec2Struct(f.pars, Config.ModelList{iModel}, ...
+                                'to struct');
     end
 end
