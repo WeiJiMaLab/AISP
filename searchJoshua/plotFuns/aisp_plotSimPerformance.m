@@ -123,15 +123,21 @@ fittedLnKappa_x = OrigParamStruct.LnKappa_x(thisSetSizeCond);
 
 fig = figure;
 kappaRange = exp(lnKappaRange);
-lines = semilogx(kappaRange, accAcrossLnKappa);
-set(gca, 'xdir', 'reverse')
-ylabel('Proportion correct')
-xlabel('Sensory precision (concentration parameter, \kappa)')
-yline(0.5, '--')
 hold on
-semilogx(exp([fittedLnKappa_x, fittedLnKappa_x]), [0.5, 0.45], 'k')
-legendLabels = ModelLabels;
-legend(lines, legendLabels)
+colors = [0  ,0  ,0;...
+     0.7,0.7,1;...
+     0  ,0  ,1;...
+     1  ,0  ,0;...
+     1  ,0.7,0.7];
+for i = 1:5
+    plot(kappaRange, accAcrossLnKappa(:,i), 'LineWidth', 3, 'Color', colors(i,:));
+end
+set(gca, 'xdir', 'reverse', 'xscale', 'log')
+ylabel('Proportion correct','FontSize', 18)
+xlabel('Sensory precision (concentration parameter, \kappa)','FontSize', 18)
+yline(0.5, '--', 'LineWidth', 2)
+semilogx(exp([fittedLnKappa_x, fittedLnKappa_x]), [0.5, 0.45], 'k', 'LineWidth', 3)
+legend(ModelLabels)
 legend box off
-set(gca, 'TickDir', 'out');
+set(gca, 'TickDir', 'out', 'FontSize', 16, 'LineWidth', 2, 'GridColor', 'k');
 set(gca, 'box', 'off');
