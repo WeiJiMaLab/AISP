@@ -1,2 +1,5 @@
+# NOTES
+
+The function ibslike.m is taken from the IBS toolbox (see the comments of this function for details and license).
 
 For reasons related to the development of the code it sometimes appears as if mu_s, the mean orientation of the distractor distribution and also the orientation of the targets, is a free parameter that may be changed. However at various places in the mathematical derivations and in the code itself we simply assume mu_s is zero.

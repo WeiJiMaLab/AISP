@@ -30,8 +30,3 @@ elseif exclExtraPE
     Config.FracPtpnts = 1; % Fraction of participants to run
 
 end
-
-% 3 models
-% Config.ModelLabel = {'Bayes', 'Point estimate', 'Opt. point estimate'};
-% Config.ModelList =  {'Bayes', 'PE', 'PE2'};
-% Config.Nreps = 20;
