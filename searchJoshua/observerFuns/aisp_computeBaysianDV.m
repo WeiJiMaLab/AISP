@@ -9,7 +9,7 @@ function d = aisp_computeBaysianDV(percept, nItems, kappa_x, kappa_s, ...
 
 % INPUT
 % percept   [numTrials x setSize] array of stimulus percepts
-% nItems    [numTrials x 1] vectors. Different numbers of items in 
+% nItems    [numTrials x 1] vector. Different numbers of items in 
 %           different trials is permitted.
 % kappa_x   Observer's belief about the concetration parameter of the 
 %           measurement noise
@@ -79,7 +79,7 @@ if termBShortcut
     % Then change this value to the correct one wherever kappa_s~=0 
     calcTrials = kappa_s ~= 0;
     
-    % Set the termC for all activeLocs to the value at kappa_s==0
+    % Set the termC for all activeLocs for when kappa_s==0
     trialTermC = logBesseliWithNoOverflow(kappa_x(~calcTrials));
     
     termC(~calcTrials, :, :) = repmat(trialTermC, ...

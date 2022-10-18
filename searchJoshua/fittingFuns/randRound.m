@@ -1,6 +1,6 @@
 function newVal = randRound(value)
-% Rounds a value up on down, with a probability determined by 
-% (one minus) the distance to the nearest integer
+% Rounds a value up or down, with a probability determined by 
+% the distance to the nearest integer
 
 % INPUT
 % value: scalar.
