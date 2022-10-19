@@ -21,9 +21,9 @@ function [ofset, finalAssocNItems, finalAssocKappa_x, finalAssocKappa_s] ...
 
 % OUTPUT
 % ofset: array, giving the optimal offset for each combination of nItems and kappa_s
-% assocNItems: Array of same size as ofset indicating the corresponding nItems
+% finalAssocNItems: Array of same size as ofset indicating the corresponding nItems
 % for each entry in ofset
-% assocKappa_s: Same as assocNItems but for kappa_s
+% finalAssocKappa_s: Same as assocNItems but for kappa_s
 
 if ~isequal(unique(nItems), sort(nItems)); error('See note'); end
 if any(size(nItems) ~= size(kappa_x)); error('These are meant to correspond.'); end
@@ -36,7 +36,7 @@ else
 end
 
 if length(varargin) > 1
-   debugPlots = varargin{2};
+    debugPlots = varargin{2};
 else
     debugPlots = false;
 end
@@ -49,7 +49,7 @@ persistent assocNItems
 persistent assocKappa_x
 persistent assocKappa_s
 
-nSim = 50000; %500000;
+nSim = 50000; 
 
 
 % Work out if the requested calulations are the same as ones done previously,
@@ -108,14 +108,7 @@ if strcmp(calc, 'new')
         crit0 = min(d1);
         crit2 = max(d0);
         crit1 = crit0 + (crit2-crit0) / ( 3 + sqrt(5) ) * 2;
-        %%
-%         % For debugging
-%         figure; hold on
-%         histogram(d0, 'Normalization', 'countdensity')
-%         histogram(d1, 'Normalization', 'countdensity')
-%         plot([crit0, crit0], get(gca,'YLim'))
-%         plot([crit2, crit2], get(gca,'YLim'))
-%         %%%
+
         f1 = sum(d0 < crit1) + sum(d1 > crit1);
         while (crit2-crit0) > 0.001
             if abs(crit2-crit1) > abs(crit1-crit0)
@@ -140,10 +133,6 @@ if strcmp(calc, 'new')
                 end
             end
         end
-%         %%%
-%         % For debugging
-%         plot([crit1, crit1], get(gca,'YLim'))
-%         %%%
         
         % If the distributions were already completely seperated, then we
         % would never have entered the while loop, and something potentially

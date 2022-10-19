@@ -2,7 +2,7 @@ function dvFunsInputChecks(percept, mu_s, nItems, kappa_s, kappa_x)
 
 assert(mu_s == 0)
 assert(not(any(all(isnan(percept),2)))) % We use summation with the 
-% 'omitnan' flag below, and this would incorrectly give an numeric result 
+% 'omitnan' flag, and this would incorrectly give an numeric result 
 % for a row that was all nans
 
 if size(percept, 2) > 8; error('Bug'); end
