@@ -13,7 +13,6 @@ assert(length(size(percept)) == 2)
 d = aisp_computePointEstDV(percept, nItems, kappa_x, kappa_s, mu_s, ...
     'stimAndTarg', runChecks);
 
-
 % Then calculate the optimal offset
 uniqueCases = unique([nItems, kappa_x], 'rows');
 if size(uniqueCases, 1) > 4
@@ -24,19 +23,6 @@ uniqueKappa_s = unique(kappa_s);
 [ofset, assocNItems, assocKappa_x, assocKappa_s] = ...
     aisp_computeOptimalPointEstOfset(uniqueCases(:, 1), uniqueCases(:, 2), ...
     uniqueKappa_s, mu_s, runChecks);
-
-% %%% Debugging 
-% samples = 20;
-% ofsetDebug = nan([size(ofset), samples]);
-% for iSample = 1 : samples
-%     [ofsetDebug(:, :, iSample), ~, ~, ~] = ...
-%         aisp_computeOptimalPointEstOfset(uniqueCases(:, 1), uniqueCases(:, 2), ...
-%         uniqueKappa_s, mu_s, true);
-% end
-% ofsetSd = std(ofsetDebug, [], 3);
-% disp('**** Debug test ****')
-% disp(ofsetSd)
-% %%%
 
 % Apply the offset
 allTrialsOfset = nan(size(nItems));

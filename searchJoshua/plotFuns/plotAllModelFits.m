@@ -76,7 +76,7 @@ for iM = 1 : length(Config.ModelList)
         
         if iPlotCol == 1
             if iM == 2
-               firstLabel = [currentLabel{:}];
+                firstLabel = [currentLabel{:}];
             else
                 firstLabel = ' ';
             end

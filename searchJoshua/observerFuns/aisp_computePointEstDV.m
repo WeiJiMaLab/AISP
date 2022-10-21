@@ -3,7 +3,7 @@ function d = aisp_computePointEstDV(percept, nItems, kappa_x, kappa_s, mu_s, ...
 % Compute the decision variable for the point estimate observer
 
 % INPUT
-% percept   [numTrials x setSize x numSamples] array of stimulus percepts
+% percept   [numTrials x setSize] array of stimulus percepts
 % nItems    [numTrials x 1] vectors. Different numbers of items in 
 %           different trials is permitted.
 % kappa_x   Observer's belief about the concetration parameter of the 

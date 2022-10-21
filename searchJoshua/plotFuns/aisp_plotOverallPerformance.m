@@ -34,7 +34,6 @@ Series(1).FindIncludedTrials = @(st) (st.BlockType==1);
 Series(2).FindIncludedTrials = @(st) (st.BlockType==2);
 
 
-% Populate PlotStyle
 PlotStyle.General = 'paper';
 
 PlotStyle.Xaxis(1).Title = {'Number of items'};

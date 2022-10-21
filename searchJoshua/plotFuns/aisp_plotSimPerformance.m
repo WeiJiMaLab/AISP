@@ -18,7 +18,7 @@ function fig = aisp_plotSimPerformance(dataDir, parsDir, ModelList, ...
 %   determine the number of stimuli.
 % varargin{2}: scalar. Sets the concentration parameter of the distractors 
 %   in the simulated stimuli. Determines which one of two options to use, 
-%   does not directly determine the number of stimuli.
+%   does not directly determine the concentration parameter.
 % varargin{3}: scalar. Determines how many trials to use for simulating
 %   each indiviudal point in the resulting plots.
 

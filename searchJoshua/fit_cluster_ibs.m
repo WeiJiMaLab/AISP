@@ -69,7 +69,6 @@ opt_bads.NoiseSize = sqrt(opt_varLimit);
 opt_ibs = ibslike;
 opt_ibs.Nreps = 1;
 opt_ibs.MaxIter = 2 * (10^4);
-% opt_ibs.Vectorized = 'on';
 
 % Only models 5 and 6 require an additional parameter
 if any(strcmp(modelName, {'impSamp', 'jointPostSamp'}))

@@ -4,8 +4,9 @@ function samples = sampVm(mu, kappa, nSamples, varargin)
 %
 % When kappa = 0 use rand
 % When mu = 0 and kappa = 1.5 use either (a) samples from a large pool of 
-%   predrawn von Mises samples, or (b) sampling importance resampling
-% Otherwise use sampling importance resampling
+%   predrawn von Mises samples, or (b) an approach related to sampling 
+%   importance resampling
+% Otherwise use an approach related to sampling importance resampling
 
 % INPUT
 % mu: scalar. Centre of the distribution

@@ -44,8 +44,7 @@ while idx > size(runs, 1)
                 data = load(fullfile(files(iFile).folder, files(iFile).name));
                 evals(iFile) = data.nLogL;
             end
-   %         disp(['***** Evaluations found for participant ' num2str(iPtpnt) ' model ' num2str(iType) ': '])
-   %         disp(evals)
+
             best = min(evals);
             n_good = sum(evals < (best + slack));
             disp(['***** Num good runs for participant ' num2str(iPtpnt) ...

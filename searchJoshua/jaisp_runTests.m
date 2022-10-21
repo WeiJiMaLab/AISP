@@ -22,19 +22,6 @@ for iModel = 1 : length(Config.ModelList)
 end
 
 
-%% imResampVm
-mu = pi/8;
-kappa = 1;
-nSamples = 2000000; 
-
-imResampSamples = imResampVm(mu, kappa, nSamples);
-standardSamples = qrandvm(mu, kappa, nSamples);
-
-figure; hold on
-histogram(imResampSamples)
-histogram(standardSamples)
-
-
 %% vmpdf
 x = -pi : 0.01 : pi;
 mu = randn(size(x));
