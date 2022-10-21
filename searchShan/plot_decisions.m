@@ -5,7 +5,7 @@ if ~exist('N', 'var')|| isempty(N)
 end
 
 if ~exist('pars', 'var') || isempty(pars)
-    pars = [5,20,0,0]; % idealized 
+    pars = [5,20,0,0]; % idealized
 end
 
 N_quantiles = 9;
@@ -28,6 +28,12 @@ switch type
         response = bayes_simulate(stimulus, pars);
     case 'Freq'
         response = pe_simulate(stimulus, pars);
+    case 'sample'
+        pars = cat(2, pars, 150); % mean N samples was 144.7
+        response = sample_simulate(stimulus, pars);
+    case 'cssample'
+        pars = cat(2, pars, 400); % mean N samples was 394.6392
+        response = cssample_simulate(stimulus, pars);
 end
 
 bin = 1/(N_quantiles);
@@ -46,6 +52,7 @@ for i_bin = 1:N_quantiles
 end
 
 imagesc((count_true./count_all)', [0,1])
+colormap('bone')
 axis square
 set(gca,'XTick',[])
 set(gca,'YTick',[])
